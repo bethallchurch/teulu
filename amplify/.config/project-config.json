@@ -1,0 +1,20 @@
+{
+    "projectName": "squeeze",
+    "projectPath": "/Users/beth/Workspace/squeeze",
+    "defaultEditor": "atom",
+    "frontendHandler": {
+        "javascript": "/Users/beth/.nvm/versions/node/v11.9.0/lib/node_modules/@aws-amplify/cli/node_modules/amplify-frontend-javascript"
+    },
+    "javascript": {
+        "framework": "react-native",
+        "config": {
+            "SourceDir": "/",
+            "DistributionDir": "/",
+            "BuildCommand": "npm run-script build",
+            "StartCommand": "npm run-script start"
+        }
+    },
+    "providers": {
+        "awscloudformation": "/Users/beth/.nvm/versions/node/v11.9.0/lib/node_modules/@aws-amplify/cli/node_modules/amplify-provider-awscloudformation"
+    }
+}
