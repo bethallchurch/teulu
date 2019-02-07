@@ -127,6 +127,19 @@
 					"authSelections": "identityPoolAndUserPool"
 				}
 			}
+		},
+		"apiSqueezeApp": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"Parameters": {
+					"AppSyncApiName": "SqueezeApp",
+					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1549565582606",
+					"ResolverBucket": "squeeze-20190207173156-deployment",
+					"ResolverRootKey": "amplify-appsync-files",
+					"DeploymentTimestamp": "1549565582606"
+				}
+			}
 		}
 	},
 	"Outputs": {
