@@ -4,3 +4,11 @@ type Todo @model {
   description: String
   completed: Boolean
 }
+
+type User @model {
+  cognitoId: ID!
+  id: ID!
+  username: String!
+  confirmed: Boolean!
+  phoneNumber: String
+}

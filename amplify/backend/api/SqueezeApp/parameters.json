@@ -1,7 +1,7 @@
 {
     "AppSyncApiName": "SqueezeApp",
-    "schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1549565582606",
+    "schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1549729490367",
     "ResolverBucket": "squeeze-20190207173156-deployment",
     "ResolverRootKey": "amplify-appsync-files",
-    "DeploymentTimestamp": "1549565582606"
+    "DeploymentTimestamp": "1549729490367"
 }

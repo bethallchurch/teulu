@@ -1,32 +1,21 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import Amplify, { Auth, API, graphqlOperation } from 'aws-amplify'
-import config from './aws-exports'
+import Amplify from 'aws-amplify'
 import { Input, Button } from 'react-native-elements'
-import { listTodos } from './src/graphql/queries'
+import { withAuthenticator } from 'aws-amplify-react-native'
+import config from './aws-exports'
+import AuthWatcher from '@auth/AuthWatcher'
+import Profile from '@user/components/Profile'
 
 Amplify.configure(config)
 
+Hub.listen('auth', AuthWatcher)
 
 class App extends React.Component {
-  state = { todos: [] }
-
-  async componentDidMount () {
-    const todoData = await API.graphql(graphqlOperation(listTodos))
-    this.setState({ todos: todoData.data.listTodos.items })
-  }
-  
   render () {
     return (
-      <View>
-        {this.state.todos.map(({ id, name, description }) => {
-          return <Text key={id}>{name}: {description}</Text>
-        })}
-      </View>
+      <Profile />
     )
   }
 }
 
-const styles = StyleSheet.create({})
-
-export default App
+export default withAuthenticator(App, includeGreetings = true)
