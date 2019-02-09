@@ -1,10 +1,3 @@
-type Todo {
-  id: ID!
-  name: String!
-  description: String
-  completed: Boolean
-}
-
 type User {
   cognitoId: ID!
   id: ID!
@@ -18,8 +11,8 @@ enum ModelSortDirection {
   DESC
 }
 
-type ModelTodoConnection {
-  items: [Todo]
+type ModelUserConnection {
+  items: [User]
   nextToken: String
 }
 
@@ -78,64 +71,6 @@ input ModelBooleanFilterInput {
   eq: Boolean
 }
 
-input ModelTodoFilterInput {
-  id: ModelIDFilterInput
-  name: ModelStringFilterInput
-  description: ModelStringFilterInput
-  completed: ModelBooleanFilterInput
-  and: [ModelTodoFilterInput]
-  or: [ModelTodoFilterInput]
-  not: ModelTodoFilterInput
-}
-
-type Query {
-  getTodo(id: ID!): Todo
-  listTodos(filter: ModelTodoFilterInput, limit: Int, nextToken: String): ModelTodoConnection
-  getUser(id: ID!): User
-  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
-}
-
-input CreateTodoInput {
-  id: ID
-  name: String!
-  description: String
-  completed: Boolean
-}
-
-input UpdateTodoInput {
-  id: ID!
-  name: String
-  description: String
-  completed: Boolean
-}
-
-input DeleteTodoInput {
-  id: ID
-}
-
-type Mutation {
-  createTodo(input: CreateTodoInput!): Todo
-  updateTodo(input: UpdateTodoInput!): Todo
-  deleteTodo(input: DeleteTodoInput!): Todo
-  createUser(input: CreateUserInput!): User
-  updateUser(input: UpdateUserInput!): User
-  deleteUser(input: DeleteUserInput!): User
-}
-
-type Subscription {
-  onCreateTodo: Todo @aws_subscribe(mutations: ["createTodo"])
-  onUpdateTodo: Todo @aws_subscribe(mutations: ["updateTodo"])
-  onDeleteTodo: Todo @aws_subscribe(mutations: ["deleteTodo"])
-  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
-  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
-  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
-}
-
-type ModelUserConnection {
-  items: [User]
-  nextToken: String
-}
-
 input ModelUserFilterInput {
   cognitoId: ModelIDFilterInput
   id: ModelIDFilterInput
@@ -145,6 +80,11 @@ input ModelUserFilterInput {
   and: [ModelUserFilterInput]
   or: [ModelUserFilterInput]
   not: ModelUserFilterInput
+}
+
+type Query {
+  getUser(id: ID!): User
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
 }
 
 input CreateUserInput {
@@ -165,4 +105,16 @@ input UpdateUserInput {
 
 input DeleteUserInput {
   id: ID
+}
+
+type Mutation {
+  createUser(input: CreateUserInput!): User
+  updateUser(input: UpdateUserInput!): User
+  deleteUser(input: DeleteUserInput!): User
+}
+
+type Subscription {
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
 }

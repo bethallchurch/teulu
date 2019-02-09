@@ -134,10 +134,10 @@
 				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"Parameters": {
 					"AppSyncApiName": "SqueezeApp",
-					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1549729490367",
+					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1549747300418",
 					"ResolverBucket": "squeeze-20190207173156-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1549729490367"
+					"DeploymentTimestamp": "1549747300418"
 				}
 			}
 		},
