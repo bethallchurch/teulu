@@ -10,7 +10,7 @@ export default class Profile extends Component {
 
   async componentDidMount () {
     try {
-      const result = await getUser()
+      const result = await getAuthUser()
       this.setState({
         username: result.username, phoneNumber: result.attributes.phone_number, email: result.attributes.email
       })

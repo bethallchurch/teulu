@@ -1,5 +1,5 @@
 import React from 'react'
-import Amplify from 'aws-amplify'
+import Amplify, { Hub } from 'aws-amplify'
 import { Input, Button } from 'react-native-elements'
 import { withAuthenticator } from 'aws-amplify-react-native'
 import config from './aws-exports'

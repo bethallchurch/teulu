@@ -7,13 +7,12 @@ import * as subscriptions from '@graphql/subscriptions'
 
 export const createUser = input => API.graphql(graphqlOperation(mutations.createUser, { input }))
 
-export const confirmUser = async cognitoId => {
-  const usersData = await API.graphql(graphqlOperation(queries.listUsers))
-  const users = usersData.data.listUsers.items
+export const confirmUser = async ({ cognitoId, phoneNumber }) => {
+  const users = await listUsers()
   const user = users.find(u => u.cognitoId === cognitoId)
   if (!user.confirmed) {
     const result = await API.graphql(graphqlOperation(mutations.updateUser, {
-      input: { id: user.id, confirmed: true }
+      input: { id: user.id, phoneNumber, confirmed: true }
     }))
   }
   return user
@@ -24,5 +23,8 @@ export const confirmUser = async cognitoId => {
 export const getAuthUser = () => Auth.currentAuthenticatedUser()
 
 // TODO: filters, etc
-export const listUsers = () => API.graphql(graphqlOperation(queries.listUsers))
+export const listUsers = async () => {
+  const usersData = await API.graphql(graphqlOperation(queries.listUsers))
+  return usersData.data.listUsers.items
+}
 

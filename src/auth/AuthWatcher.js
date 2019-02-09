@@ -23,7 +23,8 @@ AuthWatcher.onHubCapsule = async ({ payload: { event, data } }) => {
       try {
         const authUser = await getAuthUser()
         const cognitoId = authUser.attributes.sub
-        const user = await confirmUser(cognitoId)
+        const phoneNumber = authUser.attributes.phone_number
+        const user = await confirmUser({ cognitoId, phoneNumber })
         console.log('Successfully confirmed user!', user)
       } catch (error) {
         console.log('Error confirming user:', error)
@@ -33,4 +34,3 @@ AuthWatcher.onHubCapsule = async ({ payload: { event, data } }) => {
 }
 
 export default AuthWatcher
-

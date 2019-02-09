@@ -16,6 +16,7 @@ module.exports = function (api) {
           '@contacts': './src/contacts',
           '@graphql': './src/graphql',
           '@groups': './src/groups',
+          '@helpers': './src/helpers',
           '@photos': './src/photos',
           '@splash': './src/splash',
           '@styles': './src/styles',

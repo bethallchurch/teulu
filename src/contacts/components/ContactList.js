@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import { ListItem, Card } from 'react-native-elements'
-import { contacts } from '@contacts/ContactService'
+import { getContacts } from '@contacts/ContactService'
 
 export default class ContactList extends Component {
   state = { contacts: [] }
 
   async componentDidMount () {
     try {
-      const result = await contacts()
-      this.setState({ contacts: result })
+      const contacts = await getContacts()
+      this.setState({ contacts })
     } catch (error) {
       console.log('error getting contacts:', error)
     }
