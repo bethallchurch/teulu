@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { ListItem, Card } from 'react-native-elements'
+import { View } from 'react-native'
+import { ListItem } from 'react-native-elements'
 import { getContacts } from '@contacts/ContactService'
 
 export default class ContactList extends Component {
@@ -16,12 +17,12 @@ export default class ContactList extends Component {
 
   render () {
     return (
-      <Card title='Contacts' containerStyle={{ paddingHorizontal: 0 }}>
+      <View>
         {this.state.contacts.map(({ id, name }) => (
           <ListItem key={id} title={name} />
         ))}
-      </Card>
+      </View>
     )
   }
-  
+
 }

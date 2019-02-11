@@ -1,36 +1,33 @@
 import React, { Component } from 'react'
-import { View, TextInput } from 'react-native'
-import { Card, ListItem } from 'react-native-elements'
-import { MaterialIcons } from '@expo/vector-icons'
+import { SafeAreaView } from 'react-native'
+import { Card, ListItem, Button } from 'react-native-elements'
 import { getAuthUser } from '@user/UserService'
-import ContactList from '@contacts/components/ContactList'
 
 export default class Profile extends Component {
+  static navigationOptions = { title: 'Profile' }
   state = { username: '', phoneNumber: '', email: '' }
 
   async componentDidMount () {
     try {
-      const result = await getAuthUser()
+      const user = await getAuthUser()
       this.setState({
-        username: result.username, phoneNumber: result.attributes.phone_number, email: result.attributes.email
+        username: user.username, phoneNumber: user.attributes.phone_number, email: user.attributes.email
       })
     } catch (error) {
       console.log(error)
     }
-    
   }
 
   render () {
-    
     return (
-      <View>
+      <SafeAreaView>
         <Card title='My Details' containerStyle={{ paddingHorizontal: 0 }}>
-          <ListItem title={this.state.username} leftIcon={{ name: 'person' }} />
-          <ListItem title={this.state.email} leftIcon={{ name: 'email' }} />
+          <ListItem title={this.state.username} leftIcon={{ name: 'person-outline' }} />
+          <ListItem title={this.state.email} leftIcon={{ name: 'mail-outline' }} />
           <ListItem title={this.state.phoneNumber} leftIcon={{ name: 'phone' }} />
         </Card>
-        <ContactList />
-      </View>
+        <Button title='Sign Out' buttonStyle={{ backgroundColor: '#000' }} containerStyle={{ margin: 15 }} />
+      </SafeAreaView>
     )
   }
 }

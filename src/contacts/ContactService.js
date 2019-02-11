@@ -1,6 +1,6 @@
 import { Contacts } from 'expo'
 import { COUNTRY_CODES } from '@contacts/constants'
-import { intersection } from '@helpers'
+import { intersection } from '@global/helpers'
 import { listUsers } from '@user/UserService'
 
 export const getPhoneContacts = async () => {
