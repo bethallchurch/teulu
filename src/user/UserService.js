@@ -18,17 +18,14 @@ export const listUsers = async () => {
 export const userInit = async () => {
   try {
     const authUser = await getAuthUser()
-    const user = await checkUserExists(authUser.username)
-    const { getUser } = user.data
-    if (!getUser) {
-      const newUser = await createUser({
-        username: authUser.username,
-        phoneNumber: authUser.attributes.phone_number
-      })
-      console.log('Successfully created new user!', newUser)
-    }
+    const check = await checkUserExists(authUser.username)
+    const { getUser } = check.data
+    const result = getUser ? await Promise.resolve(check) : await createUser({
+      username: authUser.username,
+      phoneNumber: authUser.attributes.phone_number
+    })
+    return getUser ? result.data.getUser : result.data.createUser
   } catch (error) {
-    console.log('Error creating user:', error)
+    console.log('Error creating or getting user:', error)
   }
 }
-

@@ -4,6 +4,7 @@ import { Input, Button } from 'react-native-elements'
 import { createGroup, createGroupLink } from '@groups/GroupService'
 import { getAuthUser } from '@user/UserService'
 import SelectContactList from '@contacts/components/SelectContactList'
+import AppContext from '@global/context/AppContext'
 
 const StepOne = ({ onChangeText, onPressButton }) => (
   <Fragment>
@@ -35,11 +36,14 @@ const StepTwo = ({ selectedContacts, onPressContact, onPressButton }) => (
 )
 
 class CreateGroup extends Component {
-  state = { username: '', groupName: '', members: [], step: 1 }
-
-  async componentDidMount () {
-    const user = await getAuthUser()
-    this.setState({ username: user.username, members: [ user.username, ...this.state.members ] })
+  constructor (props) {
+    super(props)
+    this.state = {
+      username: props.userId,
+      members: [ props.userId ],
+      groupName: '',
+      step: 1
+    }
   }
 
   updateGroupName = text => {
@@ -107,4 +111,10 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CreateGroup
+const CreateGroupWithContext = props => (
+  <AppContext.Consumer>
+    {({ userId }) => <CreateGroup userId={userId} {...props} />}
+  </AppContext.Consumer>
+)
+
+export default CreateGroupWithContext

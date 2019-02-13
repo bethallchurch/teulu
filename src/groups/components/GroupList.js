@@ -1,29 +1,21 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, Text } from 'react-native'
+import { graphqlOperation }  from 'aws-amplify'
+import * as queries from '@graphql/queries'
+import * as subscriptions from '@graphql/subscriptions'
+import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
-import { listGroups } from '@groups/GroupService'
 
 class GroupList extends Component {
-  state = { groups: [] }
-
-  async componentDidMount () {
-    try {
-      const groups = await listGroups()
-      this.setState({ groups })
-    } catch (error) {
-      console.log('Error listing groups:', error)
-    }
-  }
-
   navigateToGroup = (id, name) => this.props.navigation.navigate('Group', {
     groupId: id,
     groupName: name
   })
-  
+
   render () {
     return (
       <View>
-        {this.state.groups.map(({ id, name, members }) => (
+        {this.props.groups.map(({ id, name, members }) => (
           <ListItem
             key={id}
             title={name}
@@ -37,4 +29,22 @@ class GroupList extends Component {
   }
 }
 
-export default GroupList
+const ConnectedGroupList = props => (
+  <Connect
+    query={graphqlOperation(queries.listGroups)}
+    subscription={graphqlOperation(subscriptions.onCreateGroup)}
+    onSubscriptionMsg={(previous, { onCreateGroup }) => {
+      const { listGroups } = previous
+      const newItems = [ onCreateGroup, ...listGroups.items ]
+      return { ...previous, listGroups: { ...listGroups, items: newItems } }
+    }}
+  >
+    {({ data: { listGroups }, loading, error }) => {
+      if (error) return <Text>Error</Text>
+      if (loading || !listGroups) return <Text>Loading...</Text>
+      return <GroupList groups={listGroups.items} {...props} />
+    }}
+  </Connect>
+)
+
+export default ConnectedGroupList

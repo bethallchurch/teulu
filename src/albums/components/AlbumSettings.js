@@ -1,32 +1,29 @@
 import React, { Component } from 'react'
 import { SafeAreaView, Text } from 'react-native'
+import { graphqlOperation } from 'aws-amplify'
+import * as queries from '@graphql/queries'
+import { Connect } from 'aws-amplify-react-native'
 import { Card, ListItem, Button } from 'react-native-elements'
-import { getAlbum } from '@albums/AlbumService'
 
-class AlbumSettings extends Component {
-  state = { name: '', owner: '' }
+const AlbumSettings = ({ album }) => (
+  <SafeAreaView>
+    <Card containerStyle={{ paddingHorizontal: 0 }}>
+      <ListItem title={album.name} leftElement={<Text>Name</Text>} />
+      <ListItem title={album.owner} leftElement={<Text>Owner</Text>} />
+    </Card>
+  </SafeAreaView>
+)
 
-  async componentDidMount () {
-    const id = this.props.navigation.getParam('albumId')
-    try {
-      const result = await getAlbum(id)
-      const { name, owner } = result.data.getAlbum
-      this.setState({ name, owner })
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  
-  render () {
-    return (
-      <SafeAreaView>
-        <Card containerStyle={{ paddingHorizontal: 0 }}>
-          <ListItem title={this.state.name} leftElement={<Text>Name</Text>} />
-          <ListItem title={this.state.owner} leftElement={<Text>Owner</Text>}  />
-        </Card>
-      </SafeAreaView>
-    )
-  }
-}
+const ConnectedAlbumSettings = props => (
+  <Connect
+    query={graphqlOperation(queries.getAlbum, { id: props.navigation.getParam('albumId') })}
+  >
+    {({ data: { getAlbum }, loading, error }) => {
+      if (error) return <Text>Error</Text>
+      if (loading || !getAlbum) return <Text>Loading...</Text>
+      return <AlbumSettings album={getAlbum} {...props} />
+    }}
+  </Connect>
+)
 
-export default AlbumSettings
+export default ConnectedAlbumSettings

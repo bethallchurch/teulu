@@ -13,7 +13,7 @@ class CreateAlbum extends Component {
       const result = await getGroup(id)
       this.setState({ groupId: id, contributors: result.data.getGroup.members })
     } catch (error) {
-      console.log('Error getting group', error)
+      console.log('Error getting group:', error)
     }
   }
 
