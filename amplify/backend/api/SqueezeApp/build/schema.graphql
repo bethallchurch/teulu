@@ -1,9 +1,35 @@
 type User {
-  cognitoId: ID!
   id: ID!
   username: String!
-  confirmed: Boolean!
-  phoneNumber: String
+  phoneNumber: String!
+  groups(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
+  createdAt: String
+  updatedAt: String
+}
+
+type Group {
+  id: ID!
+  name: String!
+  owner: String
+  membersLinks(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
+  members: [String]!
+  createdAt: String
+  updatedAt: String
+  albums(filter: ModelAlbumFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAlbumConnection
+}
+
+type GroupLink {
+  id: ID!
+  user: User!
+  group: Group!
+}
+
+type Album {
+  id: ID!
+  name: String!
+  owner: String
+  contributors: [String]
+  group: Group!
 }
 
 enum ModelSortDirection {
@@ -72,11 +98,11 @@ input ModelBooleanFilterInput {
 }
 
 input ModelUserFilterInput {
-  cognitoId: ModelIDFilterInput
   id: ModelIDFilterInput
   username: ModelStringFilterInput
-  confirmed: ModelBooleanFilterInput
   phoneNumber: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
   and: [ModelUserFilterInput]
   or: [ModelUserFilterInput]
   not: ModelUserFilterInput
@@ -85,22 +111,28 @@ input ModelUserFilterInput {
 type Query {
   getUser(id: ID!): User
   listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+  getGroup(id: ID!): Group
+  listGroups(filter: ModelGroupFilterInput, limit: Int, nextToken: String): ModelGroupConnection
+  getGroupLink(id: ID!): GroupLink
+  listGroupLinks(filter: ModelGroupLinkFilterInput, limit: Int, nextToken: String): ModelGroupLinkConnection
+  getAlbum(id: ID!): Album
+  listAlbums(filter: ModelAlbumFilterInput, limit: Int, nextToken: String): ModelAlbumConnection
 }
 
 input CreateUserInput {
-  cognitoId: ID!
   id: ID
   username: String!
-  confirmed: Boolean!
-  phoneNumber: String
+  phoneNumber: String!
+  createdAt: String
+  updatedAt: String
 }
 
 input UpdateUserInput {
-  cognitoId: ID
   id: ID!
   username: String
-  confirmed: Boolean
   phoneNumber: String
+  createdAt: String
+  updatedAt: String
 }
 
 input DeleteUserInput {
@@ -111,10 +143,130 @@ type Mutation {
   createUser(input: CreateUserInput!): User
   updateUser(input: UpdateUserInput!): User
   deleteUser(input: DeleteUserInput!): User
+  createGroup(input: CreateGroupInput!): Group
+  updateGroup(input: UpdateGroupInput!): Group
+  deleteGroup(input: DeleteGroupInput!): Group
+  createGroupLink(input: CreateGroupLinkInput!): GroupLink
+  updateGroupLink(input: UpdateGroupLinkInput!): GroupLink
+  deleteGroupLink(input: DeleteGroupLinkInput!): GroupLink
+  createAlbum(input: CreateAlbumInput!): Album
+  updateAlbum(input: UpdateAlbumInput!): Album
+  deleteAlbum(input: DeleteAlbumInput!): Album
 }
 
 type Subscription {
   onCreateUser: User @aws_subscribe(mutations: ["createUser"])
   onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
   onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
+  onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
+  onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
+  onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
+  onCreateGroupLink: GroupLink @aws_subscribe(mutations: ["createGroupLink"])
+  onUpdateGroupLink: GroupLink @aws_subscribe(mutations: ["updateGroupLink"])
+  onDeleteGroupLink: GroupLink @aws_subscribe(mutations: ["deleteGroupLink"])
+  onCreateAlbum: Album @aws_subscribe(mutations: ["createAlbum"])
+  onUpdateAlbum: Album @aws_subscribe(mutations: ["updateAlbum"])
+  onDeleteAlbum: Album @aws_subscribe(mutations: ["deleteAlbum"])
+}
+
+type ModelGroupConnection {
+  items: [Group]
+  nextToken: String
+}
+
+input ModelGroupFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  owner: ModelStringFilterInput
+  members: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelGroupFilterInput]
+  or: [ModelGroupFilterInput]
+  not: ModelGroupFilterInput
+}
+
+input CreateGroupInput {
+  id: ID
+  name: String!
+  owner: String
+  members: [String]!
+  createdAt: String
+  updatedAt: String
+}
+
+input UpdateGroupInput {
+  id: ID!
+  name: String
+  owner: String
+  members: [String]
+  createdAt: String
+  updatedAt: String
+}
+
+input DeleteGroupInput {
+  id: ID
+}
+
+type ModelGroupLinkConnection {
+  items: [GroupLink]
+  nextToken: String
+}
+
+input ModelGroupLinkFilterInput {
+  id: ModelIDFilterInput
+  and: [ModelGroupLinkFilterInput]
+  or: [ModelGroupLinkFilterInput]
+  not: ModelGroupLinkFilterInput
+}
+
+input CreateGroupLinkInput {
+  id: ID
+  groupLinkUserId: ID!
+  groupLinkGroupId: ID!
+}
+
+input UpdateGroupLinkInput {
+  id: ID!
+  groupLinkUserId: ID
+  groupLinkGroupId: ID
+}
+
+input DeleteGroupLinkInput {
+  id: ID
+}
+
+type ModelAlbumConnection {
+  items: [Album]
+  nextToken: String
+}
+
+input ModelAlbumFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  owner: ModelStringFilterInput
+  contributors: ModelStringFilterInput
+  and: [ModelAlbumFilterInput]
+  or: [ModelAlbumFilterInput]
+  not: ModelAlbumFilterInput
+}
+
+input CreateAlbumInput {
+  id: ID
+  name: String!
+  owner: String
+  contributors: [String]
+  albumGroupId: ID!
+}
+
+input UpdateAlbumInput {
+  id: ID!
+  name: String
+  owner: String
+  contributors: [String]
+  albumGroupId: ID
+}
+
+input DeleteAlbumInput {
+  id: ID
 }

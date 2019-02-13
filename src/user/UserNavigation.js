@@ -7,7 +7,7 @@ const UserStack = createStackNavigator({
   Profile: {
     screen: Profile,
     navigationOptions: ({ navigation }) => ({
-      title: 'My Account',
+      title: 'Account',
       headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
     })
   }

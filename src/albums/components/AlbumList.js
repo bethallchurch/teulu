@@ -1,28 +1,32 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { getAlbums } from '@albums/AlbumService'
+import { listGroupAlbums } from '@albums/AlbumService'
 
 class AlbumList extends Component {
   state = { albums: [] }
 
   async componentDidMount () {
+    const groupId = this.props.navigation.getParam('groupId')
     try {
-      const albums = await getAlbums()
+      const albums = await listGroupAlbums(groupId)
       this.setState({ albums })
     } catch (error) {
-      console.log('error getting albums:', error)
+      console.log('Error getting albums:', error)
     }
   }
 
-  navigateToAlbum = () => this.props.navigation.navigate('Album')
+  navigateToAlbum = (id, name) => this.props.navigation.navigate('Album', {
+    albumId: id,
+    albumName: name
+  })
 
   render () {
     return (
       <View>
         {this.state.albums.map(({ id, name, coverUrl }) => (
-          <TouchableOpacity key={id} onPress={this.navigateToAlbum}>
-            <ListItem title={`Placeholder for ${name}`} />
+          <TouchableOpacity key={id} onPress={() => this.navigateToAlbum(id, name)}>
+            <ListItem key={id} title={name} />
           </TouchableOpacity>
         ))}
       </View>

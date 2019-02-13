@@ -1,10 +1,11 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation'
-import HeaderIcon from '@global/components/HeaderIcon'
 import CreateAlbum from '@albums/components/CreateAlbum'
+import AlbumSettings from '@albums/components/AlbumSettings'
+import HeaderIcon from '@global/components/HeaderIcon'
 
-const Chat = () => <View><Text>Chat Placeholder</Text></View>
+const Feed = () => <View><Text>Feed Placeholder</Text></View>
 const Photos = () => <View><Text>Photos Placeholder</Text></View>
 
 export const CreateAlbumStack = createStackNavigator({
@@ -17,15 +18,25 @@ export const CreateAlbumStack = createStackNavigator({
   }
 })
 
+export const AlbumSettingsStack = createStackNavigator({
+  AlbumSettings: {
+    screen: AlbumSettings,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Settings',
+      headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
+    })
+  }
+})
+
 const AlbumStack = createMaterialTopTabNavigator({
-  Chat: {
-    screen: Chat
+  Feed: {
+    screen: Feed
   },
   Photos: {
     screen: Photos
   }
 }, {
-  initialRouteName: 'Chat',
+  initialRouteName: 'Feed',
   tabBarOptions: {
     labelStyle: {
       color: '#000'

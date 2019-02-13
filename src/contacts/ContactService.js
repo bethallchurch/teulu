@@ -11,19 +11,22 @@ export const getPhoneContacts = async () => {
 export const getContacts = async () => {
   // TODO: change to query with filter
   const appUsers = await listUsers()
-  const phoneContacts = await getPhoneContacts()
-  const appUsersPhoneNumbers = appUsers.reduce(
-    (numbers, { phoneNumber }) => [ ...numbers, phoneNumber ],
-    []
-  )
-  const validContacts = phoneContacts.filter(({ phoneNumbers }) => {
-    return intersection(phoneNumbers.reduce(
-      (numbers, { countryCode, digits }) => {
-        const number = `${COUNTRY_CODES[countryCode.toUpperCase()].code}${digits}`
-        return [ ...numbers, number ]
-      },
-      []
-    ), appUsersPhoneNumbers).length > 0
-  })
-  return validContacts
+
+  // const phoneContacts = await getPhoneContacts()
+  // const appUsersPhoneNumbers = appUsers.reduce(
+  //   (numbers, { phoneNumber }) => [ ...numbers, phoneNumber ],
+  //   []
+  // )
+  // const validContacts = phoneContacts.filter(({ phoneNumbers }) => {
+  //   return intersection(phoneNumbers.reduce(
+  //     (numbers, { countryCode, digits }) => {
+  //       const number = `${COUNTRY_CODES[countryCode.toUpperCase()].code}${digits}`
+  //       return [ ...numbers, number ]
+  //     },
+  //     []
+  //   ), appUsersPhoneNumbers).length > 0
+  // })
+
+  // TODO: for dev purposes
+  return appUsers
 }

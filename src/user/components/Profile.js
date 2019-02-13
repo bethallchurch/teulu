@@ -4,7 +4,7 @@ import { Card, ListItem, Button } from 'react-native-elements'
 import { getAuthUser } from '@user/UserService'
 
 export default class Profile extends Component {
-  static navigationOptions = { title: 'Profile' }
+  // static navigationOptions = { title: 'Profile' }
   state = { username: '', phoneNumber: '', email: '' }
 
   async componentDidMount () {
@@ -14,14 +14,14 @@ export default class Profile extends Component {
         username: user.username, phoneNumber: user.attributes.phone_number, email: user.attributes.email
       })
     } catch (error) {
-      console.log(error)
+      console.log('Error getting authenticated user:', error)
     }
   }
 
   render () {
     return (
       <SafeAreaView>
-        <Card title='My Details' containerStyle={{ paddingHorizontal: 0 }}>
+        <Card containerStyle={{ paddingHorizontal: 0 }}>
           <ListItem title={this.state.username} leftIcon={{ name: 'person-outline' }} />
           <ListItem title={this.state.email} leftIcon={{ name: 'mail-outline' }} />
           <ListItem title={this.state.phoneNumber} leftIcon={{ name: 'phone' }} />

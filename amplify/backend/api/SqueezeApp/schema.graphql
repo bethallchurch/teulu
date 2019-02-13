@@ -1,7 +1,45 @@
-type User @model {
-  cognitoId: ID!
+type User
+  @model
+  @auth(rules: [{ allow: owner, ownerField: "id", queries: null }]) {
   id: ID!
   username: String!
-  confirmed: Boolean!
-  phoneNumber: String
+  phoneNumber: String!
+  groups: [GroupLink] @connection(name: "UserGroupLinks")
+  createdAt: String
+  updatedAt: String
+}
+
+type Group
+  @model
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "members", mutations: [update] }
+  ]) {
+  id: ID!
+  name: String!
+  owner: String
+  membersLinks: [GroupLink] @connection(name: "GroupMembersLinks")
+  members: [String]!
+  createdAt: String
+  updatedAt: String
+  albums: [Album]! @connection(name: "GroupAlbums")
+}
+
+type GroupLink @model {
+  id: ID!
+  user: User! @connection(name: "UserGroupLinks")
+  group: Group! @connection(name: "GroupMembersLinks")
+}
+
+type Album
+  @model
+  @auth(rules: [
+    { allow: owner },
+    { allow: owner, ownerField: "contributors", mutations: [update] }
+  ]) {
+  id: ID!
+  name: String!
+  owner: String
+  contributors: [String]
+  group: Group! @connection(name: "GroupAlbums")
 }
