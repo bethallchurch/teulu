@@ -25,7 +25,8 @@ type Group
   albums: [Album]! @connection(name: "GroupAlbums")
 }
 
-type GroupLink @model {
+type GroupLink
+@model {
   id: ID!
   user: User! @connection(name: "UserGroupLinks")
   group: Group! @connection(name: "GroupMembersLinks")
@@ -42,4 +43,26 @@ type Album
   owner: String
   contributors: [String]
   group: Group! @connection(name: "GroupAlbums")
+  messages: [Message] @connection(name: "AlbumMessages")
+}
+
+enum MessageType {
+  TEXT
+  PHOTO
+}
+
+type Message
+@model
+@auth(rules: [
+  { allow: owner }
+  { allow: owner, ownerField: "viewers", mutations: null, queries: [get, list] }
+]) {
+  id: ID!
+  owner: String!
+  viewers: [String]
+  album: Album! @connection(name: "AlbumMessages")
+  content: String!
+  type: MessageType!
+  createdAt: String
+  updatedAt: String
 }

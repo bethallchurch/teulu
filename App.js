@@ -1,9 +1,9 @@
-import React, { Component, createContext } from 'react'
-import Amplify, { Hub } from 'aws-amplify'
+import React, { Component } from 'react'
+import Amplify from 'aws-amplify'
 import { withAuthenticator } from 'aws-amplify-react-native'
 import { createAppContainer } from 'react-navigation'
 import config from './aws-exports'
-import { userInit } from '@user/UserService'
+import { getOrCreateUser } from '@user/UserService'
 import AppContext from '@global/context/AppContext'
 import Navigator from '@Navigator'
 
@@ -15,7 +15,7 @@ class App extends Component {
   state = { userId: '' }
   
   async componentDidMount () {
-    const user = await userInit()
+    const user = await getOrCreateUser()
     this.setState({ userId: user.id })
   }
 
@@ -28,4 +28,4 @@ class App extends Component {
   }
 }
 
-export default withAuthenticator(App, includeGreetings = true)
+export default withAuthenticator(App, includeGreetings = false)

@@ -165,6 +165,17 @@ export const getAlbum = `query GetAlbum($id: ID!) {
         nextToken
       }
     }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -187,6 +198,63 @@ export const listAlbums = `query ListAlbums(
         createdAt
         updatedAt
       }
+      messages {
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`;
+export const getMessage = `query GetMessage($id: ID!) {
+  getMessage(id: $id) {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const listMessages = `query ListMessages(
+  $filter: ModelMessageFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      owner
+      viewers
+      album {
+        id
+        name
+        owner
+        contributors
+      }
+      content
+      type
+      createdAt
+      updatedAt
     }
     nextToken
   }

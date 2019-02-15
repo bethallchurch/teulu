@@ -30,6 +30,23 @@ type Album {
   owner: String
   contributors: [String]
   group: Group!
+  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+}
+
+enum MessageType {
+  TEXT
+  PHOTO
+}
+
+type Message {
+  id: ID!
+  owner: String!
+  viewers: [String]
+  album: Album!
+  content: String!
+  type: MessageType!
+  createdAt: String
+  updatedAt: String
 }
 
 enum ModelSortDirection {
@@ -117,6 +134,8 @@ type Query {
   listGroupLinks(filter: ModelGroupLinkFilterInput, limit: Int, nextToken: String): ModelGroupLinkConnection
   getAlbum(id: ID!): Album
   listAlbums(filter: ModelAlbumFilterInput, limit: Int, nextToken: String): ModelAlbumConnection
+  getMessage(id: ID!): Message
+  listMessages(filter: ModelMessageFilterInput, limit: Int, nextToken: String): ModelMessageConnection
 }
 
 input CreateUserInput {
@@ -152,6 +171,9 @@ type Mutation {
   createAlbum(input: CreateAlbumInput!): Album
   updateAlbum(input: UpdateAlbumInput!): Album
   deleteAlbum(input: DeleteAlbumInput!): Album
+  createMessage(input: CreateMessageInput!): Message
+  updateMessage(input: UpdateMessageInput!): Message
+  deleteMessage(input: DeleteMessageInput!): Message
 }
 
 type Subscription {
@@ -167,6 +189,9 @@ type Subscription {
   onCreateAlbum: Album @aws_subscribe(mutations: ["createAlbum"])
   onUpdateAlbum: Album @aws_subscribe(mutations: ["updateAlbum"])
   onDeleteAlbum: Album @aws_subscribe(mutations: ["deleteAlbum"])
+  onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
+  onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
+  onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
 }
 
 type ModelGroupConnection {
@@ -268,5 +293,48 @@ input UpdateAlbumInput {
 }
 
 input DeleteAlbumInput {
+  id: ID
+}
+
+type ModelMessageConnection {
+  items: [Message]
+  nextToken: String
+}
+
+input ModelMessageFilterInput {
+  id: ModelIDFilterInput
+  owner: ModelStringFilterInput
+  viewers: ModelStringFilterInput
+  content: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelMessageFilterInput]
+  or: [ModelMessageFilterInput]
+  not: ModelMessageFilterInput
+}
+
+input CreateMessageInput {
+  id: ID
+  owner: String!
+  viewers: [String]
+  content: String!
+  type: MessageType!
+  createdAt: String
+  updatedAt: String
+  messageAlbumId: ID!
+}
+
+input UpdateMessageInput {
+  id: ID!
+  owner: String
+  viewers: [String]
+  content: String
+  type: MessageType
+  createdAt: String
+  updatedAt: String
+  messageAlbumId: ID
+}
+
+input DeleteMessageInput {
   id: ID
 }

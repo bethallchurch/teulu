@@ -237,6 +237,17 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
         nextToken
       }
     }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -259,6 +270,17 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
       albums {
         nextToken
       }
+    }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
   }
 }
@@ -283,6 +305,104 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
         nextToken
       }
     }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const createMessage = `mutation CreateMessage($input: CreateMessageInput!) {
+  createMessage(input: $input) {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const updateMessage = `mutation UpdateMessage($input: UpdateMessageInput!) {
+  updateMessage(input: $input) {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const deleteMessage = `mutation DeleteMessage($input: DeleteMessageInput!) {
+  deleteMessage(input: $input) {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
   }
 }
 `;

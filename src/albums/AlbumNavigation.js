@@ -3,9 +3,9 @@ import { View, Text } from 'react-native'
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation'
 import CreateAlbum from '@albums/components/CreateAlbum'
 import AlbumSettings from '@albums/components/AlbumSettings'
+import MessagesScreen from '@messages/components/MessagesScreen'
 import HeaderIcon from '@global/components/HeaderIcon'
 
-const Feed = () => <View><Text>Feed Placeholder</Text></View>
 const Photos = () => <View><Text>Photos Placeholder</Text></View>
 
 export const CreateAlbumStack = createStackNavigator({
@@ -29,14 +29,14 @@ export const AlbumSettingsStack = createStackNavigator({
 })
 
 const AlbumStack = createMaterialTopTabNavigator({
-  Feed: {
-    screen: Feed
+  Messages: {
+    screen: MessagesScreen
   },
   Photos: {
     screen: Photos
   }
 }, {
-  initialRouteName: 'Feed',
+  initialRouteName: 'Messages',
   tabBarOptions: {
     labelStyle: {
       color: '#000'

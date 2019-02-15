@@ -34,6 +34,7 @@ const ConnectedGroupList = props => (
     query={graphqlOperation(queries.listGroups)}
     subscription={graphqlOperation(subscriptions.onCreateGroup)}
     onSubscriptionMsg={(previous, { onCreateGroup }) => {
+      // TODO: check it's a group the user belongs to.
       const { listGroups } = previous
       const newItems = [ onCreateGroup, ...listGroups.items ]
       return { ...previous, listGroups: { ...listGroups, items: newItems } }

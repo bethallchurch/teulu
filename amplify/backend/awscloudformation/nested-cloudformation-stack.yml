@@ -134,10 +134,10 @@
 				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"Parameters": {
 					"AppSyncApiName": "SqueezeApp",
-					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550079991656",
+					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550188363797",
 					"ResolverBucket": "squeeze-20190207173156-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1550079991656",
+					"DeploymentTimestamp": "1550188363797",
 					"AuthCognitoUserPoolId": {
 						"Fn::GetAtt": [
 							"authcognito57a32b25",

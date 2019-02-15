@@ -237,6 +237,17 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
         nextToken
       }
     }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -259,6 +270,17 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
       albums {
         nextToken
       }
+    }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
   }
 }
@@ -283,6 +305,104 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
         nextToken
       }
     }
+    messages {
+      items {
+        id
+        owner
+        viewers
+        content
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onCreateMessage = `subscription OnCreateMessage {
+  onCreateMessage {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onUpdateMessage = `subscription OnUpdateMessage {
+  onUpdateMessage {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onDeleteMessage = `subscription OnDeleteMessage {
+  onDeleteMessage {
+    id
+    owner
+    viewers
+    album {
+      id
+      name
+      owner
+      contributors
+      group {
+        id
+        name
+        owner
+        members
+        createdAt
+        updatedAt
+      }
+      messages {
+        nextToken
+      }
+    }
+    content
+    type
+    createdAt
+    updatedAt
   }
 }
 `;

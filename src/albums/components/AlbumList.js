@@ -15,7 +15,7 @@ class AlbumList extends Component {
   render () {
     return (
       <View>
-        {this.props.albums.map(({ id, name, coverUrl }) => (
+        {this.props.albums.map(({ id, name }) => (
           <TouchableOpacity key={id} onPress={() => this.navigateToAlbum(id, name)}>
             <ListItem key={id} title={name} />
           </TouchableOpacity>
