@@ -171,6 +171,7 @@ export const getAlbum = `query GetAlbum($id: ID!) {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -230,6 +231,17 @@ export const getMessage = `query GetMessage($id: ID!) {
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }
@@ -253,6 +265,17 @@ export const listMessages = `query ListMessages(
       }
       content
       type
+      bucket
+      fullsize {
+        key
+        width
+        height
+      }
+      thumbnail {
+        key
+        width
+        height
+      }
       createdAt
       updatedAt
     }

@@ -45,8 +45,17 @@ type Message {
   album: Album!
   content: String!
   type: MessageType!
+  bucket: String
+  fullsize: PhotoS3Info
+  thumbnail: PhotoS3Info
   createdAt: String
   updatedAt: String
+}
+
+type PhotoS3Info {
+  key: String!
+  width: Int!
+  height: Int!
 }
 
 enum ModelSortDirection {
@@ -296,6 +305,12 @@ input DeleteAlbumInput {
   id: ID
 }
 
+input PhotoS3InfoInput {
+  key: String!
+  width: Int!
+  height: Int!
+}
+
 type ModelMessageConnection {
   items: [Message]
   nextToken: String
@@ -306,6 +321,7 @@ input ModelMessageFilterInput {
   owner: ModelStringFilterInput
   viewers: ModelStringFilterInput
   content: ModelStringFilterInput
+  bucket: ModelStringFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput
   and: [ModelMessageFilterInput]
@@ -319,6 +335,9 @@ input CreateMessageInput {
   viewers: [String]
   content: String!
   type: MessageType!
+  bucket: String
+  fullsize: PhotoS3InfoInput
+  thumbnail: PhotoS3InfoInput
   createdAt: String
   updatedAt: String
   messageAlbumId: ID!
@@ -330,6 +349,9 @@ input UpdateMessageInput {
   viewers: [String]
   content: String
   type: MessageType
+  bucket: String
+  fullsize: PhotoS3InfoInput
+  thumbnail: PhotoS3InfoInput
   createdAt: String
   updatedAt: String
   messageAlbumId: ID

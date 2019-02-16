@@ -243,6 +243,7 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -277,6 +278,7 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -311,6 +313,7 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -343,6 +346,17 @@ export const createMessage = `mutation CreateMessage($input: CreateMessageInput!
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }
@@ -372,6 +386,17 @@ export const updateMessage = `mutation UpdateMessage($input: UpdateMessageInput!
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }
@@ -401,6 +426,17 @@ export const deleteMessage = `mutation DeleteMessage($input: DeleteMessageInput!
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }

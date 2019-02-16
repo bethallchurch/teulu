@@ -243,6 +243,7 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -277,6 +278,7 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -311,6 +313,7 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
         owner
         viewers
         content
+        bucket
         createdAt
         updatedAt
       }
@@ -343,6 +346,17 @@ export const onCreateMessage = `subscription OnCreateMessage {
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }
@@ -372,6 +386,17 @@ export const onUpdateMessage = `subscription OnUpdateMessage {
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }
@@ -401,6 +426,17 @@ export const onDeleteMessage = `subscription OnDeleteMessage {
     }
     content
     type
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
     createdAt
     updatedAt
   }

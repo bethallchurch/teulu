@@ -4,9 +4,8 @@ import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navig
 import CreateAlbum from '@albums/components/CreateAlbum'
 import AlbumSettings from '@albums/components/AlbumSettings'
 import MessagesScreen from '@messages/components/MessagesScreen'
+import PhotosScreen from '@photos/components/PhotosScreen'
 import HeaderIcon from '@global/components/HeaderIcon'
-
-const Photos = () => <View><Text>Photos Placeholder</Text></View>
 
 export const CreateAlbumStack = createStackNavigator({
   CreateAlbum: {
@@ -33,7 +32,7 @@ const AlbumStack = createMaterialTopTabNavigator({
     screen: MessagesScreen
   },
   Photos: {
-    screen: Photos
+    screen: PhotosScreen
   }
 }, {
   initialRouteName: 'Messages',

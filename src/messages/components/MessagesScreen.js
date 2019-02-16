@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import * as mutations from '@graphql/mutations'
@@ -73,6 +73,7 @@ const ConnectedMessagesScreen = props => {
         if (error) return <Text>Error</Text>
         if (loading || !listMessages) return <Text>Loading...</Text>
         const albumMessages = listMessages.items
+          .filter(message => !!message)
           .filter(({ album: { id } }) => id === albumId)
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
         const contributors = albumMessages[0].album.contributors
@@ -87,5 +88,7 @@ const MessagesScreenWithContext = props => (
     {({ userId }) => <ConnectedMessagesScreen userId={userId} {...props} />}
   </AppContext.Consumer>
 )
+
+const Temp = () => <View />
 
 export default MessagesScreenWithContext

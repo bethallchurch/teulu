@@ -12,3 +12,5 @@ amplify/.config/local-*
 amplify/backend/amplify-meta.json
 aws-exports.js
 awsconfiguration.json
+
+amplify/backend/function/squeezephotoprocessor/src/node_modules

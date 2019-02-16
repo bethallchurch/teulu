@@ -1,9 +1,9 @@
 {
     "AppSyncApiName": "SqueezeApp",
-    "schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550188363797",
+    "schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550345414833",
     "ResolverBucket": "squeeze-20190207173156-deployment",
     "ResolverRootKey": "amplify-appsync-files",
-    "DeploymentTimestamp": "1550188363797",
+    "DeploymentTimestamp": "1550345414833",
     "AuthCognitoUserPoolId": {
         "Fn::GetAtt": [
             "authcognito57a32b25",

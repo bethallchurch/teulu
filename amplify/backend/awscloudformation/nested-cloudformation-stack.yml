@@ -134,10 +134,10 @@
 				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"Parameters": {
 					"AppSyncApiName": "SqueezeApp",
-					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550188363797",
+					"schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550345414833",
 					"ResolverBucket": "squeeze-20190207173156-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1550188363797",
+					"DeploymentTimestamp": "1550345414833",
 					"AuthCognitoUserPoolId": {
 						"Fn::GetAtt": [
 							"authcognito57a32b25",
@@ -159,6 +159,16 @@
 					"unauthRoleName": "squeeze-20190207173156-unauthRole",
 					"authPermissions": "rw",
 					"unauthPermissions": ""
+				}
+			}
+		},
+		"functionsqueezephotoprocessor": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/function/squeezephotoprocessor-cloudformation-template.json",
+				"Parameters": {
+					"S3UserfilesBucketName": "amplifysqueezes3storage0",
+					"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message-pm7skb4lkfao3ixpypmciic3ea"
 				}
 			}
 		}

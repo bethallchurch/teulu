@@ -63,6 +63,15 @@ type Message
   album: Album! @connection(name: "AlbumMessages")
   content: String!
   type: MessageType!
+  bucket: String
+  fullsize: PhotoS3Info
+  thumbnail: PhotoS3Info
   createdAt: String
   updatedAt: String
+}
+
+type PhotoS3Info {
+    key: String!
+    width: Int!
+    height: Int!
 }
