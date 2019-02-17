@@ -20,7 +20,6 @@ module.exports = function (api) {
           '@messages': './src/messages',
           '@Navigator': './src/Navigator',
           '@photos': './src/photos',
-          '@splash': './src/splash',
           '@styles': './src/styles',
           '@user': './src/user'
         }

@@ -9,41 +9,43 @@ type User
   updatedAt: String
 }
 
+type GroupLink
+@model {
+  id: ID!
+  user: User @connection(name: "UserGroupLinks")
+  group: Group! @connection(name: "GroupUserLinks")
+}
+
 type Group
   @model
   @auth(rules: [
     { allow: owner },
-    { allow: owner, ownerField: "members", mutations: [update] }
+    { allow: owner, ownerField: "authUsers", mutations: [update] }
   ]) {
   id: ID!
-  name: String!
+  name: String
   owner: String
-  membersLinks: [GroupLink] @connection(name: "GroupMembersLinks")
-  members: [String]!
+  authUsers: [String]
+  userLinks: [GroupLink] @connection(name: "GroupUserLinks")
+  albums: [Album] @connection(name: "GroupAlbums")
   createdAt: String
   updatedAt: String
-  albums: [Album]! @connection(name: "GroupAlbums")
-}
-
-type GroupLink
-@model {
-  id: ID!
-  user: User! @connection(name: "UserGroupLinks")
-  group: Group! @connection(name: "GroupMembersLinks")
 }
 
 type Album
   @model
   @auth(rules: [
     { allow: owner },
-    { allow: owner, ownerField: "contributors", mutations: [update] }
+    { allow: owner, ownerField: "authUsers", mutations: [update] }
   ]) {
   id: ID!
-  name: String!
+  name: String
   owner: String
-  contributors: [String]
-  group: Group! @connection(name: "GroupAlbums")
+  authUsers: [String]
+  group: Group @connection(name: "GroupAlbums")
   messages: [Message] @connection(name: "AlbumMessages")
+  createdAt: String
+  updatedAt: String
 }
 
 enum MessageType {
@@ -55,23 +57,38 @@ type Message
 @model
 @auth(rules: [
   { allow: owner }
-  { allow: owner, ownerField: "viewers", mutations: null, queries: [get, list] }
+  { allow: owner, ownerField: "authUsers", mutations: null, queries: [get, list] }
 ]) {
   id: ID!
-  owner: String!
-  viewers: [String]
-  album: Album! @connection(name: "AlbumMessages")
-  content: String!
-  type: MessageType!
+  owner: String
+  authUsers: [String]
+  type: MessageType
+  text: String
+  album: Album @connection(name: "AlbumMessages")
+  photos: [Photo] @connection(name: "MessagePhotos")
+  createdAt: String
+  updatedAt: String
+}
+
+type Photo
+@model
+@auth(rules: [
+  { allow: owner }
+  { allow: owner, ownerField: "authUsers", mutations: null, queries: [get, list] }
+]) {
+  id: ID!
+  owner: String
+  authUsers: [String]
   bucket: String
   fullsize: PhotoS3Info
   thumbnail: PhotoS3Info
+  message: Message @connection(name: "MessagePhotos")
   createdAt: String
   updatedAt: String
 }
 
 type PhotoS3Info {
-    key: String!
-    width: Int!
-    height: Int!
+  key: String!
+  width: Int!
+  height: Int!
 }

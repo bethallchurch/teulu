@@ -5,7 +5,7 @@ import { Input, Button } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo'
 import { Connect, S3Image } from 'aws-amplify-react-native'
 import { uploadImage } from '@photos/PhotoService'
-import AppContext from '@global/context/AppContext'
+import { UserContext } from '@global/context'
 
 class PhotoUpload extends Component {
   state = {
@@ -60,9 +60,9 @@ class PhotoUpload extends Component {
 }
 
 const PhotoUploadWithContext = props => (
-  <AppContext.Consumer>
+  <UserContext.Consumer>
     {({ userId }) => <PhotoUpload userId={userId} {...props} />}
-  </AppContext.Consumer>
+  </UserContext.Consumer>
 )
 
 

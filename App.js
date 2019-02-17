@@ -4,28 +4,29 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 import { createAppContainer } from 'react-navigation'
 import config from './aws-exports'
 import { getOrCreateUser } from '@user/UserService'
-import AppContext from '@global/context/AppContext'
+import { UserContext } from '@global/context'
 import Navigator from '@Navigator'
+import AuthStack from '@auth/AuthNavigation'
 
 Amplify.configure(config)
 
 const NavigationContainer = createAppContainer(Navigator)
 
 class App extends Component {
-  state = { userId: '' }
-  
+  state = { user: {} }
+
   async componentDidMount () {
     const user = await getOrCreateUser()
-    this.setState({ userId: user.id })
+    this.setState({ user })
   }
 
   render () {
     return (
-      <AppContext.Provider value={{ userId: this.state.userId }}>
+      <UserContext.Provider value={this.state.user}>
         <NavigationContainer />
-      </AppContext.Provider>
+      </UserContext.Provider>
     )
   }
 }
 
-export default withAuthenticator(App, includeGreetings = false)
+export default AuthStack

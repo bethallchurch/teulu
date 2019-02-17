@@ -25,8 +25,8 @@
         #set( $isLocalOwnerAuthorized = true )
       #end
     #end
-    ## Authorization rule: { allow: "owner", ownerField: "members", identityField: "cognito:username" } **
-    #set( $allowedOwners1 = $item.members )
+    ## Authorization rule: { allow: "owner", ownerField: "authUsers", identityField: "cognito:username" } **
+    #set( $allowedOwners1 = $item.authUsers )
     #set( $identityValue = $util.defaultIfNull($ctx.identity.claims.get("username"), $util.defaultIfNull($ctx.identity.claims.get("cognito:username"), "___xamznone____")) )
     #if( $util.isList($allowedOwners1) )
       #foreach( $allowedOwner in $allowedOwners1 )

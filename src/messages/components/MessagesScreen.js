@@ -6,7 +6,7 @@ import * as mutations from '@graphql/mutations'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
-import AppContext from '@global/context/AppContext'
+import { UserContext } from '@global/context'
 
 class MessagesScreen extends React.Component {
   constructor (props) {
@@ -84,9 +84,9 @@ const ConnectedMessagesScreen = props => {
 }
 
 const MessagesScreenWithContext = props => (
-  <AppContext.Consumer>
+  <UserContext.Consumer>
     {({ userId }) => <ConnectedMessagesScreen userId={userId} {...props} />}
-  </AppContext.Consumer>
+  </UserContext.Consumer>
 )
 
 const Temp = () => <View />

@@ -49,84 +49,6 @@ export const onDeleteUser = `subscription OnDeleteUser {
   }
 }
 `;
-export const onCreateGroup = `subscription OnCreateGroup {
-  onCreateGroup {
-    id
-    name
-    owner
-    membersLinks {
-      items {
-        id
-      }
-      nextToken
-    }
-    members
-    createdAt
-    updatedAt
-    albums {
-      items {
-        id
-        name
-        owner
-        contributors
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onUpdateGroup = `subscription OnUpdateGroup {
-  onUpdateGroup {
-    id
-    name
-    owner
-    membersLinks {
-      items {
-        id
-      }
-      nextToken
-    }
-    members
-    createdAt
-    updatedAt
-    albums {
-      items {
-        id
-        name
-        owner
-        contributors
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const onDeleteGroup = `subscription OnDeleteGroup {
-  onDeleteGroup {
-    id
-    name
-    owner
-    membersLinks {
-      items {
-        id
-      }
-      nextToken
-    }
-    members
-    createdAt
-    updatedAt
-    albums {
-      items {
-        id
-        name
-        owner
-        contributors
-      }
-      nextToken
-    }
-  }
-}
-`;
 export const onCreateGroupLink = `subscription OnCreateGroupLink {
   onCreateGroupLink {
     id
@@ -144,15 +66,15 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 }
@@ -174,15 +96,15 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 }
@@ -204,16 +126,100 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
+  }
+}
+`;
+export const onCreateGroup = `subscription OnCreateGroup {
+  onCreateGroup {
+    id
+    name
+    owner
+    authUsers
+    userLinks {
+      items {
+        id
+      }
+      nextToken
+    }
+    albums {
+      items {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onUpdateGroup = `subscription OnUpdateGroup {
+  onUpdateGroup {
+    id
+    name
+    owner
+    authUsers
+    userLinks {
+      items {
+        id
+      }
+      nextToken
+    }
+    albums {
+      items {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onDeleteGroup = `subscription OnDeleteGroup {
+  onDeleteGroup {
+    id
+    name
+    owner
+    authUsers
+    userLinks {
+      items {
+        id
+      }
+      nextToken
+    }
+    albums {
+      items {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
   }
 }
 `;
@@ -222,33 +228,34 @@ export const onCreateAlbum = `subscription OnCreateAlbum {
     id
     name
     owner
-    contributors
+    authUsers
     group {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
     messages {
       items {
         id
         owner
-        viewers
-        content
-        bucket
+        authUsers
+        text
         createdAt
         updatedAt
       }
       nextToken
     }
+    createdAt
+    updatedAt
   }
 }
 `;
@@ -257,33 +264,34 @@ export const onUpdateAlbum = `subscription OnUpdateAlbum {
     id
     name
     owner
-    contributors
+    authUsers
     group {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
     messages {
       items {
         id
         owner
-        viewers
-        content
-        bucket
+        authUsers
+        text
         createdAt
         updatedAt
       }
       nextToken
     }
+    createdAt
+    updatedAt
   }
 }
 `;
@@ -292,33 +300,34 @@ export const onDeleteAlbum = `subscription OnDeleteAlbum {
     id
     name
     owner
-    contributors
+    authUsers
     group {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
     messages {
       items {
         id
         owner
-        viewers
-        content
-        bucket
+        authUsers
+        text
         createdAt
         updatedAt
       }
       nextToken
     }
+    createdAt
+    updatedAt
   }
 }
 `;
@@ -326,36 +335,38 @@ export const onCreateMessage = `subscription OnCreateMessage {
   onCreateMessage {
     id
     owner
-    viewers
+    authUsers
+    type
+    text
     album {
       id
       name
       owner
-      contributors
+      authUsers
       group {
         id
         name
         owner
-        members
+        authUsers
         createdAt
         updatedAt
       }
       messages {
         nextToken
       }
+      createdAt
+      updatedAt
     }
-    content
-    type
-    bucket
-    fullsize {
-      key
-      width
-      height
-    }
-    thumbnail {
-      key
-      width
-      height
+    photos {
+      items {
+        id
+        owner
+        authUsers
+        bucket
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
     createdAt
     updatedAt
@@ -366,36 +377,38 @@ export const onUpdateMessage = `subscription OnUpdateMessage {
   onUpdateMessage {
     id
     owner
-    viewers
+    authUsers
+    type
+    text
     album {
       id
       name
       owner
-      contributors
+      authUsers
       group {
         id
         name
         owner
-        members
+        authUsers
         createdAt
         updatedAt
       }
       messages {
         nextToken
       }
+      createdAt
+      updatedAt
     }
-    content
-    type
-    bucket
-    fullsize {
-      key
-      width
-      height
-    }
-    thumbnail {
-      key
-      width
-      height
+    photos {
+      items {
+        id
+        owner
+        authUsers
+        bucket
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
     createdAt
     updatedAt
@@ -406,26 +419,49 @@ export const onDeleteMessage = `subscription OnDeleteMessage {
   onDeleteMessage {
     id
     owner
-    viewers
+    authUsers
+    type
+    text
     album {
       id
       name
       owner
-      contributors
+      authUsers
       group {
         id
         name
         owner
-        members
+        authUsers
         createdAt
         updatedAt
       }
       messages {
         nextToken
       }
+      createdAt
+      updatedAt
     }
-    content
-    type
+    photos {
+      items {
+        id
+        owner
+        authUsers
+        bucket
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onCreatePhoto = `subscription OnCreatePhoto {
+  onCreatePhoto {
+    id
+    owner
+    authUsers
     bucket
     fullsize {
       key
@@ -436,6 +472,108 @@ export const onDeleteMessage = `subscription OnDeleteMessage {
       key
       width
       height
+    }
+    message {
+      id
+      owner
+      authUsers
+      type
+      text
+      album {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onUpdatePhoto = `subscription OnUpdatePhoto {
+  onUpdatePhoto {
+    id
+    owner
+    authUsers
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
+    message {
+      id
+      owner
+      authUsers
+      type
+      text
+      album {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onDeletePhoto = `subscription OnDeletePhoto {
+  onDeletePhoto {
+    id
+    owner
+    authUsers
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
+    message {
+      id
+      owner
+      authUsers
+      type
+      text
+      album {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
     createdAt
     updatedAt

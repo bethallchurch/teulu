@@ -7,30 +7,32 @@ type User {
   updatedAt: String
 }
 
-type Group {
-  id: ID!
-  name: String!
-  owner: String
-  membersLinks(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
-  members: [String]!
-  createdAt: String
-  updatedAt: String
-  albums(filter: ModelAlbumFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAlbumConnection
-}
-
 type GroupLink {
   id: ID!
-  user: User!
+  user: User
   group: Group!
+}
+
+type Group {
+  id: ID!
+  name: String
+  owner: String
+  authUsers: [String]
+  userLinks(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
+  albums(filter: ModelAlbumFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAlbumConnection
+  createdAt: String
+  updatedAt: String
 }
 
 type Album {
   id: ID!
-  name: String!
+  name: String
   owner: String
-  contributors: [String]
-  group: Group!
+  authUsers: [String]
+  group: Group
   messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+  createdAt: String
+  updatedAt: String
 }
 
 enum MessageType {
@@ -40,14 +42,24 @@ enum MessageType {
 
 type Message {
   id: ID!
-  owner: String!
-  viewers: [String]
-  album: Album!
-  content: String!
-  type: MessageType!
+  owner: String
+  authUsers: [String]
+  type: MessageType
+  text: String
+  album: Album
+  photos(filter: ModelPhotoFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPhotoConnection
+  createdAt: String
+  updatedAt: String
+}
+
+type Photo {
+  id: ID!
+  owner: String
+  authUsers: [String]
   bucket: String
   fullsize: PhotoS3Info
   thumbnail: PhotoS3Info
+  message: Message
   createdAt: String
   updatedAt: String
 }
@@ -137,14 +149,16 @@ input ModelUserFilterInput {
 type Query {
   getUser(id: ID!): User
   listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
-  getGroup(id: ID!): Group
-  listGroups(filter: ModelGroupFilterInput, limit: Int, nextToken: String): ModelGroupConnection
   getGroupLink(id: ID!): GroupLink
   listGroupLinks(filter: ModelGroupLinkFilterInput, limit: Int, nextToken: String): ModelGroupLinkConnection
+  getGroup(id: ID!): Group
+  listGroups(filter: ModelGroupFilterInput, limit: Int, nextToken: String): ModelGroupConnection
   getAlbum(id: ID!): Album
   listAlbums(filter: ModelAlbumFilterInput, limit: Int, nextToken: String): ModelAlbumConnection
   getMessage(id: ID!): Message
   listMessages(filter: ModelMessageFilterInput, limit: Int, nextToken: String): ModelMessageConnection
+  getPhoto(id: ID!): Photo
+  listPhotos(filter: ModelPhotoFilterInput, limit: Int, nextToken: String): ModelPhotoConnection
 }
 
 input CreateUserInput {
@@ -171,75 +185,42 @@ type Mutation {
   createUser(input: CreateUserInput!): User
   updateUser(input: UpdateUserInput!): User
   deleteUser(input: DeleteUserInput!): User
-  createGroup(input: CreateGroupInput!): Group
-  updateGroup(input: UpdateGroupInput!): Group
-  deleteGroup(input: DeleteGroupInput!): Group
   createGroupLink(input: CreateGroupLinkInput!): GroupLink
   updateGroupLink(input: UpdateGroupLinkInput!): GroupLink
   deleteGroupLink(input: DeleteGroupLinkInput!): GroupLink
+  createGroup(input: CreateGroupInput!): Group
+  updateGroup(input: UpdateGroupInput!): Group
+  deleteGroup(input: DeleteGroupInput!): Group
   createAlbum(input: CreateAlbumInput!): Album
   updateAlbum(input: UpdateAlbumInput!): Album
   deleteAlbum(input: DeleteAlbumInput!): Album
   createMessage(input: CreateMessageInput!): Message
   updateMessage(input: UpdateMessageInput!): Message
   deleteMessage(input: DeleteMessageInput!): Message
+  createPhoto(input: CreatePhotoInput!): Photo
+  updatePhoto(input: UpdatePhotoInput!): Photo
+  deletePhoto(input: DeletePhotoInput!): Photo
 }
 
 type Subscription {
   onCreateUser: User @aws_subscribe(mutations: ["createUser"])
   onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
   onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
-  onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
-  onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
-  onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
   onCreateGroupLink: GroupLink @aws_subscribe(mutations: ["createGroupLink"])
   onUpdateGroupLink: GroupLink @aws_subscribe(mutations: ["updateGroupLink"])
   onDeleteGroupLink: GroupLink @aws_subscribe(mutations: ["deleteGroupLink"])
+  onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
+  onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
+  onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
   onCreateAlbum: Album @aws_subscribe(mutations: ["createAlbum"])
   onUpdateAlbum: Album @aws_subscribe(mutations: ["updateAlbum"])
   onDeleteAlbum: Album @aws_subscribe(mutations: ["deleteAlbum"])
   onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
   onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
   onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
-}
-
-type ModelGroupConnection {
-  items: [Group]
-  nextToken: String
-}
-
-input ModelGroupFilterInput {
-  id: ModelIDFilterInput
-  name: ModelStringFilterInput
-  owner: ModelStringFilterInput
-  members: ModelStringFilterInput
-  createdAt: ModelStringFilterInput
-  updatedAt: ModelStringFilterInput
-  and: [ModelGroupFilterInput]
-  or: [ModelGroupFilterInput]
-  not: ModelGroupFilterInput
-}
-
-input CreateGroupInput {
-  id: ID
-  name: String!
-  owner: String
-  members: [String]!
-  createdAt: String
-  updatedAt: String
-}
-
-input UpdateGroupInput {
-  id: ID!
-  name: String
-  owner: String
-  members: [String]
-  createdAt: String
-  updatedAt: String
-}
-
-input DeleteGroupInput {
-  id: ID
+  onCreatePhoto: Photo @aws_subscribe(mutations: ["createPhoto"])
+  onUpdatePhoto: Photo @aws_subscribe(mutations: ["updatePhoto"])
+  onDeletePhoto: Photo @aws_subscribe(mutations: ["deletePhoto"])
 }
 
 type ModelGroupLinkConnection {
@@ -256,7 +237,7 @@ input ModelGroupLinkFilterInput {
 
 input CreateGroupLinkInput {
   id: ID
-  groupLinkUserId: ID!
+  groupLinkUserId: ID
   groupLinkGroupId: ID!
 }
 
@@ -270,6 +251,45 @@ input DeleteGroupLinkInput {
   id: ID
 }
 
+type ModelGroupConnection {
+  items: [Group]
+  nextToken: String
+}
+
+input ModelGroupFilterInput {
+  id: ModelIDFilterInput
+  name: ModelStringFilterInput
+  owner: ModelStringFilterInput
+  authUsers: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelGroupFilterInput]
+  or: [ModelGroupFilterInput]
+  not: ModelGroupFilterInput
+}
+
+input CreateGroupInput {
+  id: ID
+  name: String
+  owner: String
+  authUsers: [String]
+  createdAt: String
+  updatedAt: String
+}
+
+input UpdateGroupInput {
+  id: ID!
+  name: String
+  owner: String
+  authUsers: [String]
+  createdAt: String
+  updatedAt: String
+}
+
+input DeleteGroupInput {
+  id: ID
+}
+
 type ModelAlbumConnection {
   items: [Album]
   nextToken: String
@@ -279,7 +299,9 @@ input ModelAlbumFilterInput {
   id: ModelIDFilterInput
   name: ModelStringFilterInput
   owner: ModelStringFilterInput
-  contributors: ModelStringFilterInput
+  authUsers: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
   and: [ModelAlbumFilterInput]
   or: [ModelAlbumFilterInput]
   not: ModelAlbumFilterInput
@@ -287,28 +309,26 @@ input ModelAlbumFilterInput {
 
 input CreateAlbumInput {
   id: ID
-  name: String!
+  name: String
   owner: String
-  contributors: [String]
-  albumGroupId: ID!
+  authUsers: [String]
+  createdAt: String
+  updatedAt: String
+  albumGroupId: ID
 }
 
 input UpdateAlbumInput {
   id: ID!
   name: String
   owner: String
-  contributors: [String]
+  authUsers: [String]
+  createdAt: String
+  updatedAt: String
   albumGroupId: ID
 }
 
 input DeleteAlbumInput {
   id: ID
-}
-
-input PhotoS3InfoInput {
-  key: String!
-  width: Int!
-  height: Int!
 }
 
 type ModelMessageConnection {
@@ -319,9 +339,8 @@ type ModelMessageConnection {
 input ModelMessageFilterInput {
   id: ModelIDFilterInput
   owner: ModelStringFilterInput
-  viewers: ModelStringFilterInput
-  content: ModelStringFilterInput
-  bucket: ModelStringFilterInput
+  authUsers: ModelStringFilterInput
+  text: ModelStringFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput
   and: [ModelMessageFilterInput]
@@ -331,32 +350,77 @@ input ModelMessageFilterInput {
 
 input CreateMessageInput {
   id: ID
-  owner: String!
-  viewers: [String]
-  content: String!
-  type: MessageType!
-  bucket: String
-  fullsize: PhotoS3InfoInput
-  thumbnail: PhotoS3InfoInput
+  owner: String
+  authUsers: [String]
+  type: MessageType
+  text: String
   createdAt: String
   updatedAt: String
-  messageAlbumId: ID!
+  messageAlbumId: ID
 }
 
 input UpdateMessageInput {
   id: ID!
   owner: String
-  viewers: [String]
-  content: String
+  authUsers: [String]
   type: MessageType
-  bucket: String
-  fullsize: PhotoS3InfoInput
-  thumbnail: PhotoS3InfoInput
+  text: String
   createdAt: String
   updatedAt: String
   messageAlbumId: ID
 }
 
 input DeleteMessageInput {
+  id: ID
+}
+
+input PhotoS3InfoInput {
+  key: String!
+  width: Int!
+  height: Int!
+}
+
+type ModelPhotoConnection {
+  items: [Photo]
+  nextToken: String
+}
+
+input ModelPhotoFilterInput {
+  id: ModelIDFilterInput
+  owner: ModelStringFilterInput
+  authUsers: ModelStringFilterInput
+  bucket: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelPhotoFilterInput]
+  or: [ModelPhotoFilterInput]
+  not: ModelPhotoFilterInput
+}
+
+input CreatePhotoInput {
+  id: ID
+  owner: String
+  authUsers: [String]
+  bucket: String
+  fullsize: PhotoS3InfoInput
+  thumbnail: PhotoS3InfoInput
+  createdAt: String
+  updatedAt: String
+  photoMessageId: ID
+}
+
+input UpdatePhotoInput {
+  id: ID!
+  owner: String
+  authUsers: [String]
+  bucket: String
+  fullsize: PhotoS3InfoInput
+  thumbnail: PhotoS3InfoInput
+  createdAt: String
+  updatedAt: String
+  photoMessageId: ID
+}
+
+input DeletePhotoInput {
   id: ID
 }

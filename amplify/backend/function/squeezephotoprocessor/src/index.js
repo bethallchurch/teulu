@@ -16,14 +16,22 @@ const Sharp = require('sharp')
 // We'll expect these environment variables to be defined when the Lambda function is deployed
 const THUMBNAIL_WIDTH = parseInt(process.env.THUMBNAIL_WIDTH, 10)
 const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT, 10)
-const DYNAMODB_PHOTOS_TABLE_NAME = process.env.DYNAMODB_PHOTOS_TABLE_ARN.split('/')[1]
+const DYNAMODB_PHOTO_TABLE_NAME = process.env.DYNAMODB_PHOTO_TABLE_ARN.split('/')[1]
+const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
 
-const storePhotoInfo = item => {
-  const params = {
-    Item: item,
-    TableName: DYNAMODB_PHOTOS_TABLE_NAME
+const storePhotoInfo = ({ photo, message }) => {
+  const photoParams = {
+    Item: photo,
+    TableName: DYNAMODB_PHOTO_TABLE_NAME
   }
-  return DynamoDBDocClient.put(params).promise()
+  const messageParams = {
+    Item: message,
+    TableName: DYNAMODB_MESSAGE_TABLE_NAME
+  }
+  return Promise.all([
+    DynamoDBDocClient.put(photoParams).promise(),
+    DynamoDBDocClient.put(messageParams).promise()
+  ])
 }
 
 const getMetadata = async (bucketName, key) => {
@@ -91,21 +99,36 @@ const processRecord = async record => {
 
   const metadata = await getMetadata(bucketName, key)
   const sizes = await resize(bucketName, key)
-  const id = uuid()
+  const photoId = uuid()
+  const messageId = uuid()
 
-  const item = {
-    id: id,
+  console.log('AUTH USERS:', metadata.authusers)
+  console.log('TEXT:', metadata.text)
+
+  const sharedParams = {
     owner: metadata.userid,
-    messageAlbumId: metadata.albumid,
-    bucket: bucketName,
-    thumbnail: sizes.thumbnail,
-    fullsize: sizes.fullsize,
+    authUsers: metadata.authusers,
     createdAt: new Date().toISOString(),
-    type: 'PHOTO',
-    content: `${metadata.userid} sent a photo`
+    updatedAt: new Date().toISOString()
   }
 
-  await storePhotoInfo(item)
+  const photo = { ...sharedParams,
+    id: photoId,
+    bucket: bucketName,
+    fullsize: sizes.fullsize,
+    thumbnail: sizes.thumbnail,
+    message: messageId
+  }
+
+  const message = { ...sharedParams,
+    id: messageId,
+    type: 'PHOTO',
+    text: metadata.text,
+    album: metadata.albumid,
+    photos: [ photoId ]
+  }
+
+  await storePhotoInfo({ photo, message })
 }
 
 exports.handler = async (event, context, callback) => {

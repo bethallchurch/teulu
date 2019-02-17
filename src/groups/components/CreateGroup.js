@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Input, Button } from 'react-native-elements'
 import { createGroup, createGroupLink } from '@groups/GroupService'
 import SelectContactList from '@contacts/components/SelectContactList'
-import AppContext from '@global/context/AppContext'
+import { UserContext } from '@global/context'
 
 const StepOne = ({ onChangeText, onPressButton }) => (
   <Fragment>
@@ -111,9 +111,9 @@ const styles = StyleSheet.create({
 })
 
 const CreateGroupWithContext = props => (
-  <AppContext.Consumer>
+  <UserContext.Consumer>
     {({ userId }) => <CreateGroup userId={userId} {...props} />}
-  </AppContext.Consumer>
+  </UserContext.Consumer>
 )
 
 export default CreateGroupWithContext

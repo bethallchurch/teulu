@@ -37,56 +37,6 @@ export const listUsers = `query ListUsers(
   }
 }
 `;
-export const getGroup = `query GetGroup($id: ID!) {
-  getGroup(id: $id) {
-    id
-    name
-    owner
-    membersLinks {
-      items {
-        id
-      }
-      nextToken
-    }
-    members
-    createdAt
-    updatedAt
-    albums {
-      items {
-        id
-        name
-        owner
-        contributors
-      }
-      nextToken
-    }
-  }
-}
-`;
-export const listGroups = `query ListGroups(
-  $filter: ModelGroupFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      name
-      owner
-      membersLinks {
-        nextToken
-      }
-      members
-      createdAt
-      updatedAt
-      albums {
-        nextToken
-      }
-    }
-    nextToken
-  }
-}
-`;
 export const getGroupLink = `query GetGroupLink($id: ID!) {
   getGroupLink(id: $id) {
     id
@@ -104,15 +54,15 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
   }
 }
@@ -136,10 +86,62 @@ export const listGroupLinks = `query ListGroupLinks(
         id
         name
         owner
-        members
+        authUsers
         createdAt
         updatedAt
       }
+    }
+    nextToken
+  }
+}
+`;
+export const getGroup = `query GetGroup($id: ID!) {
+  getGroup(id: $id) {
+    id
+    name
+    owner
+    authUsers
+    userLinks {
+      items {
+        id
+      }
+      nextToken
+    }
+    albums {
+      items {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const listGroups = `query ListGroups(
+  $filter: ModelGroupFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listGroups(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      owner
+      authUsers
+      userLinks {
+        nextToken
+      }
+      albums {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
     nextToken
   }
@@ -150,33 +152,34 @@ export const getAlbum = `query GetAlbum($id: ID!) {
     id
     name
     owner
-    contributors
+    authUsers
     group {
       id
       name
       owner
-      membersLinks {
+      authUsers
+      userLinks {
         nextToken
       }
-      members
-      createdAt
-      updatedAt
       albums {
         nextToken
       }
+      createdAt
+      updatedAt
     }
     messages {
       items {
         id
         owner
-        viewers
-        content
-        bucket
+        authUsers
+        text
         createdAt
         updatedAt
       }
       nextToken
     }
+    createdAt
+    updatedAt
   }
 }
 `;
@@ -190,18 +193,20 @@ export const listAlbums = `query ListAlbums(
       id
       name
       owner
-      contributors
+      authUsers
       group {
         id
         name
         owner
-        members
+        authUsers
         createdAt
         updatedAt
       }
       messages {
         nextToken
       }
+      createdAt
+      updatedAt
     }
     nextToken
   }
@@ -211,36 +216,38 @@ export const getMessage = `query GetMessage($id: ID!) {
   getMessage(id: $id) {
     id
     owner
-    viewers
+    authUsers
+    type
+    text
     album {
       id
       name
       owner
-      contributors
+      authUsers
       group {
         id
         name
         owner
-        members
+        authUsers
         createdAt
         updatedAt
       }
       messages {
         nextToken
       }
+      createdAt
+      updatedAt
     }
-    content
-    type
-    bucket
-    fullsize {
-      key
-      width
-      height
-    }
-    thumbnail {
-      key
-      width
-      height
+    photos {
+      items {
+        id
+        owner
+        authUsers
+        bucket
+        createdAt
+        updatedAt
+      }
+      nextToken
     }
     createdAt
     updatedAt
@@ -256,15 +263,78 @@ export const listMessages = `query ListMessages(
     items {
       id
       owner
-      viewers
+      authUsers
+      type
+      text
       album {
         id
         name
         owner
-        contributors
+        authUsers
+        createdAt
+        updatedAt
       }
-      content
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+`;
+export const getPhoto = `query GetPhoto($id: ID!) {
+  getPhoto(id: $id) {
+    id
+    owner
+    authUsers
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
+    message {
+      id
+      owner
+      authUsers
       type
+      text
+      album {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const listPhotos = `query ListPhotos(
+  $filter: ModelPhotoFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listPhotos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      owner
+      authUsers
       bucket
       fullsize {
         key
@@ -275,6 +345,14 @@ export const listMessages = `query ListMessages(
         key
         width
         height
+      }
+      message {
+        id
+        owner
+        authUsers
+        text
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
