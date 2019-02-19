@@ -1,32 +1,29 @@
 import React, { Component } from 'react'
 import Amplify from 'aws-amplify'
-import { withAuthenticator } from 'aws-amplify-react-native'
 import { createAppContainer } from 'react-navigation'
 import config from './aws-exports'
-import { getOrCreateUser } from '@user/UserService'
-import { UserContext } from '@global/context'
-import Navigator from '@Navigator'
 import AuthStack from '@auth/AuthNavigation'
+import { Font } from 'expo'
+import { font, fontBold } from '@global/styles'
 
 Amplify.configure(config)
 
-const NavigationContainer = createAppContainer(Navigator)
+const AppNavigator = createAppContainer(AuthStack)
 
 class App extends Component {
-  state = { user: {} }
-
+  state = { fontLoaded: false }
+  
   async componentDidMount () {
-    const user = await getOrCreateUser()
-    this.setState({ user })
+    await Font.loadAsync({
+      [font]: require('@assets/fonts/OpenSans/OpenSans-Regular.ttf'),
+      [fontBold]: require('@assets/fonts/OpenSans/OpenSans-Bold.ttf')
+    })
+    this.setState({ fontLoaded: true })
   }
-
+  
   render () {
-    return (
-      <UserContext.Provider value={this.state.user}>
-        <NavigationContainer />
-      </UserContext.Provider>
-    )
+    return this.state.fontLoaded ? <AppNavigator /> : null
   }
 }
 
-export default AuthStack
+export default App

@@ -1,9 +1,6 @@
 {
+    "DynamoDBBillingMode": "PROVISIONED",
     "AppSyncApiName": "SqueezeApp",
-    "schemaGraphql": "s3://squeeze-20190207173156-deployment/amplify-appsync-files/schema.graphql.1550404774867",
-    "ResolverBucket": "squeeze-20190207173156-deployment",
-    "ResolverRootKey": "amplify-appsync-files",
-    "DeploymentTimestamp": "1550404774867",
     "AuthCognitoUserPoolId": {
         "Fn::GetAtt": [
             "authcognito57a32b25",

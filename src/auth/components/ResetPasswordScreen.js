@@ -10,68 +10,64 @@ import {
   Keyboard,
   Alert
 } from 'react-native'
+import { Icon } from 'react-native-elements'
 import { Auth } from 'aws-amplify'
 import Button from '@global/components/Button'
 import TextInput from '@auth/components/TextInput'
-import Link, { LinkContainer } from '@global/components/Link'
 
-class VerificationScreen extends Component {
-  constructor (props) {
-    super(props)
-    const username = props.navigation.getParam('username') || ''
-    this.state = { username, authenticationCode: '' }
+class ResetPasswordScreen extends Component {
+  state = {
+    password: '', repeatPassword: '', authenticationCode: ''
   }
 
   onChangeText = (key, value) => {
     this.setState({ [key]: value })
   }
 
-  confirm = async () => {
-    const { username, authenticationCode } = this.state
-    console.log('Username:', username, 'AuthCode:', authenticationCode)
+  async resetPassword () {
+    const { username, password, authenticationCode } = this.state
     try {
-      await Auth.confirmSignUp(username, authenticationCode)
-      this.props.navigation.navigate('Login', { username })
+      await Auth.forgotPasswordSubmit(username, authenticationCode, password)
+      this.props.navigation.navigate('Login')
     } catch (error) {
-      const { message } = error
       Alert.alert('Something went wrong!', message ? message : error)
     }
   }
 
-  render () {
+  render() {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar />
-          <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
+          <KeyboardAvoidingView style={{ ...styles.container, flex: 1 }} behavior='padding' enabled>
             <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
               <View style={styles.container}>
                 <View style={styles.infoContainer}>
-                  <Text style={styles.titleText}>Enter verification code</Text>
+                  <Text style={styles.titleText}>Reset Password</Text>
                   <TextInput
-                    placeholder='Username'
-                    value={this.state.username}
+                    placeholder='Password'
+                    value={this.state.password}
                     returnKeyType='next'
-                    keyboardType='email-address'
                     autoCorrect={false}
-                    onChangeText={value => this.onChangeText('username', value)}
+                    secureTextEntry={true}
+                    onChangeText={value => this.onChangeText('password', value)}
+                  />
+                  <TextInput
+                    placeholder='Repeat Password'
+                    value={this.state.repeatPassword}
+                    returnKeyType='next'
+                    autoCorrect={false}
+                    secureTextEntry={true}
+                    onChangeText={value => this.onChangeText('repeatPassword', value)}
                   />
                   <TextInput
                     placeholder='Verification Code'
                     value={this.state.authenticationCode}
-                    returnKeyType='done'
+                    returnKeyType='go'
                     autoCorrect={false}
                     keyboardType='numeric'
                     onChangeText={value => this.onChangeText('authenticationCode', value)}
                   />
-                  <Button onPress={this.confirm}>Confirm</Button>
-                  <LinkContainer>
-                  <Link onPress={this.resend}>
-                    Resend code
-                  </Link>
-                    <Link onPress={() => this.props.navigation.navigate('Login')}>
-                      Login
-                    </Link>
-                  </LinkContainer>
+                  <Button onPress={this.resetPassword}>Reset</Button>
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -104,4 +100,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default VerificationScreen
+export default ResetPasswordScreen

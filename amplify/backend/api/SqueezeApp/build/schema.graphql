@@ -336,10 +336,16 @@ type ModelMessageConnection {
   nextToken: String
 }
 
+input ModelMessageTypeFilterInput {
+  eq: MessageType
+  ne: MessageType
+}
+
 input ModelMessageFilterInput {
   id: ModelIDFilterInput
   owner: ModelStringFilterInput
   authUsers: ModelStringFilterInput
+  type: ModelMessageTypeFilterInput
   text: ModelStringFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput

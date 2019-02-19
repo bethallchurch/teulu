@@ -7,6 +7,9 @@
 		},
 		"DynamoDBPhotosTableArn": {
 			"Type": "String"
+		},
+		"env": {
+			"Type": "String"
 		}
 	},
 	"Resources": {
@@ -18,7 +21,24 @@
 			},
 			"Properties": {
 				"Handler": "index.handler",
-				"FunctionName": "squeezephotoprocessor",
+				"FunctionName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"squeezephotoprocessor",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"squeezephotoprocessor",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
 				"Role": {
 					"Fn::GetAtt": [
 						"LambdaExecutionRole",
@@ -29,23 +49,38 @@
 				"Timeout": "25",
 				"Environment": {
 					"Variables": {
-						"THUMBNAIL_WIDTH": "80",
-						"THUMBNAIL_HEIGHT": "80",
-						"DYNAMODB_PHOTOS_TABLE_ARN": {
-							"Ref": "DynamoDBPhotosTableArn"
+						"ENV": {
+							"Ref": "env"
 						}
 					}
 				},
 				"Code": {
 					"S3Bucket": "squeeze-20190207173156-deployment",
-					"S3Key": "amplify-builds/squeezephotoprocessor-1550356384-latest-build.zip"
+					"S3Key": "amplify-builds/squeezephotoprocessor-1550414892-latest-build.zip"
 				}
 			}
 		},
 		"LambdaExecutionRole": {
 			"Type": "AWS::IAM::Role",
 			"Properties": {
-				"RoleName": "squeezeLambdaRolea67c68c5",
+				"RoleName": {
+					"Fn::If": [
+						"ShouldNotCreateEnvResources",
+						"squeezeLambdaRolea67c68c5",
+						{
+							"Fn::Join": [
+								"",
+								[
+									"squeezeLambdaRolea67c68c5",
+									"-",
+									{
+										"Ref": "env"
+									}
+								]
+							]
+						}
+					]
+				},
 				"AssumeRolePolicyDocument": {
 					"Version": "2012-10-17",
 					"Statement": [
@@ -215,6 +250,16 @@
 			"Value": {
 				"Ref": "AWS::Region"
 			}
+		}
+	},
+	"Conditions": {
+		"ShouldNotCreateEnvResources": {
+			"Fn::Equals": [
+				{
+					"Ref": "env"
+				},
+				"NONE"
+			]
 		}
 	}
 }

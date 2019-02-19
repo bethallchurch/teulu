@@ -17,20 +17,23 @@ const Sharp = require('sharp')
 const THUMBNAIL_WIDTH = parseInt(process.env.THUMBNAIL_WIDTH, 10)
 const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT, 10)
 const DYNAMODB_PHOTO_TABLE_NAME = process.env.DYNAMODB_PHOTO_TABLE_ARN.split('/')[1]
-const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
+// const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
 
 const storePhotoInfo = ({ photo, message }) => {
   const photoParams = {
     Item: photo,
     TableName: DYNAMODB_PHOTO_TABLE_NAME
   }
-  const messageParams = {
-    Item: message,
-    TableName: DYNAMODB_MESSAGE_TABLE_NAME
-  }
+
+  console.log('MESSAGE!', message)
+
+  // const messageParams = {
+  //   Item: message,
+  //   TableName: DYNAMODB_MESSAGE_TABLE_NAME
+  // }
   return Promise.all([
-    DynamoDBDocClient.put(photoParams).promise(),
-    DynamoDBDocClient.put(messageParams).promise()
+    DynamoDBDocClient.put(photoParams).promise()
+    // DynamoDBDocClient.put(messageParams).promise()
   ])
 }
 

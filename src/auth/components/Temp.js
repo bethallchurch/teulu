@@ -14,19 +14,29 @@ export default class WelcomeScreen extends React.Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity 
-          onPress={() => this.props.navigation.navigate('SignUp')}
+          onPress={() => this.props.navigation.navigate('Register')}
           style={styles.buttonStyle}>
-          <Text style={styles.textStyle}>Sign up</Text>
+          <Text style={styles.textStyle}>Register</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          onPress={() => this.props.navigation.navigate('SignIn')}
+          onPress={() => this.props.navigation.navigate('Login')}
           style={styles.buttonStyle}>
-          <Text style={styles.textStyle}>Sign in</Text>
+          <Text style={styles.textStyle}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity 
-          onPress={() => this.props.navigation.navigate('ForgetPassword')}
+          onPress={() => this.props.navigation.navigate('ForgotPassword')}
           style={styles.buttonStyle}>
-          <Text style={styles.textStyle}>Forget password ?</Text>
+          <Text style={styles.textStyle}>Forgot Password</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          onPress={() => this.props.navigation.navigate('ResetPassword')}
+          style={styles.buttonStyle}>
+          <Text style={styles.textStyle}>Reset Password</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+          onPress={() => this.props.navigation.navigate('Verification')}
+          style={styles.buttonStyle}>
+          <Text style={styles.textStyle}>Verification</Text>
         </TouchableOpacity>
       </View>
     )

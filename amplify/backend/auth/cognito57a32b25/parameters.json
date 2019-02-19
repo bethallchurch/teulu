@@ -1,4 +1,22 @@
 {
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    },
+    "unauthRoleArn": {
+        "Fn::GetAtt": [
+            "UnauthRole",
+            "Arn"
+        ]
+    },
     "identityPoolName": "cognito57a32b25_identitypool_57a32b25",
     "allowUnauthenticatedIdentities": false,
     "thirdPartyAuth": false,
@@ -49,9 +67,7 @@
     "userpoolClientSetAttributes": false,
     "useDefault": "default",
     "unAuthRoleName": "squeeze-20190207173156-unauthRole",
-    "authRoleName": "squeeze-20190207173156-authRole",
     "unAuthRoleArn": "arn:aws:iam::798760150336:role/squeeze-20190207173156-unauthRole",
-    "authRoleArn": "arn:aws:iam::798760150336:role/squeeze-20190207173156-authRole",
     "resourceName": "cognito57a32b25",
     "authSelections": "identityPoolAndUserPool"
 }

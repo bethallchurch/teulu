@@ -1,0 +1,14 @@
+{
+    "Migration": {
+        "V1": {
+            "Resources": [
+                "UserTable",
+                "GroupLinkTable",
+                "GroupTable",
+                "AlbumTable",
+                "MessageTable",
+                "PhotoTable"
+            ]
+        }
+    }
+}

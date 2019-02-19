@@ -1,9 +1,13 @@
 {
-    "bucketName": "amplifysqueezes3storage0",
-    "authPolicyName": "s3_amplify_6637bba9",
-    "unauthPolicyName": "s3_amplify_6637bba9",
-    "authRoleName": "squeeze-20190207173156-authRole",
-    "unauthRoleName": "squeeze-20190207173156-unauthRole",
-    "authPermissions": "rw",
-    "unauthPermissions": ""
+	"bucketName": "amplifysqueezes3storage0",
+	"authPolicyName": "s3_amplify_6637bba9",
+	"unauthPolicyName": "s3_amplify_6637bba9",
+	"authRoleName": {
+		"Ref": "AuthRoleName"
+	},
+	"unauthRoleName": {
+		"Ref": "UnauthRoleName"
+	},
+	"authPermissions": "rw",
+	"unauthPermissions": ""
 }

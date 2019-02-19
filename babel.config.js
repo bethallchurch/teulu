@@ -18,10 +18,11 @@ module.exports = function (api) {
           '@graphql': './src/graphql',
           '@groups': './src/groups',
           '@messages': './src/messages',
-          '@Navigator': './src/Navigator',
           '@photos': './src/photos',
           '@styles': './src/styles',
-          '@user': './src/user'
+          '@user': './src/user',
+          '@App': './src/App',
+          '@Navigator': './src/Navigator'
         }
       }]
     ]

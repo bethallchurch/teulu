@@ -1,5 +1,5 @@
 import { Contacts } from 'expo'
-import { COUNTRY_CODES } from '@contacts/constants'
+import { COUNTRY_CODES } from '@global/constants'
 import { intersection } from '@global/helpers'
 import { listUsers } from '@user/UserService'
 
@@ -20,7 +20,9 @@ export const getContacts = async () => {
   // const validContacts = phoneContacts.filter(({ phoneNumbers }) => {
   //   return intersection(phoneNumbers.reduce(
   //     (numbers, { countryCode, digits }) => {
-  //       const number = `${COUNTRY_CODES[countryCode.toUpperCase()].code}${digits}`
+  //      TODO! untested code
+          // const { dialCode } = COUNTRY_CODES.find(({ code }) => code === countryCode)
+  //       const number = `${dialCode}${digits}`
   //       return [ ...numbers, number ]
   //     },
   //     []

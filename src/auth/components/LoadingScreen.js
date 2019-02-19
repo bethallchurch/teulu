@@ -6,15 +6,24 @@ import {
   ActivityIndicator,
   AsyncStorage
 } from 'react-native'
+import { Auth } from 'aws-amplify'
+import { offWhite } from '@global/styles'
 
 export default class AuthLoadingScreen extends React.Component {
+  state = { userToken: null }
+  
   async componentDidMount () {
     await this.loadApp()
   }
 
   loadApp = async () => {
-    const userToken = await AsyncStorage.getItem('userToken')
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth')
+    try {
+      const user = await Auth.currentAuthenticatedUser()
+      this.setState({ userToken: user.signInUserSession.accessToken.jwtToken })
+    } catch (error) {
+      console.log(error)
+    }
+    this.props.navigation.navigate(this.state.userToken ? 'App' : 'Auth')
   }
 
   render () {
@@ -28,7 +37,7 @@ export default class AuthLoadingScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#aa73b7',
+    backgroundColor: offWhite,
     alignItems: 'center',
     justifyContent: 'center'
   }

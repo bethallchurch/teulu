@@ -5,44 +5,37 @@ import ForgotPasswordScreen from '@auth/components/ForgotPasswordScreen'
 import LoadingScreen from '@auth/components/LoadingScreen'
 import LoginScreen from '@auth/components/LoginScreen'
 import RegisterScreen from '@auth/components/RegisterScreen'
+import ResetPasswordScreen from '@auth/components/ResetPasswordScreen'
 import Temp from '@auth/components/Temp'
 import VerificationScreen from '@auth/components/VerificationScreen'
+import App from '@App'
 
 const AuthStack = createStackNavigator({
+
+  Login: {
+    screen: LoginScreen
+  },
   Welcome: {
-    screen: Temp,
-    navigationOptions: () => ({
-      title: `Welcome to this App`, // for the header screen
-      headerBackTitle: 'Back'
-    })
+    screen: Temp
   },
   Register: {
-    screen: RegisterScreen,
-    navigationOptions: () => ({
-      title: `Create a new account`
-    })
+    screen: RegisterScreen
   },
-  Verification: {
-    screen: VerificationScreen,
-    navigationOptions: () => ({
-      title: `Enter verification code`
-    })
-  },
-  Login: {
-    screen: LoginScreen,
-    navigationOptions: () => ({
-      title: `Log in to your account`
-    })
+  ResetPassword: {
+    screen: ResetPasswordScreen
   },
   ForgotPassword: {
-    screen: ForgotPasswordScreen,
-    navigationOptions: () => ({
-      title: `Create a new password`
-    })
+    screen: ForgotPasswordScreen
+  },
+  Verification: {
+    screen: VerificationScreen
   }
+}, {
+  headerMode: 'none'
 })
 
 export default createSwitchNavigator({
   AuthLoading: LoadingScreen,
-  Auth: AuthStack
+  Auth: AuthStack,
+  App: App
 })
