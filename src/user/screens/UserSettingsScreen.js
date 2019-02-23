@@ -52,7 +52,7 @@ export default class UserSettingsScreen extends Component {
               onPress={() => navigate(routes.RESET_PASSWORD)}
             />
           </View>
-          <LogOutButton navigate={navigate} />
+          <LogOutButton navigation={this.props.navigation} />
         </View>
       </SafeAreaView>
     )

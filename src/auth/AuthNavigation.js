@@ -1,3 +1,4 @@
+import React from 'react'
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import * as routes from '@navigation/routes'
 import { lightGrey, offWhite } from '@global/styles'
@@ -6,7 +7,7 @@ import LoadingScreen from '@auth/screens/LoadingScreen'
 import LoginScreen from '@auth/screens/LoginScreen'
 import RegisterScreen from '@auth/screens/RegisterScreen'
 import TabBarIcon from '@auth/components/TabBarIcon'
-import App from '@App'
+import { default as MainApp } from '@navigation/Navigator'
 
 const AuthTabs = createBottomTabNavigator({
   [routes.LOGIN]: {
@@ -47,5 +48,5 @@ const AuthStack = createStackNavigator({
 export default createSwitchNavigator({
   [routes.AUTH_LOADING]: LoadingScreen,
   [routes.AUTH]: AuthStack,
-  [routes.APP]: App
+  [routes.APP]: MainApp
 })

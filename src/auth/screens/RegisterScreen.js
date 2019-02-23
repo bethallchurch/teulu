@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, Alert } from 'react-native'
 import uuid from 'uuid/v4'
+import { LOGIN } from '@navigation/routes'
 import { signUp, resendSignUp, confirmSignUp } from '@auth/AuthService'
 import Button from '@global/components/Button'
 import TextInput from '@global/components/TextInput'
@@ -61,7 +62,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
   }
 
   register = async () => {
-    const { navgation: { navigate } } = this.props
+    const { navigation: { navigate } } = this.props
     const { username, nationalNumber, dialCode, verificationCode } = this.state
     try {
       await confirmSignUp({ username, verificationCode })
@@ -73,7 +74,6 @@ class RegisterScreen extends ComponentWithPhoneInput {
           onPress: () => navigate(LOGIN, { nationalNumber, dialCode })
         }]
       )
-
     } catch (error) {
       const { message } = error
       console.log('Error confirming user registration:', error)
@@ -86,8 +86,8 @@ class RegisterScreen extends ComponentWithPhoneInput {
     const {
       modalVisible,
       dialCode,
-      username,
       nationalNumber,
+      verificationCode,
       password,
       repeatPassword,
       codeRequested
@@ -130,16 +130,19 @@ class RegisterScreen extends ComponentWithPhoneInput {
         />
         {!codeRequested && <Button onPress={this.requestCode}>Register</Button>}
         {codeRequested && (
-          <TextInput
-            placeholder='Verification Code'
-            value={verificationCode}
-            returnKeyType='done'
-            autoCorrect={false}
-            keyboardType='numeric'
-            ref='verificationCode'
-            refName='verificationCode'
-            onChangeText={value => this.onChangeText('verificationCode', value)}
-          />
+          <>
+            <TextInput
+              placeholder='Verification Code'
+              value={verificationCode}
+              returnKeyType='done'
+              autoCorrect={false}
+              keyboardType='numeric'
+              ref='verificationCode'
+              refName='verificationCode'
+              onChangeText={value => this.onChangeText('verificationCode', value)}
+            />
+            <Button onPress={this.register}>Confirm Register</Button>
+          </>
         )}
         <LinkContainer>
           {codeRequested && <Link onPress={this.resendCode}>Resend code</Link>}

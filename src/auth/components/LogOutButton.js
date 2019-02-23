@@ -10,7 +10,7 @@ export default class LogOutButton extends Component {
   logOut = async () => {
     try {
       await signOut()
-      this.props.navigate(AUTH_LOADING)
+      this.props.navigation.navigate(AUTH_LOADING)
     } catch (error) {
       const { message } = error
       console.log('Error signing out:', error)

@@ -2,6 +2,7 @@ type User
   @model
   @auth(rules: [{ allow: owner, ownerField: "id", queries: null }]) {
   id: ID!
+  phoneNumber: String
   groups: [GroupLink] @connection(name: "UserGroupLinks")
   createdAt: String
   updatedAt: String

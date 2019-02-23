@@ -4,6 +4,7 @@
 export const createUser = `mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
     id
+    phoneNumber
     groups {
       items {
         id
@@ -18,6 +19,7 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
 export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
     id
+    phoneNumber
     groups {
       items {
         id
@@ -32,6 +34,7 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
 export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
   deleteUser(input: $input) {
     id
+    phoneNumber
     groups {
       items {
         id
@@ -48,6 +51,7 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
     id
     user {
       id
+      phoneNumber
       groups {
         nextToken
       }
@@ -76,6 +80,7 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
     id
     user {
       id
+      phoneNumber
       groups {
         nextToken
       }
@@ -104,6 +109,7 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
     id
     user {
       id
+      phoneNumber
       groups {
         nextToken
       }

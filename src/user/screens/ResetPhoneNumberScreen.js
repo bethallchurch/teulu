@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Alert } from 'react-native'
 import { LOGIN } from '@navigation/routes'
 import { getAuthUser, updateUserAttributes, verifyCurrentUserAttributeSubmit } from '@auth/AuthService'
+import { updateUser } from '@user/UserService'
 import MinimalScreenBase from '@global/components/MinimalScreenBase'
 import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
 import PhoneInput from '@global/components/PhoneInput'
@@ -22,10 +23,10 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
   
   requestCode = async () => {
     const { newDialCode, newNationalNumber } = this.state
-    const attributes = { phone_number: `${newDialCode}${newNationalNumber}` }
+    const phoneNumber = `${newDialCode}${newNationalNumber}`
     try {
       const user = await getAuthUser()
-      await updateUserAttributes({ user, attributes })
+      await updateUserAttributes({ user, attributes: { phone_number: phoneNumber }})
       Alert.alert(
         'Verification Code Sent',
         'A verification code has been sent via SMS to your new number.',
@@ -46,6 +47,7 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
     const phoneNumber = `${newDialCode}${newNationalNumber}`
     try {
       await verifyCurrentUserAttributeSubmit({ attribute: phoneNumber, verificationCode })
+      await updateUser({ id: user.username, phoneNumber })
       Alert.alert('Phone Number Changed!', 'Successfully updated phone number.', [{
         text: 'OK',
         onPress: () => this.props.navigation.navigate(ACCOUNT)

@@ -1,6 +1,5 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
-import { SafeAreaView } from 'react-native'
 import { headerTitleStyles } from '@global/styles'
 import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@albums/AlbumNavigation'
 import { CreateGroupStack, GroupSettingsStack } from '@groups/GroupNavigation'
@@ -8,9 +7,8 @@ import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@global/components/HeaderIcon'
 import GroupsScreen from '@groups/components/GroupsScreen'
 import GroupScreen from '@groups/components/GroupScreen'
+import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
-
-const HomeScreen = () => <SafeAreaView style={{ backgroundColor: '#f6f7f6', flex: 1 }} />
 
 const MainAppStack = createStackNavigator({
   'Home': {

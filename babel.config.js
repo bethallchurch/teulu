@@ -21,7 +21,7 @@ module.exports = function (api) {
           '@photos': './src/photos',
           '@styles': './src/styles',
           '@user': './src/user',
-          '@App': './src/App',
+          '@home': './src/home',
           '@navigation': './src/navigation'
         }
       }]

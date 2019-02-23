@@ -4,6 +4,7 @@
 export const onCreateUser = `subscription OnCreateUser {
   onCreateUser {
     id
+    phoneNumber
     groups {
       items {
         id
@@ -18,6 +19,7 @@ export const onCreateUser = `subscription OnCreateUser {
 export const onUpdateUser = `subscription OnUpdateUser {
   onUpdateUser {
     id
+    phoneNumber
     groups {
       items {
         id
@@ -32,6 +34,7 @@ export const onUpdateUser = `subscription OnUpdateUser {
 export const onDeleteUser = `subscription OnDeleteUser {
   onDeleteUser {
     id
+    phoneNumber
     groups {
       items {
         id
@@ -48,6 +51,7 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
     id
     user {
       id
+      phoneNumber
       groups {
         nextToken
       }
@@ -76,6 +80,7 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
     id
     user {
       id
+      phoneNumber
       groups {
         nextToken
       }
@@ -104,6 +109,7 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
     id
     user {
       id
+      phoneNumber
       groups {
         nextToken
       }
