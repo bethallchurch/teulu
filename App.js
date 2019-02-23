@@ -6,6 +6,7 @@ import config from './aws-exports'
 import AuthStack from '@auth/AuthNavigation'
 import { getOrCreateUser } from '@user/UserService'
 import { font, fontBold } from '@global/styles'
+import LoadingScreen from '@global/components/LoadingScreen'
 
 Amplify.configure(config)
 
@@ -33,7 +34,11 @@ class App extends Component {
   }
 
   render () {
-    return this.state.fontLoaded ? <AppNavigator /> : null
+    return this.state.fontLoaded ? (
+      <AppNavigator
+        persistenceKey='persistenceKey000'
+        renderLoadingExperimental={() => <LoadingScreen />}
+      />) : <LoadingScreen />
   }
 }
 
