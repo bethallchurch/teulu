@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Input, Button } from 'react-native-elements'
-import { createGroup, createGroupLink } from '@groups/GroupService'
-import SelectContactList from '@contacts/components/SelectContactList'
+import { createGroup, createGroupLink } from '@group/GroupService'
+import SelectContactList from '@contact/components/SelectContactList'
 import { UserContext } from '@global/context'
 import { GROUP } from '@navigation/routes'
 

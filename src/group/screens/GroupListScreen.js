@@ -2,17 +2,16 @@ import React, { Component } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import ActionButton from '@global/components/ActionButton'
-import GroupList from '@groups/components/GroupList'
+import GroupList from '@group/components/GroupList'
 import { CREATE_GROUP } from '@navigation/routes'
 
-class GroupsScreen extends Component {
-  navigateToCreateGroup = () => this.props.navigation.navigate(CREATE_GROUP)
-
+export default class GroupListScreen extends Component {
   render () {
+    const { navigation: { navigate } } = this.props
     return (
       <SafeAreaView style={styles.container}>
         <GroupList navigation={this.props.navigation} />
-        <ActionButton onPress={this.navigateToCreateGroup}>
+        <ActionButton onPress={() => navigate(CREATE_GROUP)}>
           <MaterialIcons name='group-add' color='#fff' size={32} />
         </ActionButton>
       </SafeAreaView>
@@ -26,5 +25,3 @@ const styles = StyleSheet.create({
     position: 'relative'
   }
 })
-
-export default GroupsScreen

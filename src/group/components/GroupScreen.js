@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import ActionButton from '@global/components/ActionButton'
-import AlbumList from '@albums/components/AlbumList'
+import AlbumList from '@album/components/AlbumList'
 import { CREATE_ALBUM } from '@navigation/routes'
 
 class GroupScreen extends Component {

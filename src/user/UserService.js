@@ -1,10 +1,9 @@
 import { API, graphqlOperation } from 'aws-amplify'
+import { createQuery } from '@global/helpers'
 import { getAuthUser } from '@auth/AuthService'
 import * as mutations from '@graphql/mutations'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
-
-const createQuery = (query, input) => API.graphql(graphqlOperation(query, input))
 
 // Mutations
 const createUser = input => createQuery(mutations.createUser, { input })

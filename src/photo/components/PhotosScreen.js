@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native'
-import PhotoUpload from '@photos/components/PhotoUpload'
-import PhotoList from '@photos/components/PhotoList'
+import PhotoUpload from '@photo/components/PhotoUpload'
+import PhotoList from '@photo/components/PhotoList'
 
 class PhotosScreen extends Component {
   get albumId () {

@@ -1,17 +1,17 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
 import { headerTitleStyles } from '@global/styles'
-import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@albums/AlbumNavigation'
-import { CreateGroupStack, GroupSettingsStack } from '@groups/GroupNavigation'
+import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
+import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@global/components/HeaderIcon'
-import GroupsScreen from '@groups/components/GroupsScreen'
-import GroupScreen from '@groups/components/GroupScreen'
+import GroupListScreen from '@group/screens/GroupListScreen'
+import GroupScreen from '@group/components/GroupScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
 
 const MainAppStack = createStackNavigator({
-  'Home': {
+  [routes.HOME]: {
     screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
@@ -24,17 +24,11 @@ const MainAppStack = createStackNavigator({
       )
     })
   },
-  [routes.GROUPS]: {
-    screen: GroupsScreen,
+  [routes.GROUP_LIST]: {
+    screen: GroupListScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
-      headerTitleStyle: headerTitleStyles,
-      headerRight: (
-        <HeaderIcon
-          iconName='person-outline'
-          onPress={() => navigation.navigate(routes.USER_SETTINGS)}
-        />
-      )
+      headerTitleStyle: headerTitleStyles
     })
   },
   [routes.GROUP]: {
@@ -67,6 +61,8 @@ const MainAppStack = createStackNavigator({
       )
     })
   }
+}, {
+  mode: 'card'
 })
 
 const Navigator = createStackNavigator({

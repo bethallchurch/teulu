@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { getContacts } from '@contacts/ContactService'
+import { getContacts } from '@contact/ContactService'
 
 export default class SelectContactList extends Component {
   state = { contacts: [] }

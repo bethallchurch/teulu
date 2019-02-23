@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Input, Button } from 'react-native-elements'
-import { getGroup } from '@groups/GroupService'
-import { createAlbum } from '@albums/AlbumService'
+import { getGroup } from '@group/GroupService'
+import { createAlbum } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
 
 class CreateAlbum extends Component {

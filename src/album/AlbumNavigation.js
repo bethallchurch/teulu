@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation'
-import CreateAlbum from '@albums/components/CreateAlbum'
-import AlbumSettings from '@albums/components/AlbumSettings'
-import MessagesScreen from '@messages/components/MessagesScreen'
-import PhotosScreen from '@photos/components/PhotosScreen'
+import CreateAlbum from '@album/components/CreateAlbum'
+import AlbumSettings from '@album/components/AlbumSettings'
+import MessagesScreen from '@message/components/MessagesScreen'
+import PhotosScreen from '@photo/components/PhotosScreen'
 import HeaderIcon from '@global/components/HeaderIcon'
 
 export const CreateAlbumStack = createStackNavigator({
