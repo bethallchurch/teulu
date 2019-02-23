@@ -5,9 +5,10 @@ import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
+import { ALBUM } from '@navigation/routes'
 
 class AlbumList extends Component {
-  navigateToAlbum = (id, name) => this.props.navigation.navigate('Album', {
+  navigateToAlbum = (id, name) => this.props.navigation.navigate(ALBUM, {
     albumId: id,
     albumName: name
   })

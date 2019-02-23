@@ -9,6 +9,11 @@
             "UnauthRoleName": "squeeze-20190207173156-unauthRole",
             "StackName": "squeeze-20190207173156",
             "StackId": "arn:aws:cloudformation:eu-west-1:798760150336:stack/squeeze-20190207173156/44083880-2afe-11e9-bf98-0a8d8e29a944"
+        },
+        "categories": {
+            "auth": {
+                "squeezecognitob38dc439": {}
+            }
         }
     }
 }

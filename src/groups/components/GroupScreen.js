@@ -3,9 +3,10 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import ActionButton from '@global/components/ActionButton'
 import AlbumList from '@albums/components/AlbumList'
+import { CREATE_ALBUM } from '@navigation/routes'
 
 class GroupScreen extends Component {
-  navigateToCreateAlbum = () => this.props.navigation.navigate('CreateAlbum', {
+  navigateToCreateAlbum = () => this.props.navigation.navigate(CREATE_ALBUM, {
     groupId: this.props.navigation.getParam('groupId')
   })
 

@@ -22,7 +22,7 @@ module.exports = function (api) {
           '@styles': './src/styles',
           '@user': './src/user',
           '@App': './src/App',
-          '@Navigator': './src/Navigator'
+          '@navigation': './src/navigation'
         }
       }]
     ]

@@ -1,4 +1,5 @@
-import { Auth, API, graphqlOperation } from 'aws-amplify'
+import { API, graphqlOperation } from 'aws-amplify'
+import { getAuthUser } from '@auth/AuthService'
 import * as mutations from '@graphql/mutations'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
@@ -7,7 +8,6 @@ import * as subscriptions from '@graphql/subscriptions'
 const createUser = input => API.graphql(graphqlOperation(mutations.createUser, { input }))
 
 // Queries
-export const getAuthUser = () => Auth.currentAuthenticatedUser()
 const getUser = id => API.graphql(graphqlOperation(queries.getUser, { id }))
 
 export const listUsers = async () => {

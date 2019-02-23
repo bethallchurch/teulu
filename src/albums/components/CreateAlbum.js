@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
 import { Input, Button } from 'react-native-elements'
 import { getGroup } from '@groups/GroupService'
 import { createAlbum } from '@albums/AlbumService'
+import { ALBUM } from '@navigation/routes'
 
 class CreateAlbum extends Component {
   state = { albumName: '', groupId: '', contributors: [] }
@@ -26,7 +27,7 @@ class CreateAlbum extends Component {
     try {
       const result = await createAlbum({ name: albumName, albumGroupId: groupId, contributors })
       const albumId = result.data.createAlbum.id
-      this.props.navigation.navigate('Album', { albumId, albumName })
+      this.props.navigation.navigate(ALBUM, { albumId, albumName })
     } catch (error) {
       console.log('Error creating album:', error)
     }

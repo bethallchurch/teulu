@@ -12,56 +12,22 @@ import { withAuthenticator } from 'aws-amplify-react-native'
 import { createAppContainer } from 'react-navigation'
 import { getOrCreateUser } from '@user/UserService'
 import { UserContext } from '@global/context'
-import Navigator from '@Navigator'
+import { AUTH_LOADING } from '@navigation/routes'
+import Navigator from '@navigation/Navigator'
 
-// class App extends Component {
-//   state = { user: {} }
-//
-//   async componentDidMount () {
-//     const user = await getOrCreateUser()
-//     this.setState({ user })
-//   }
-//
-//   render () {
-//     return (
-//       <UserContext.Provider value={this.state.user}>
-//         <Navigator />
-//       </UserContext.Provider>
-//     )
-//   }
-// }
+class App extends Component {
+  state = { user: {} }
 
-class App extends React.Component {
-  signOutAlert = () => {
-    Alert.alert('Log Out', 'Are you sure you want to log out?', [{
-      text: 'Cancel',
-      onPress: () => console.log('Canceled'),
-      style: 'cancel'
-    }, {
-      text: 'OK',
-      onPress: () => this.signOut()
-    }], { cancelable: false })
-  }
-
-  signOut = async () => {
-    try {
-      await Auth.signOut()
-      this.props.navigation.navigate('AuthLoading')
-    } catch (error) {
-      const { message } = error
-      Alert.alert('Something went wrong!', message ? message : error)
-    }
+  async componentDidMount () {
+    const user = await getOrCreateUser()
+    this.setState({ user })
   }
 
   render () {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => this.signOut()}
-          style={styles.buttonStyle}>
-          <Text style={styles.textStyle}>Sign out</Text>
-        </TouchableOpacity>
-      </View>
+      <UserContext.Provider value={this.state.user}>
+        <Navigator {...this.props} />
+      </UserContext.Provider>
     )
   }
 }
@@ -82,4 +48,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default App
+export default Navigator

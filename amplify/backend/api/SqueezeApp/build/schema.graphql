@@ -1,7 +1,5 @@
 type User {
   id: ID!
-  username: String!
-  phoneNumber: String!
   groups(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
   createdAt: String
   updatedAt: String
@@ -137,8 +135,6 @@ input ModelBooleanFilterInput {
 
 input ModelUserFilterInput {
   id: ModelIDFilterInput
-  username: ModelStringFilterInput
-  phoneNumber: ModelStringFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput
   and: [ModelUserFilterInput]
@@ -163,16 +159,12 @@ type Query {
 
 input CreateUserInput {
   id: ID
-  username: String!
-  phoneNumber: String!
   createdAt: String
   updatedAt: String
 }
 
 input UpdateUserInput {
   id: ID!
-  username: String
-  phoneNumber: String
   createdAt: String
   updatedAt: String
 }

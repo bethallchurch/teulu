@@ -4,8 +4,6 @@
 export const getUser = `query GetUser($id: ID!) {
   getUser(id: $id) {
     id
-    username
-    phoneNumber
     groups {
       items {
         id
@@ -25,8 +23,6 @@ export const listUsers = `query ListUsers(
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
-      username
-      phoneNumber
       groups {
         nextToken
       }
@@ -42,8 +38,6 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
     id
     user {
       id
-      username
-      phoneNumber
       groups {
         nextToken
       }
@@ -77,8 +71,6 @@ export const listGroupLinks = `query ListGroupLinks(
       id
       user {
         id
-        username
-        phoneNumber
         createdAt
         updatedAt
       }

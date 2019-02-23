@@ -1,15 +1,10 @@
-import React from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  ActivityIndicator,
-  AsyncStorage
-} from 'react-native'
-import { Auth } from 'aws-amplify'
+import React, { Component } from 'react'
+import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { offWhite } from '@global/styles'
+import { APP, AUTH } from '@navigation/routes'
+import { getAuthUser } from '@auth/AuthService'
 
-export default class AuthLoadingScreen extends React.Component {
+export default class AuthLoadingScreen extends Component {
   state = { userToken: null }
   
   async componentDidMount () {
@@ -18,12 +13,12 @@ export default class AuthLoadingScreen extends React.Component {
 
   loadApp = async () => {
     try {
-      const user = await Auth.currentAuthenticatedUser()
+      const user = await getAuthUser()
       this.setState({ userToken: user.signInUserSession.accessToken.jwtToken })
     } catch (error) {
       console.log(error)
     }
-    this.props.navigation.navigate(this.state.userToken ? 'App' : 'Auth')
+    this.props.navigation.navigate(this.state.userToken ? APP : AUTH)
   }
 
   render () {

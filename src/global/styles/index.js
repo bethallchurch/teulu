@@ -12,6 +12,11 @@ export const textColor = grey
 export const font = 'OpenSans'
 export const fontBold = 'OpenSans-Bold'
 
+export const headerTitleStyles = {
+  fontFamily: fontBold,
+  color: grey
+}
+
 export const textInputStyles = StyleSheet.create({
   input: {
     fontFamily: font,

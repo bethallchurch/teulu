@@ -89,6 +89,4 @@ const MessagesScreenWithContext = props => (
   </UserContext.Consumer>
 )
 
-const Temp = () => <View />
-
 export default MessagesScreenWithContext

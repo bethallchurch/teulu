@@ -2,17 +2,19 @@ import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { phoneInputStyles } from '@global/styles'
-import TextInput from '@auth/components/TextInput'
-import InternationalPhoneDropdown from '@auth/components/InternationalPhoneDropdown'
+import TextInput from '@global/components/TextInput'
+import InternationalPhoneDropdown from '@global/components/InternationalPhoneDropdown'
 
 const PhoneInput = ({
-  value,
   showModal,
   hideModal,
   onChangeText,
   dialCode,
   modalVisible,
-  getCountry
+  getCountry,
+  returnKeyType = 'next',
+  placeholder = 'Phone number',
+  ...props
 }) => (
   <View style={phoneInputStyles.container}>
     <TouchableOpacity onPress={showModal}>
@@ -23,13 +25,13 @@ const PhoneInput = ({
       </View>
     </TouchableOpacity>
     <TextInput
-      placeholder='Phone number'
-      value={value}
+      placeholder={placeholder}
       keyboardType='numeric'
-      returnKeyType='next'
+      returnKeyType={returnKeyType}
       autoCorrect={false}
       containerStyle={phoneInputStyles.textInputContainer}
-      onChangeText={value => onChangeText('phoneNumber', value)}
+      onChangeText={value => onChangeText(value)}
+      {...props}
     />
   </View>
 )

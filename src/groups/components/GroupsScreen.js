@@ -3,9 +3,10 @@ import { SafeAreaView, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import ActionButton from '@global/components/ActionButton'
 import GroupList from '@groups/components/GroupList'
+import { CREATE_GROUP } from '@navigation/routes'
 
 class GroupsScreen extends Component {
-  navigateToCreateGroup = () => this.props.navigation.navigate('CreateGroup')
+  navigateToCreateGroup = () => this.props.navigation.navigate(CREATE_GROUP)
 
   render () {
     return (

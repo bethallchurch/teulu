@@ -4,6 +4,7 @@ import { Input, Button } from 'react-native-elements'
 import { createGroup, createGroupLink } from '@groups/GroupService'
 import SelectContactList from '@contacts/components/SelectContactList'
 import { UserContext } from '@global/context'
+import { GROUP } from '@navigation/routes'
 
 const StepOne = ({ onChangeText, onPressButton }) => (
   <Fragment>
@@ -69,7 +70,7 @@ class CreateGroup extends Component {
       members.forEach(async username => await createGroupLink({
         groupLinkUserId: username, groupLinkGroupId: groupId
       }))
-      this.props.navigation.navigate('Group', { groupId, groupName })
+      this.props.navigation.navigate(GROUP, { groupId, groupName })
     } catch (error) {
       console.log('Error creating group:', error)
     }

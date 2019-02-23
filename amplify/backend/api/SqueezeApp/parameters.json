@@ -3,7 +3,7 @@
     "AppSyncApiName": "SqueezeApp",
     "AuthCognitoUserPoolId": {
         "Fn::GetAtt": [
-            "authcognito57a32b25",
+            "authsqueezecognitob38dc439",
             "Outputs.UserPoolId"
         ]
     }

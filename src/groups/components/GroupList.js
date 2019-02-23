@@ -5,9 +5,10 @@ import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
+import { GROUP } from '@navigation/routes'
 
 class GroupList extends Component {
-  navigateToGroup = (id, name) => this.props.navigation.navigate('Group', {
+  navigateToGroup = (id, name) => this.props.navigation.navigate(GROUP, {
     groupId: id,
     groupName: name
   })

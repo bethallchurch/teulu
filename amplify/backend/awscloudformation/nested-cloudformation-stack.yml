@@ -78,11 +78,51 @@
 				}
 			}
 		},
-		"authcognito57a32b25": {
+		"authsqueezecognitob38dc439": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/auth/cognito57a32b25-cloudformation-template.yml",
+				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/auth/squeezecognitob38dc439-cloudformation-template.yml",
 				"Parameters": {
+					"identityPoolName": "squeezeb38dc439_identitypool_b38dc439",
+					"allowUnauthenticatedIdentities": false,
+					"thirdPartyAuth": false,
+					"lambdaLogPolicy": "squeezecognitob38dc439_lambda_log_policy",
+					"openIdLambdaRoleName": "squeezecognitob38dc439_openid_lambda_role",
+					"openIdRolePolicy": "squeezecognitob38dc439_openid_pass_role_policy",
+					"openIdLambdaIAMPolicy": "squeezecognitob38dc439_openid_lambda_iam_policy",
+					"openIdLogPolicy": "squeezecognitob38dc439_openid_lambda_log_policy",
+					"userPoolName": "squeezeb38dc439_userpool_b38dc439",
+					"autoVerifiedAttributes": "phone_number",
+					"aliasAttributes": "phone_number",
+					"mfaConfiguration": "OPTIONAL",
+					"mfaTypes": "SMS Text Message",
+					"roleName": "squeezecognitob38dc439_sns-role",
+					"roleExternalId": "squeezecognitob38dc439_role_external_id",
+					"policyName": "squeezecognitob38dc439-sns-policy",
+					"smsAuthenticationMessage": "Your authentication code is {####}",
+					"smsVerificationMessage": "Your verification code is {####}",
+					"emailVerificationSubject": "Your verification code",
+					"emailVerificationMessage": "Your verification code is {####}",
+					"defaultPasswordPolicy": true,
+					"passwordPolicyMinLength": 8,
+					"passwordPolicyCharacters": "Requires Lowercase,Requires Uppercase",
+					"requiredAttributes": "phone_number",
+					"userpoolClientName": "squeezecognitob38dc439_app_client",
+					"userpoolClientGenerateSecret": true,
+					"userpoolClientRefreshTokenValidity": 30,
+					"userpoolClientReadAttributes": "phone_number",
+					"mfaLambdaRole": "squeezecognitob38dc439_totp_lambda_role",
+					"mfaLambdaLogPolicy": "squeezecognitob38dc439_totp_lambda_log_policy",
+					"mfaPassRolePolicy": "squeezecognitob38dc439_totp_pass_role_policy",
+					"mfaLambdaIAMPolicy": "squeezecognitob38dc439_totp_lambda_iam_policy",
+					"userpoolClientLambdaRole": "squeezecognitob38dc439_userpoolclient_lambda_role",
+					"userpoolClientLogPolicy": "squeezecognitob38dc439_userpoolclient_lambda_log_policy",
+					"userpoolClientLambdaPolicy": "squeezecognitob38dc439_userpoolclient_lambda_iam_policy",
+					"userpoolClientSetAttributes": true,
+					"useDefault": "manual",
+					"authSelections": "identityPoolAndUserPool",
+					"resourceName": "squeezecognitob38dc439",
+					"userpoolClientWriteAttributes": "email,phone_number",
 					"authRoleName": {
 						"Ref": "AuthRoleName"
 					},
@@ -101,46 +141,6 @@
 							"Arn"
 						]
 					},
-					"identityPoolName": "cognito57a32b25_identitypool_57a32b25",
-					"allowUnauthenticatedIdentities": false,
-					"thirdPartyAuth": false,
-					"lambdaLogPolicy": "cognito57a32b25_lambda_log_policy",
-					"openIdLambdaRoleName": "cognito57a32b25_openid_lambda_role",
-					"openIdRolePolicy": "cognito57a32b25_openid_pass_role_policy",
-					"openIdLambdaIAMPolicy": "cognito57a32b25_openid_lambda_iam_policy",
-					"openIdLogPolicy": "cognito57a32b25_openid_lambda_log_policy",
-					"userPoolName": "cognito57a32b25_userpool_57a32b25",
-					"autoVerifiedAttributes": "email",
-					"mfaConfiguration": "OFF",
-					"mfaTypes": "SMS Text Message",
-					"roleName": "cognito57a32b25_sns-role",
-					"roleExternalId": "cognito57a32b25_role_external_id",
-					"policyName": "cognito57a32b25-sns-policy",
-					"smsAuthenticationMessage": "Your authentication code is {####}",
-					"smsVerificationMessage": "Your verification code is {####}",
-					"emailVerificationSubject": "Your verification code",
-					"emailVerificationMessage": "Your verification code is {####}",
-					"defaultPasswordPolicy": false,
-					"passwordPolicyMinLength": 8,
-					"passwordPolicyCharacters": "Requires Lowercase,Requires Uppercase,Requires Numbers,Requires Symbols",
-					"requiredAttributes": "email",
-					"userpoolClientName": "cognito57a32b25_app_client",
-					"userpoolClientGenerateSecret": true,
-					"userpoolClientRefreshTokenValidity": 30,
-					"userpoolClientReadAttributes": "email",
-					"mfaLambdaRole": "cognito57a32b25_totp_lambda_role",
-					"mfaLambdaLogPolicy": "cognito57a32b25_totp_lambda_log_policy",
-					"mfaPassRolePolicy": "cognito57a32b25_totp_pass_role_policy",
-					"mfaLambdaIAMPolicy": "cognito57a32b25_totp_lambda_iam_policy",
-					"userpoolClientLambdaRole": "cognito57a32b25_userpoolclient_lambda_role",
-					"userpoolClientLogPolicy": "cognito57a32b25_userpoolclient_lambda_log_policy",
-					"userpoolClientLambdaPolicy": "cognito57a32b25_userpoolclient_lambda_iam_policy",
-					"userpoolClientSetAttributes": false,
-					"useDefault": "default",
-					"unAuthRoleName": "squeeze-20190207173156-unauthRole",
-					"unAuthRoleArn": "arn:aws:iam::798760150336:role/squeeze-20190207173156-unauthRole",
-					"resourceName": "cognito57a32b25",
-					"authSelections": "identityPoolAndUserPool",
 					"env": "NONE"
 				}
 			}
@@ -150,17 +150,16 @@
 			"Properties": {
 				"TemplateURL": "https://s3.amazonaws.com/squeeze-20190207173156-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"Parameters": {
-					"APIKeyExpirationEpoch": -1,
 					"DynamoDBBillingMode": "PROVISIONED",
 					"AppSyncApiName": "SqueezeApp",
 					"AuthCognitoUserPoolId": {
 						"Fn::GetAtt": [
-							"authcognito57a32b25",
+							"authsqueezecognitob38dc439",
 							"Outputs.UserPoolId"
 						]
 					},
 					"S3DeploymentBucket": "squeeze-20190207173156-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/ef85155d374e45ae5d33ba61c3b37242b6d75d53",
+					"S3DeploymentRootKey": "amplify-appsync-files/7c5ab9843e225f203f9591e927136fc21042435e",
 					"env": "NONE"
 				}
 			}

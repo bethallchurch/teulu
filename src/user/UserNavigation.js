@@ -1,16 +1,51 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
+import { headerTitleStyles } from '@global/styles'
 import HeaderIcon from '@global/components/HeaderIcon'
-import Profile from '@user/components/Profile'
+import UserSettingsScreen from '@user/screens/UserSettingsScreen'
+import ResetPasswordScreen from '@user/screens/ResetPasswordScreen'
+import ResetPhoneNumberScreen from '@user/screens/ResetPhoneNumberScreen'
+import NotificationSettingsScreen from '@user/screens/NotificationSettingsScreen'
+import * as routes from '@navigation/routes'
 
-const UserStack = createStackNavigator({
-  Profile: {
-    screen: Profile,
+const UserSettingsStack = createStackNavigator({
+  [routes.ACCOUNT]: {
+    screen: UserSettingsScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Account',
-      headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
+      headerTitleStyle: headerTitleStyles,
+      headerRight: (
+        <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
+      )
+    })
+  },
+  [routes.RESET_PASSWORD]: {
+    screen: ResetPasswordScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Reset Password',
+      headerTitleStyle: headerTitleStyles
+    })
+  },
+  [routes.RESET_PHONE_NUMBER]: {
+    screen: ResetPhoneNumberScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Update Phone Number',
+      headerTitleStyle: headerTitleStyles
+    })
+  },
+  [routes.NOTIFICATION_SETTINGS]: {
+    screen: NotificationSettingsScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Notifications',
+      headerTitleStyle: headerTitleStyles
     })
   }
+})
+
+const UserStack = createStackNavigator({
+  [routes.USER_SETTINGS]: UserSettingsStack
+}, {
+  headerMode: 'none'
 })
 
 export default UserStack
