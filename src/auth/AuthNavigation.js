@@ -39,7 +39,7 @@ const AuthTabs = createBottomTabNavigator({
 })
 
 const AuthStack = createStackNavigator({
-  [routes.AUTH_MAIN]: AuthTabs,
+  [routes.AUTH_TABS]: AuthTabs,
   [routes.FORGOT_PASSWORD]: ForgotPasswordScreen
 }, {
   headerMode: 'none'
