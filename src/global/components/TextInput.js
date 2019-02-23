@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { textInputStyles, lightGrey } from '@global/styles'
+import { textInputStyle, colors } from '@global/styles'
 import { Input } from 'react-native-elements'
 
 export default class TextInput extends Component {
@@ -15,12 +15,12 @@ export default class TextInput extends Component {
     return (
       <Input
         placeholder={placeholder}
-        inputStyle={{ ...textInputStyles.input, ...inputStyle }}
-        inputContainerStyle={{ ...textInputStyles.inputInputContainer, ...inputContainerStyle }}
-        containerStyle={{ ...textInputStyles.inputContainer, ...containerStyle }}
+        inputStyle={{ ...textInputStyle.input, ...inputStyle }}
+        inputContainerStyle={{ ...textInputStyle.inputInputContainer, ...inputContainerStyle }}
+        containerStyle={{ ...textInputStyle.inputContainer, ...containerStyle }}
         ref={refName}
         textInputRef={refName}
-        placeholderTextColor={lightGrey}
+        placeholderTextColor={colors.textLight}
         {...props}
       />
     )

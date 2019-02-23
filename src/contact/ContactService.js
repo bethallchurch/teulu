@@ -11,7 +11,7 @@ export const getPhoneContacts = async () => {
 export const getContacts = async () => {
   // TODO: change to query with filter
   const appUsers = await listUsers()
-
+  console.log(appUsers)
   // const phoneContacts = await getPhoneContacts()
   // const appUsersPhoneNumbers = appUsers.reduce(
   //   (numbers, { phoneNumber }) => [ ...numbers, phoneNumber ],

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, Alert } from 'react-native'
+import { Text, Alert } from 'react-native'
 import uuid from 'uuid/v4'
 import { LOGIN } from '@navigation/routes'
 import { signUp, resendSignUp, confirmSignUp } from '@auth/AuthService'
@@ -9,6 +9,8 @@ import PhoneInput from '@global/components/PhoneInput'
 import Link, { LinkContainer } from '@global/components/Link'
 import MinimalScreenBase from '@global/components/MinimalScreenBase'
 import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
+
+import { titleStyle } from '@global/styles'
 
 class RegisterScreen extends ComponentWithPhoneInput {
   constructor (props) {
@@ -94,7 +96,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
     } = this.state
     return (
       <MinimalScreenBase>
-        <Text style={styles.titleText}>Register</Text>
+        <Text style={titleStyle.style}>Register</Text>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -151,16 +153,5 @@ class RegisterScreen extends ComponentWithPhoneInput {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  titleText: {
-    fontFamily: 'OpenSans-Bold',
-    textAlign: 'left',
-    width: '100%',
-    fontSize: 32,
-    marginBottom: 32,
-    color: '#555'
-  }
-})
 
 export default RegisterScreen

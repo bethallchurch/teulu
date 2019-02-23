@@ -1,41 +1,15 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
-import { Input, Button } from 'react-native-elements'
 import { createGroup, createGroupLink } from '@group/GroupService'
 import SelectContactList from '@contact/components/SelectContactList'
 import { UserContext } from '@global/context'
 import { GROUP } from '@navigation/routes'
+import ComponentWithInputs from '@global/components/ComponentWithInputs'
+import MinimalScreenBase from '@global/components/MinimalScreenBase'
+import TextInput from '@global/components/TextInput'
+import Button from '@global/components/Button'
 
-const StepOne = ({ onChangeText, onPressButton }) => (
-  <Fragment>
-    <Text>Name your group</Text>
-    <Input onChangeText={onChangeText} />
-    <Button
-      buttonStyle={styles.button}
-      containerStyle={styles.buttonContainer}
-      onPress={onPressButton}
-      title='Next'
-    />
-  </Fragment>
-)
-
-const StepTwo = ({ selectedContacts, onPressContact, onPressButton }) => (
-  <Fragment>
-    <Text>Add members</Text>
-    <SelectContactList
-      selectedContacts={selectedContacts}
-      onPressContact={onPressContact}
-    />
-    <Button
-      buttonStyle={styles.button}
-      containerStyle={styles.buttonContainer}
-      onPress={onPressButton}
-      title='Create'
-    />
-  </Fragment>
-)
-
-class CreateGroup extends Component {
+class CreateGroup extends ComponentWithInputs {
   constructor (props) {
     super(props)
     this.state = {
@@ -46,20 +20,12 @@ class CreateGroup extends Component {
     }
   }
 
-  updateGroupName = text => {
-    this.setState({ groupName: text })
-  }
-
   toggleMember = id => {
     const { members } = this.state
     const updatedMembers = members.includes(id) ?
       members.filter(memberId => memberId !== id) :
       [ id, ...members ]
     this.setState({ members: updatedMembers })
-  }
-
-  goToStepTwo = () => {
-    this.setState({ step: 2 })
   }
 
   createGroup = async () => {
@@ -77,44 +43,37 @@ class CreateGroup extends Component {
   }
 
   render () {
+    const { groupName } = this.state
+    // 6rem (96px)	5rem (80px)	3rem (48px)	2.25rem (36px)	1.5rem (24px)	1.25rem (20px)	1rem (16px)	.875rem (14px)
     return (
-      <SafeAreaView>
-        <View style={styles.container}>
-          {this.state.step === 1 && (
-            <StepOne
-              onChangeText={this.updateGroupName}
-              onPressButton={this.goToStepTwo}
-            />
-          )}
-          {this.state.step === 2 && (
-            <StepTwo
-              onPressButton={this.createGroup}
-              onPressContact={this.toggleMember}
-              selectedContacts={this.state.members}
-            />
-          )}
-        </View>
-      </SafeAreaView>
+      <MinimalScreenBase>
+        <Text style={{ fontSize: 36 }}>Name your group</Text>
+        <TextInput
+          placeholder='Group Name'
+          value={groupName}
+          returnKeyType='go'
+          autoCorrect={false}
+          onChangeText={value => this.onChangeText('groupName', value)}
+        />
+        <Text>Add members</Text>
+        <SelectContactList
+          selectedContacts={this.state.members}
+          onPressContact={this.toggleMember}
+        />
+        <Button onPress={this.createGroup}>Create Group</Button>
+      </MinimalScreenBase>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 15
-  },
-  buttonContainer: {
-    marginTop: 15
-  },
-  button: {
-    backgroundColor: '#000'
-  }
-})
-
 const CreateGroupWithContext = props => (
   <UserContext.Consumer>
-    {({ userId }) => <CreateGroup userId={userId} {...props} />}
+    {user => <CreateGroup userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
+
+const styles = StyleSheet.create({
+
+})
 
 export default CreateGroupWithContext

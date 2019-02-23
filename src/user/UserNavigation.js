@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
-import { headerTitleStyles } from '@global/styles'
-import HeaderIcon from '@global/components/HeaderIcon'
+import { headerTitleStyle } from '@navigation/styles'
+import HeaderIcon from '@navigation/components/HeaderIcon'
 import UserSettingsScreen from '@user/screens/UserSettingsScreen'
 import ResetPasswordScreen from '@user/screens/ResetPasswordScreen'
 import ResetPhoneNumberScreen from '@user/screens/ResetPhoneNumberScreen'
@@ -13,7 +13,7 @@ const UserSettingsStack = createStackNavigator({
     screen: UserSettingsScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Account',
-      headerTitleStyle: headerTitleStyles,
+      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
       )
@@ -23,21 +23,21 @@ const UserSettingsStack = createStackNavigator({
     screen: ResetPasswordScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Reset Password',
-      headerTitleStyle: headerTitleStyles
+      headerTitleStyle: headerTitleStyle.style
     })
   },
   [routes.RESET_PHONE_NUMBER]: {
     screen: ResetPhoneNumberScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Update Phone Number',
-      headerTitleStyle: headerTitleStyles
+      headerTitleStyle: headerTitleStyle.style
     })
   },
   [routes.NOTIFICATION_SETTINGS]: {
     screen: NotificationSettingsScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Notifications',
-      headerTitleStyle: headerTitleStyles
+      headerTitleStyle: headerTitleStyle.style
     })
   }
 })

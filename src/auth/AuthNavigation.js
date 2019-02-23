@@ -1,13 +1,13 @@
 import React from 'react'
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import * as routes from '@navigation/routes'
-import { lightGrey, offWhite } from '@global/styles'
 import ForgotPasswordScreen from '@auth/screens/ForgotPasswordScreen'
 import LoadingScreen from '@auth/screens/LoadingScreen'
 import LoginScreen from '@auth/screens/LoginScreen'
 import RegisterScreen from '@auth/screens/RegisterScreen'
-import TabBarIcon from '@auth/components/TabBarIcon'
+import TabBarIcon from '@navigation/components/TabBarIcon'
 import { default as MainApp } from '@navigation/Navigator'
+import { tabBarStyle, tabBarLabelStyle } from '@navigation/styles'
 
 const AuthTabs = createBottomTabNavigator({
   [routes.LOGIN]: {
@@ -22,20 +22,7 @@ const AuthTabs = createBottomTabNavigator({
       tabBarIcon: ({ focused }) => <TabBarIcon name='adduser' focused={focused} />
     }
   }
-}, {
-  tabBarOptions: {
-    style: {
-      backgroundColor: offWhite,
-      borderTopWidth: 0,
-      paddingBottom: 8
-    },
-    labelStyle: {
-      fontSize: 12,
-      color: lightGrey,
-      fontFamily: 'OpenSans',
-      marginTop: 4
-    }
-  }
+}, { tabBarOptions: { style: tabBarStyle.style, labelStyle: tabBarLabelStyle.style }
 })
 
 const AuthStack = createStackNavigator({

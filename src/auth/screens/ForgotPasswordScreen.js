@@ -9,6 +9,8 @@ import TextInput from '@global/components/TextInput'
 import PhoneInput from '@global/components/PhoneInput'
 import Button from '@global/components/Button'
 
+import { titleStyle } from '@global/styles'
+
 export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
   constructor (props) {
     super(props)
@@ -79,7 +81,7 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
     } = this.state
     return (
       <MinimalScreenBase>
-        <Text style={styles.titleText}>Forgot Password?</Text>
+        <Text style={titleStyle.style}>Forgot Password?</Text>
         <Text style={styles.text}>We'll text you a verification code that you can use to reset it.</Text>
         <PhoneInput
           showModal={this.showModal}
@@ -143,16 +145,8 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
 }
 
 const styles = StyleSheet.create({
-  titleText: {
-    fontFamily: 'OpenSans-Bold',
-    textAlign: 'left',
-    width: '100%',
-    fontSize: 32,
-    marginBottom: 32,
-    color: '#555'
-  },
   text: {
-    fontFamily: 'OpenSans',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 16,
     color: '#555',
     marginBottom: 16

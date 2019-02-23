@@ -80,7 +80,7 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
           onSubmitEditing={() => codeRequested ? this.focusInput('verificationCode') : null}
           onChangeText={value => this.onChangeText('newNationalNumber', value)}
         />
-        {!codeRequested && <Button onPress={this.requestCode}>Request Code</Button>}
+        {!codeRequested && <Button onPress={this.requestCode}>Update</Button>}
         {codeRequested && (
           <>
             <TextInput
@@ -93,7 +93,7 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
               refName='verificationCode'
               onChangeText={value => this.onChangeText('verificationCode', value)}
             />
-            <Button onPress={this.resetPhoneNumber}>Verify Update</Button>
+            <Button onPress={this.resetPhoneNumber}>Confirm Update</Button>
           </>
         )}
       </MinimalScreenBase>

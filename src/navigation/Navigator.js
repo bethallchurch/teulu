@@ -1,10 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
-import { headerTitleStyles } from '@global/styles'
+import { headerTitleStyle } from '@navigation/styles'
 import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
 import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
-import HeaderIcon from '@global/components/HeaderIcon'
+import HeaderIcon from '@navigation/components/HeaderIcon'
 import GroupListScreen from '@group/screens/GroupListScreen'
 import GroupScreen from '@group/components/GroupScreen'
 import HomeScreen from '@home/screens/HomeScreen'
@@ -15,7 +15,7 @@ const MainAppStack = createStackNavigator({
     screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
-      headerTitleStyle: headerTitleStyles,
+      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
           iconName='person-outline'
@@ -28,14 +28,14 @@ const MainAppStack = createStackNavigator({
     screen: GroupListScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
-      headerTitleStyle: headerTitleStyles
+      headerTitleStyle: headerTitleStyle.style
     })
   },
   [routes.GROUP]: {
     screen: GroupScreen,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('groupName'),
-      headerTitleStyle: headerTitleStyles,
+      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
           iconName='settings'
@@ -50,7 +50,7 @@ const MainAppStack = createStackNavigator({
     screen: AlbumStack,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('albumName'),
-      headerTitleStyle: headerTitleStyles,
+      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
           iconName='settings'

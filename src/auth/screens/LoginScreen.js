@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, Alert } from 'react-native'
+import { Text, Alert } from 'react-native'
 import { signIn } from '@auth/AuthService'
 import Link, { LinkContainer } from '@global/components/Link'
 import Button from '@global/components/Button'
@@ -8,6 +8,8 @@ import PhoneInput from '@global/components/PhoneInput'
 import MinimalScreenBase from '@global/components/MinimalScreenBase'
 import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
 import { AUTH_LOADING, FORGOT_PASSWORD } from '@navigation/routes'
+
+import { titleStyle } from '@global/styles'
 
 export default class LoginScreen extends ComponentWithPhoneInput {
   constructor (props) {
@@ -39,7 +41,7 @@ export default class LoginScreen extends ComponentWithPhoneInput {
     const { dialCode, modalVisible, nationalNumber, password } = this.state
     return (
       <MinimalScreenBase>
-        <Text style={styles.titleText}>Log In</Text>
+        <Text style={titleStyle.style}>Log In</Text>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -68,14 +70,3 @@ export default class LoginScreen extends ComponentWithPhoneInput {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  titleText: {
-    fontFamily: 'OpenSans-Bold',
-    textAlign: 'left',
-    width: '100%',
-    fontSize: 32,
-    marginBottom: 32,
-    color: '#555'
-  }
-})

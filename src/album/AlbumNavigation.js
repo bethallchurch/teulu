@@ -5,7 +5,7 @@ import CreateAlbum from '@album/components/CreateAlbum'
 import AlbumSettings from '@album/components/AlbumSettings'
 import MessagesScreen from '@message/components/MessagesScreen'
 import PhotosScreen from '@photo/components/PhotosScreen'
-import HeaderIcon from '@global/components/HeaderIcon'
+import HeaderIcon from '@navigation/components/HeaderIcon'
 
 export const CreateAlbumStack = createStackNavigator({
   CreateAlbum: {

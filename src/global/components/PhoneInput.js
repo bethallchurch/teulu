@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { phoneInputStyles } from '@global/styles'
+import { phoneInputStyle, copyStyle } from '@global/styles'
 import TextInput from '@global/components/TextInput'
 import InternationalPhoneDropdown from '@global/components/InternationalPhoneDropdown'
 
@@ -16,11 +16,11 @@ const PhoneInput = ({
   placeholder = 'Phone number',
   ...props
 }) => (
-  <View style={phoneInputStyles.container}>
+  <View style={phoneInputStyle.container}>
     <TouchableOpacity onPress={showModal}>
-      <View style={phoneInputStyles.dropdownContainer}>
-        <Icon name='chevron-down' type='material-community' iconStyle={phoneInputStyles.icon} />
-        <Text style={phoneInputStyles.text}>{dialCode}</Text>
+      <View style={phoneInputStyle.dropdownContainer}>
+        <Icon name='chevron-down' type='material-community' iconStyle={phoneInputStyle.icon} />
+        <Text style={copyStyle.style}>{dialCode}</Text>
         <InternationalPhoneDropdown visible={modalVisible} getCountry={getCountry} hide={hideModal} />
       </View>
     </TouchableOpacity>
@@ -29,7 +29,7 @@ const PhoneInput = ({
       keyboardType='numeric'
       returnKeyType={returnKeyType}
       autoCorrect={false}
-      containerStyle={phoneInputStyles.textInputContainer}
+      containerStyle={phoneInputStyle.textInputContainer}
       onChangeText={value => onChangeText(value)}
       {...props}
     />

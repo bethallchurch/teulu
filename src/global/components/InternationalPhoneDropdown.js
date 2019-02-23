@@ -53,12 +53,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column'
   },
   text: {
-    fontFamily: 'OpenSans',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 16,
     color: '#555'
   },
   dialCodeStyle: {
-    fontFamily: 'OpenSans',
+    fontFamily: 'OpenSans-Regular',
     fontSize: 16,
     color: '#aaa',
     marginLeft: 8

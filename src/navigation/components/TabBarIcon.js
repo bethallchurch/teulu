@@ -1,9 +1,9 @@
 import React from 'react'
 import { AntDesign } from '@expo/vector-icons'
-import { lightGrey, green } from '@global/styles'
+import { colors, w4 } from '@global/styles'
 
 const TabBarIcon = ({ name, focused }) => (
-  <AntDesign name={name} size={24} color={focused ? green : lightGrey} />
+  <AntDesign name={name} size={w4.width} color={focused ? colors.primary : colors.textLight} />
 )
 
 export default TabBarIcon

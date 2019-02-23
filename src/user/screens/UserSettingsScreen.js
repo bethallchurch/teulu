@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, Alert, View, Text, StyleSheet } from 'react-native'
 import { getAuthUser } from '@auth/AuthService'
 import { Avatar, ListItem } from 'react-native-elements'
-import { grey, lightGrey, offWhite } from '@global/styles'
+import { colors } from '@global/styles'
 import * as routes from '@navigation/routes'
 import LogOutButton from '@auth/components/LogOutButton'
 
@@ -15,7 +15,7 @@ export default class UserSettingsScreen extends Component {
   }
 
   get chevronProps () {
-    return { name: 'chevron-right', color: lightGrey }
+    return { name: 'chevron-right', color: colors.textLight }
   }
 
   render () {
@@ -24,7 +24,7 @@ export default class UserSettingsScreen extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={{ alignItems: 'center', paddingVertical: 32 }}>
-          <Avatar rounded icon={{ name: 'person' }} size='large' titleStyle={{ color: offWhite }} overlayContainerStyle={{ backgroundColor: grey }} />
+          <Avatar rounded icon={{ name: 'person' }} size='large' titleStyle={{ color: colors.backgroundPrimary }} overlayContainerStyle={{ backgroundColor: colors.textDefault }} />
         </View>
         <View style={{ justifyContent: 'space-between', flex: 1 }}>
           <View>
@@ -62,10 +62,10 @@ export default class UserSettingsScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: offWhite
+    backgroundColor: colors.primaryBackground
   },
   text: {
-    fontFamily: 'OpenSans',
-    color: grey
+    fontFamily: 'OpenSans-Regular',
+    color: colors.textDefault
   }
 })
