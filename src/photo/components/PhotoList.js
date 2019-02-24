@@ -4,6 +4,7 @@ import { Connect, S3Image } from 'aws-amplify-react-native'
 import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
+import LoadingComponent from '@global/components/LoadingComponent'
 
 const PhotoListItem = ({ thumbnail: { height, width, key } }) => (
   <S3Image style={{ width, height }} imgKey={key.replace('public/', '')} />
@@ -36,7 +37,7 @@ const ConnectedPhotoList = props => {
      >
       {({ data: { listMessages }, loading, error, errors }) => {
         if (error) return <Text>Error</Text>
-        if (loading || !listMessages) return <Text>Loading...</Text>
+        if (loading || !listMessages) return <LoadingComponent />
 
         const albumPhotos = listMessages.items
           .filter(message => !!message)

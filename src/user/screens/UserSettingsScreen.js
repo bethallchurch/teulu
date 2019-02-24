@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, Alert, View, Text, StyleSheet } from 'react-native'
 import { getAuthUser } from '@auth/AuthService'
 import { Avatar, ListItem } from 'react-native-elements'
-import { colors } from '@global/styles'
+import { colors, copyStyle } from '@global/styles'
 import * as routes from '@navigation/routes'
 import LogOutButton from '@auth/components/LogOutButton'
 
@@ -24,13 +24,19 @@ export default class UserSettingsScreen extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={{ alignItems: 'center', paddingVertical: 32 }}>
-          <Avatar rounded icon={{ name: 'person' }} size='large' titleStyle={{ color: colors.backgroundPrimary }} overlayContainerStyle={{ backgroundColor: colors.textDefault }} />
+          <Avatar
+            rounded
+            icon={{ name: 'person' }}
+            size='large'
+            titleStyle={{ color: colors.backgroundPrimary }}
+            overlayContainerStyle={{ backgroundColor: colors.textDefault }}
+          />
         </View>
         <View style={{ justifyContent: 'space-between', flex: 1 }}>
           <View>
             <ListItem
               title={phoneNumber}
-              titleStyle={styles.text}
+              titleStyle={copyStyle.style}
               bottomDivider
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'smartphone' }}
@@ -38,7 +44,7 @@ export default class UserSettingsScreen extends Component {
             />
             <ListItem
               title='Notifications'
-              titleStyle={styles.text}
+              titleStyle={copyStyle.style}
               bottomDivider
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'notifications-none' }}
@@ -46,7 +52,7 @@ export default class UserSettingsScreen extends Component {
             />
             <ListItem
               title='Reset Password'
-              titleStyle={styles.text}
+              titleStyle={copyStyle.style}
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'lock-outline' }}
               onPress={() => navigate(routes.RESET_PASSWORD)}
@@ -63,9 +69,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.primaryBackground
-  },
-  text: {
-    fontFamily: 'OpenSans-Regular',
-    color: colors.textDefault
   }
 })

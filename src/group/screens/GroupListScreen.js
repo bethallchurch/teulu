@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import ActionButton from '@global/components/ActionButton'
 import GroupList from '@group/components/GroupList'
 import { CREATE_GROUP } from '@navigation/routes'
+import { colors } from '@global/styles'
 
 export default class GroupListScreen extends Component {
   render () {
@@ -22,6 +23,7 @@ export default class GroupListScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: 'relative'
+    position: 'relative',
+    backgroundColor: colors.primaryBackground
   }
 })

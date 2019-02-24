@@ -187,6 +187,19 @@ export const titleStyle = StyleSheet.create({
   }
 })
 
+export const subtitleStyle = StyleSheet.create({
+  style: {
+    color: colors.textDefault,
+    ...fBold,
+    ...f2,
+    ...lhTitle(f2.fontSize),
+    ...mb2,
+    ...measureWide,
+    ...w100Pc,
+    ...tl
+  }
+})
+
 export const copyStyle = StyleSheet.create({
   style: {
     color: colors.textDefault,
@@ -261,5 +274,17 @@ export const linkStyles = StyleSheet.create({
     color: colors.secondary,
     ...f5,
     ...pv2
+  }
+})
+
+export const loadingComponentStyle = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.secondaryBackground,
+    ...w100Pc,
+    ...pa3,
+    ...mb3
   }
 })

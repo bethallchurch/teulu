@@ -8,34 +8,36 @@ import ComponentWithInputs from '@global/components/ComponentWithInputs'
 import MinimalScreenBase from '@global/components/MinimalScreenBase'
 import TextInput from '@global/components/TextInput'
 import Button from '@global/components/Button'
+import { subtitleStyle, mt2 } from '@global/styles'
 
 class CreateGroup extends ComponentWithInputs {
   constructor (props) {
     super(props)
     this.state = {
-      username: props.userId,
-      members: [ props.userId ],
+      authUsers: [],
       groupName: '',
       step: 1
     }
   }
 
   toggleMember = id => {
-    const { members } = this.state
-    const updatedMembers = members.includes(id) ?
-      members.filter(memberId => memberId !== id) :
-      [ id, ...members ]
-    this.setState({ members: updatedMembers })
+    const { authUsers } = this.state
+    const updatedAuthUsers = authUsers.includes(id) ?
+      [ id, ...authUsers ]
+    this.setState({ authUsers: updatedAuthUsers })
   }
 
   createGroup = async () => {
-    const { username, groupName, members } = this.state
+    const { groupName, authUsers } = this.state
+    const { userId } = this.props
+    console.log('GROUP:', groupName, [ userId, ...authUsers ])
+    
     try {
-      const result = await createGroup({ name: groupName, members })
+      const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ]})
       const groupId = result.data.createGroup.id
-      members.forEach(async username => await createGroupLink({
+      await Promise.all(authUsers.map(username => createGroupLink({
         groupLinkUserId: username, groupLinkGroupId: groupId
-      }))
+      })))
       this.props.navigation.navigate(GROUP, { groupId, groupName })
     } catch (error) {
       console.log('Error creating group:', error)
@@ -43,11 +45,10 @@ class CreateGroup extends ComponentWithInputs {
   }
 
   render () {
-    const { groupName } = this.state
-    // 6rem (96px)	5rem (80px)	3rem (48px)	2.25rem (36px)	1.5rem (24px)	1.25rem (20px)	1rem (16px)	.875rem (14px)
+    const { groupName, authUsers } = this.state
     return (
-      <MinimalScreenBase>
-        <Text style={{ fontSize: 36 }}>Name your group</Text>
+      <MinimalScreenBase>      
+        <Text style={subtitleStyle.style}>Name your group</Text>
         <TextInput
           placeholder='Group Name'
           value={groupName}
@@ -55,9 +56,9 @@ class CreateGroup extends ComponentWithInputs {
           autoCorrect={false}
           onChangeText={value => this.onChangeText('groupName', value)}
         />
-        <Text>Add members</Text>
+        <Text style={{ ...mt2, ...subtitleStyle.style }}>Add members</Text>
         <SelectContactList
-          selectedContacts={this.state.members}
+          selectedContacts={authUsers}
           onPressContact={this.toggleMember}
         />
         <Button onPress={this.createGroup}>Create Group</Button>

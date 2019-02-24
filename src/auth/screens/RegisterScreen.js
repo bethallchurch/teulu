@@ -9,8 +9,9 @@ import PhoneInput from '@global/components/PhoneInput'
 import Link, { LinkContainer } from '@global/components/Link'
 import MinimalScreenBase from '@global/components/MinimalScreenBase'
 import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
-
 import { titleStyle } from '@global/styles'
+
+// TODO: check if user with phone number already exists
 
 class RegisterScreen extends ComponentWithPhoneInput {
   constructor (props) {

@@ -6,6 +6,7 @@ import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { ALBUM } from '@navigation/routes'
+import LoadingComponent from '@global/components/LoadingComponent'
 
 class AlbumList extends Component {
   navigateToAlbum = (id, name) => this.props.navigation.navigate(ALBUM, {
@@ -45,12 +46,12 @@ const ConnectedAlbumList = props => {
     >
       {({ data: { listAlbums }, loading, error }) => {
         if (error) return <Text>Error</Text>
-        if (loading || !listAlbums) return <Text>Loading...</Text>
+        if (loading || !listAlbums) return <LoadingComponent />
         const groupAlbums = listAlbums.items.filter(({ group: { id } }) => id === groupId)
         return <AlbumList albums={groupAlbums} {...props} />
       }}
     </Connect>
   )
-} 
+}
 
 export default ConnectedAlbumList

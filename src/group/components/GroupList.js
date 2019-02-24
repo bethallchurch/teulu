@@ -6,6 +6,7 @@ import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { GROUP } from '@navigation/routes'
+import LoadingComponent from '@global/components/LoadingComponent'
 
 class GroupList extends Component {
   navigateToGroup = (id, name) => this.props.navigation.navigate(GROUP, {
@@ -16,11 +17,10 @@ class GroupList extends Component {
   render () {
     return (
       <View>
-        {this.props.groups.map(({ id, name, members }) => (
+        {this.props.groups.map(({ id, name }) => (
           <ListItem
             key={id}
             title={name}
-            subtitle={members.join(', ')}
             bottomDivider
             onPress={() => this.navigateToGroup(id, name)}
           />
@@ -43,7 +43,7 @@ const ConnectedGroupList = props => (
   >
     {({ data: { listGroups }, loading, error }) => {
       if (error) return <Text>Error</Text>
-      if (loading || !listGroups) return <Text>Loading...</Text>
+      if (loading || !listGroups) return <LoadingComponent />
       return <GroupList groups={listGroups.items} {...props} />
     }}
   </Connect>

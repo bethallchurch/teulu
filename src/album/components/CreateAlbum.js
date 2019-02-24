@@ -12,7 +12,7 @@ class CreateAlbum extends Component {
     const id = this.props.navigation.getParam('groupId')
     try {
       const result = await getGroup(id)
-      this.setState({ groupId: id, contributors: result.data.getGroup.members })
+      this.setState({ groupId: id, contributors: result.data.getGroup.authUsers })
     } catch (error) {
       console.log('Error getting group:', error)
     }

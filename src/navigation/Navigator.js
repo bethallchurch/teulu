@@ -9,12 +9,14 @@ import GroupListScreen from '@group/screens/GroupListScreen'
 import GroupScreen from '@group/components/GroupScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
+import { colors } from '@global/styles'
 
 const MainAppStack = createStackNavigator({
   [routes.HOME]: {
     screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
+      headerTintColor: colors.textDefault,
       headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
@@ -28,6 +30,7 @@ const MainAppStack = createStackNavigator({
     screen: GroupListScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Groups',
+      headerTintColor: colors.textDefault,
       headerTitleStyle: headerTitleStyle.style
     })
   },
@@ -35,6 +38,7 @@ const MainAppStack = createStackNavigator({
     screen: GroupScreen,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('groupName'),
+      headerTintColor: colors.textDefault,
       headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
@@ -50,6 +54,7 @@ const MainAppStack = createStackNavigator({
     screen: AlbumStack,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('albumName'),
+      headerTintColor: colors.textDefault,
       headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
@@ -61,8 +66,6 @@ const MainAppStack = createStackNavigator({
       )
     })
   }
-}, {
-  mode: 'card'
 })
 
 const Navigator = createStackNavigator({

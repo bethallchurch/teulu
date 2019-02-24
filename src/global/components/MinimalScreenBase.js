@@ -9,17 +9,21 @@ import {
   Keyboard
 } from 'react-native'
 
-const AuthScreenBase = ({ children }) => (
+const MinimalScreenBase = ({ children }) => (
   <SafeAreaView style={styles.container}>
     <StatusBar />
     <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
       <TouchableWithoutFeedback style={styles.container} onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <View style={styles.infoContainer}>{children}</View>
-        </View>
+        <Content children={children} />
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   </SafeAreaView>
+)
+
+const Content = ({ children }) => (
+  <View style={styles.container}>
+    <View style={styles.infoContainer}>{children}</View>
+  </View>
 )
 
 const styles = StyleSheet.create({
@@ -32,9 +36,9 @@ const styles = StyleSheet.create({
   infoContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 32,
+    padding: 32,
     flex: 1
   }
 })
 
-export default AuthScreenBase
+export default MinimalScreenBase
