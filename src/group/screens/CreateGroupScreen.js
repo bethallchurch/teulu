@@ -20,9 +20,10 @@ class CreateGroup extends ComponentWithInputs {
     }
   }
 
-  toggleMember = id => {
+  toggleAuthUser = id => {
     const { authUsers } = this.state
     const updatedAuthUsers = authUsers.includes(id) ?
+      authUsers.filter(authUserId => authUserId !== id) :
       [ id, ...authUsers ]
     this.setState({ authUsers: updatedAuthUsers })
   }
@@ -30,8 +31,6 @@ class CreateGroup extends ComponentWithInputs {
   createGroup = async () => {
     const { groupName, authUsers } = this.state
     const { userId } = this.props
-    console.log('GROUP:', groupName, [ userId, ...authUsers ])
-    
     try {
       const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ]})
       const groupId = result.data.createGroup.id
@@ -59,7 +58,7 @@ class CreateGroup extends ComponentWithInputs {
         <Text style={{ ...mt2, ...subtitleStyle.style }}>Add members</Text>
         <SelectContactList
           selectedContacts={authUsers}
-          onPressContact={this.toggleMember}
+          onPressContact={this.toggleAuthUser}
         />
         <Button onPress={this.createGroup}>Create Group</Button>
       </MinimalScreenBase>
