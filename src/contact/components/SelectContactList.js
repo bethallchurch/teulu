@@ -9,8 +9,6 @@ import NoContacts from '@contact/components/NoContacts'
 import { colors, copyStyle } from '@global/styles'
 import { selectContactListStyle } from '@contact/styles'
 
-// TODO: use Connect component
-
 class SelectContactList extends Component {
   state = { contacts: [], loading: true }
 

@@ -11,8 +11,6 @@ import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
 import { colors, copyStyle } from '@global/styles'
 
-// TODO: FlatList
-
 class GroupList extends Component {
   navigateToGroup = (id, name) => this.props.navigation.navigate(GROUP, {
     groupId: id,
@@ -33,13 +31,28 @@ class GroupList extends Component {
     )
   }
 
+  renderItemCompact = ({ item: { id, name }, index}) =>  {
+    return (
+      <ListItem
+        title={name}
+        titleStyle={copyStyle.regular}
+        containerStyle={{ paddingVertical: 8 }}
+        onPress={() => this.navigateToGroup(id, name)}
+        leftAvatar={{ rounded: true, title: name[0], overlayContainerStyle: { backgroundColor: colors.textDefault }}}
+        rightIcon={{ name: 'chevron-right', color: colors.textLight }}
+        topDivider={index !== 0}
+      />
+    )
+  }
+
   render () {
+    const { compact = false } = this.props
     return (
       <FlatList
-        style={{ paddingVertical: 8 }}
+        style={compact ? {} : { paddingVertical: 8 }}
         keyExtractor={({ id }) => id}
         data={this.props.groups}
-        renderItem={this.renderItem}
+        renderItem={compact ? this.renderItemCompact : this.renderItem}
       />
     )
   }
@@ -48,10 +61,11 @@ class GroupList extends Component {
 const ConnectedGroupList = props => {
   const { userId } = props
   const filter = { authUsers: { contains: userId }}
+  const queryParams = props.compact ? { filter, limit: 3 } : { filter }
   return (
     <Connect
-      query={graphqlOperation(queries.listGroups, { filter })}
-      subscription={graphqlOperation(subscriptions.onCreateGroup, { filter })}
+      query={graphqlOperation(queries.listGroups, queryParams)}
+      subscription={graphqlOperation(subscriptions.onCreateGroup, queryParams)}
       onSubscriptionMsg={(previous, { onCreateGroup }) => {
         const { listGroups } = previous
         const newItems = [ onCreateGroup, ...listGroups.items ]

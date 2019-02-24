@@ -1,14 +1,21 @@
 import React, { Component } from 'react'
 import { SafeAreaView } from 'react-native'
-import { ListItem } from 'react-native-elements'
 import { GROUP_LIST } from '@navigation/routes'
+import GroupList from '@group/components/GroupList'
+import Section from '@home/components/Section'
+import { colors } from '@global/styles'
+import { homeScreenStyle } from '@home/styles'
 
 export default class HomeScreen extends Component {
-
   render () {
+    const { navigation } = this.props
     return (
-      <SafeAreaView style={{ backgroundColor: '#f6f7f6', flex: 1 }}>
-        <ListItem title='Groups' onPress={() => this.props.navigation.navigate(GROUP_LIST)} />
+      <SafeAreaView style={homeScreenStyle.container}>
+        <Section
+          title='Groups'
+          onPressTitle={() => navigation.navigate(GROUP_LIST)}
+          listComponent={<GroupList compact navigation={navigation} />}
+        />
       </SafeAreaView>
     )
   }
