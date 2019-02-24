@@ -36,7 +36,7 @@ export default class UserSettingsScreen extends Component {
           <View>
             <ListItem
               title={phoneNumber}
-              titleStyle={copyStyle.style}
+              titleStyle={copyStyle.regular}
               bottomDivider
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'smartphone' }}
@@ -44,7 +44,7 @@ export default class UserSettingsScreen extends Component {
             />
             <ListItem
               title='Notifications'
-              titleStyle={copyStyle.style}
+              titleStyle={copyStyle.regular}
               bottomDivider
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'notifications-none' }}
@@ -52,7 +52,7 @@ export default class UserSettingsScreen extends Component {
             />
             <ListItem
               title='Reset Password'
-              titleStyle={copyStyle.style}
+              titleStyle={copyStyle.regular}
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'lock-outline' }}
               onPress={() => navigate(routes.RESET_PASSWORD)}

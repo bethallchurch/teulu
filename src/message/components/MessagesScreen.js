@@ -7,7 +7,8 @@ import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { UserContext } from '@global/context'
-import LoadingComponent from '@global/components/LoadingComponent'
+import Loading from '@global/components/Loading'
+import Error from '@global/components/Error'
 
 class MessagesScreen extends React.Component {
   constructor (props) {
@@ -71,8 +72,8 @@ const ConnectedMessagesScreen = props => {
       }}
     >
       {({ mutation, data: { listMessages }, loading, error }) => {
-        if (error) return <Text>Error</Text>
-        if (loading || !listMessages) return <LoadingComponent />
+        if (error) return <Error />
+        if (loading || !listMessages) return <Loading />
         const albumMessages = listMessages.items
           .filter(message => !!message)
           .filter(({ album: { id } }) => id === albumId)

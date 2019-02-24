@@ -4,7 +4,8 @@ import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import { Connect } from 'aws-amplify-react-native'
 import { Card, ListItem, Button } from 'react-native-elements'
-import LoadingComponent from '@global/components/LoadingComponent'
+import Loading from '@global/components/Loading'
+import Error from '@global/components/Error'
 
 const AlbumSettings = ({ album }) => (
   <SafeAreaView>
@@ -20,8 +21,8 @@ const ConnectedAlbumSettings = props => (
     query={graphqlOperation(queries.getAlbum, { id: props.navigation.getParam('albumId') })}
   >
     {({ data: { getAlbum }, loading, error }) => {
-      if (error) return <Text>Error</Text>
-      if (loading || !getAlbum) return <LoadingComponent />
+      if (error) return <Error />
+      if (loading || !getAlbum) return <Loading />
       return <AlbumSettings album={getAlbum} {...props} />
     }}
   </Connect>

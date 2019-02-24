@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { APP, AUTH } from '@navigation/routes'
 import { getAuthUser } from '@auth/AuthService'
-import LoadingScreen from '@global/components/LoadingScreen'
+import Loading from '@global/components/Loading'
 
-export default class AuthLoadingScreen extends Component {
+export default class AuthLoading extends Component {
   state = { userToken: null }
   
   async componentDidMount () {
@@ -21,7 +21,7 @@ export default class AuthLoadingScreen extends Component {
   }
 
   render () {
-    return <LoadingScreen />
+    return <Loading />
   }
 }
 

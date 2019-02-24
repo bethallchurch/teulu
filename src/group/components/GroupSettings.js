@@ -4,7 +4,8 @@ import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import { Connect } from 'aws-amplify-react-native'
 import { Card, ListItem, Button } from 'react-native-elements'
-import LoadingComponent from '@global/components/LoadingComponent'
+import Loading from '@global/components/Loading'
+import Error from '@global/components/Error'
 
 const GroupSettings = ({ group }) => (
   <SafeAreaView>
@@ -21,8 +22,8 @@ const ConnectedGroupSettings = props => (
     query={graphqlOperation(queries.getGroup, { id: props.navigation.getParam('groupId') })}
   >
     {({ data: { getGroup }, loading, error }) => {
-      if (error) return <Text>Error</Text>
-      if (loading || !getGroup) return <LoadingComponent />
+      if (error) return <Error />
+      if (loading || !getGroup) return <Loading />
       return <GroupSettings group={getGroup} {...props} />
     }}
   </Connect>

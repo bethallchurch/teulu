@@ -7,7 +7,7 @@ import AuthStack from '@auth/AuthNavigation'
 import { getOrCreateUser, getUser } from '@user/UserService'
 import { fDefault, fBold, fItalic } from '@global/styles'
 import { UserContext } from '@global/context'
-import LoadingScreen from '@global/components/LoadingScreen'
+import Loading from '@global/components/Loading'
 
 Amplify.configure(config)
 
@@ -46,10 +46,10 @@ class App extends Component {
       <UserContext.Provider value={this.state.user}>
         <AppNavigator
           persistenceKey='persistenceKey000'
-          renderLoadingExperimental={() => <LoadingScreen />}
+          renderLoadingExperimental={() => <Loading />}
         />
       </UserContext.Provider>
-    ) : <LoadingScreen />
+    ) : <Loading />
   }
 }
 

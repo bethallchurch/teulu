@@ -5,7 +5,7 @@ import { noContactsStyle } from '@contact/styles'
 
 const NoContacts = () => (
   <View style={noContactsStyle.container}>
-    <Text style={{ ...copyStyle.style, ...f5 }}>
+    <Text style={copyStyle.bold}>
       Contacts from your phone who have downloaded the app will automatically appear here.
     </Text>
   </View>

@@ -201,9 +201,19 @@ export const subtitleStyle = StyleSheet.create({
 })
 
 export const copyStyle = StyleSheet.create({
-  style: {
+  regular: {
     color: colors.textDefault,
     ...fDefault,
+    ...f4
+  },
+  bold: {
+    color: colors.textDefault,
+    ...fBold,
+    ...f4
+  },
+  italic: {
+    color: colors.textDefault,
+    ...fItalic,
     ...f4
   }
 })
@@ -277,14 +287,13 @@ export const linkStyles = StyleSheet.create({
   }
 })
 
-export const loadingComponentStyle = StyleSheet.create({
+export const loadingStyle = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.secondaryBackground,
-    ...w100Pc,
-    ...pa3,
-    ...mb3
+    ...w100Pc
   }
 })
+
+export const errorStyle = loadingStyle

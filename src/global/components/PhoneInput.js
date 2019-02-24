@@ -20,7 +20,7 @@ const PhoneInput = ({
     <TouchableOpacity onPress={showModal}>
       <View style={phoneInputStyle.dropdownContainer}>
         <Icon name='chevron-down' type='material-community' iconStyle={phoneInputStyle.icon} />
-        <Text style={copyStyle.style}>{dialCode}</Text>
+        <Text style={copyStyle.regular}>{dialCode}</Text>
         <InternationalPhoneDropdown visible={modalVisible} getCountry={getCountry} hide={hideModal} />
       </View>
     </TouchableOpacity>

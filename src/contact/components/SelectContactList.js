@@ -4,10 +4,12 @@ import { ListItem } from 'react-native-elements'
 import { Permissions } from 'expo'
 import { getContacts } from '@contact/ContactService'
 import { UserContext } from '@global/context'
-import LoadingComponent from '@global/components/LoadingComponent'
+import Loading from '@global/components/Loading'
 import NoContacts from '@contact/components/NoContacts'
 import { colors, copyStyle } from '@global/styles'
 import { selectContactListStyle } from '@contact/styles'
+
+// TODO: use Connect component
 
 class SelectContactList extends Component {
   state = { contacts: [], loading: true }
@@ -35,7 +37,7 @@ class SelectContactList extends Component {
       <ListItem
         bottomDivider
         title={phoneNumber}
-        titleStyle={copyStyle.style}
+        titleStyle={copyStyle.regular}
         rightIcon={{
           name: selected ? 'check-box' : 'check-box-outline-blank',
           color: selected ? colors.primary : colors.textDefault
@@ -47,11 +49,11 @@ class SelectContactList extends Component {
 
   render () {
     const { contacts, loading } = this.state
-    if (loading) return <LoadingComponent />
+    if (loading) return <Loading />
     return contacts.length > 0 ? (<FlatList
       extraData={this.props.selectedContacts}
       style={selectContactListStyle.list}
-      keyExtractor={({ id }, index) => index.toString()}
+      keyExtractor={({ id }) => id}
       data={contacts}
       renderItem={this.renderItem}
     />) : <NoContacts />
