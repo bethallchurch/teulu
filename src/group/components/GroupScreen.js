@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import ActionButton from '@global/components/ActionButton'
 import AlbumList from '@album/components/AlbumList'
 import { CREATE_ALBUM } from '@navigation/routes'
+import { colors } from '@global/styles'
 
 class GroupScreen extends Component {
   navigateToCreateAlbum = () => this.props.navigation.navigate(CREATE_ALBUM, {
@@ -12,7 +13,7 @@ class GroupScreen extends Component {
 
   render () {
     return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={{ ...styles.container, backgroundColor: colors.primaryBackground }}>
         <AlbumList navigation={this.props.navigation} />
         <ActionButton onPress={this.navigateToCreateAlbum}>
           <MaterialIcons name='add-to-photos' color='#fff' size={32} />

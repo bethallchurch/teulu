@@ -13,12 +13,13 @@ class SelectContactList extends Component {
   state = { contacts: [], loading: true }
 
   async componentDidMount () {
+    const { exclude = [] } = this.props
     try {
       const { status } = await Permissions.askAsync(Permissions.CONTACTS)
       if (status === 'granted') {
         const { data: { listUsers: { items: contacts } } } = await getContacts()
         this.setState({
-          contacts: contacts.filter(({ id }) => id !== this.props.userId),
+          contacts: contacts.filter(({ id }) => !exclude.includes(id)).filter(({ id }) => id !== this.props.userId),
           loading: false
         })
       }
@@ -47,6 +48,10 @@ class SelectContactList extends Component {
 
   render () {
     const { contacts, loading } = this.state
+    const { exclude = [] } = this.props
+    const message  = exclude.length <= 0 ?
+      'Contacts from your phone who have downloaded the app will automatically appear here.' :
+      'No results.'
     if (loading) return <Loading />
     return contacts.length > 0 ? (<FlatList
       extraData={this.props.selectedContacts}
@@ -54,7 +59,7 @@ class SelectContactList extends Component {
       keyExtractor={({ id }) => id}
       data={contacts}
       renderItem={this.renderItem}
-    />) : <NoContacts />
+    />) : <NoContacts onEmptyMessage={message} />
   }
 }
 

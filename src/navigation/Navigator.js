@@ -1,5 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { headerTitleStyle } from '@navigation/styles'
 import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
 import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
@@ -9,7 +10,7 @@ import GroupListScreen from '@group/screens/GroupListScreen'
 import GroupScreen from '@group/components/GroupScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
-import { colors } from '@global/styles'
+import { colors, w4 } from '@global/styles'
 
 const MainAppStack = createStackNavigator({
   [routes.HOME]: {
@@ -42,7 +43,7 @@ const MainAppStack = createStackNavigator({
       headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
-          iconName='settings'
+          icon={<MaterialCommunityIcons name='dots-vertical' size={w4.width} color={colors.textDefault} />}
           onPress={() => navigation.navigate(routes.GROUP_SETTINGS, {
             groupId: navigation.getParam('groupId')
           })}

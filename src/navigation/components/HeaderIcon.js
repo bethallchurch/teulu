@@ -4,10 +4,11 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { colors, w4 } from '@global/styles'
 import { headerIconStyle } from '@navigation/styles'
 
-const HeaderIcon = ({ onPress, iconName }) => (
+const HeaderIcon = ({ onPress, iconName, icon = null }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={headerIconStyle.style}>
-      <MaterialIcons name={iconName} size={w4.width} color={colors.textDefault} />
+      {icon}
+      {!icon && <MaterialIcons name={iconName} size={w4.width} color={colors.textDefault} />}
     </View>
   </TouchableOpacity>
 )

@@ -1,14 +1,17 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import { ListItem } from 'react-native-elements'
 import { copyStyle, f5 } from '@global/styles'
 import { noContactsStyle } from '@contact/styles'
 
-const NoContacts = () => (
-  <View style={noContactsStyle.container}>
-    <Text style={copyStyle.bold}>
-      Contacts from your phone who have downloaded the app will automatically appear here.
-    </Text>
-  </View>
+const NoContacts = ({
+  onEmptyMessage = 'No results.'
+}) => (
+  <ListItem
+    title={onEmptyMessage}
+    titleStyle={copyStyle.regular}
+    containerStyle={noContactsStyle.container}
+  />
 )
 
 export default NoContacts

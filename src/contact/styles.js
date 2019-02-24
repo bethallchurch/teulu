@@ -12,9 +12,7 @@ export const selectContactListStyle = StyleSheet.create({
 export const noContactsStyle = StyleSheet.create({
   container: {
     ...mb3,
-    ...w100Pc,
-    flex: 1,
     backgroundColor: colors.secondaryBackground,
-    ...pa3
+    ...w100Pc
   }
 })

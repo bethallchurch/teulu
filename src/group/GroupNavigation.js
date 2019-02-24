@@ -2,12 +2,12 @@ import React from 'react'
 import { createStackNavigator } from 'react-navigation'
 import { headerTitleStyle } from '@navigation/styles'
 import CreateGroupScreen from '@group/screens/CreateGroupScreen'
-import GroupSettings from '@group/components/GroupSettings'
+import GroupSettingsScreen from '@group/screens/GroupSettingsScreen'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 import { colors } from '@global/styles'
 
 export const CreateGroupStack = createStackNavigator({
-  CreateGroup: {
+  CreateGroupScreen: {
     screen: CreateGroupScreen,
     headerTintColor: colors.textDefault,
     headerTitleStyle: headerTitleStyle.style,
@@ -19,12 +19,12 @@ export const CreateGroupStack = createStackNavigator({
 })
 
 export const GroupSettingsStack = createStackNavigator({
-  GroupSettings: {
-    screen: GroupSettings,
+  GroupSettingsScreen: {
+    screen: GroupSettingsScreen,
     headerTintColor: colors.textDefault,
     headerTitleStyle: headerTitleStyle.style,
     navigationOptions: ({ navigation }) => ({
-      title: 'Settings',
+      title: 'Group Info',
       headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
     })
   }
