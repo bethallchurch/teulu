@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation'
-import CreateAlbum from '@album/components/CreateAlbum'
+import CreateAlbumScreen from '@album/screens/CreateAlbumScreen'
 import AlbumSettings from '@album/components/AlbumSettings'
 import MessagesScreen from '@message/components/MessagesScreen'
 import PhotosScreen from '@photo/components/PhotosScreen'
@@ -9,7 +9,7 @@ import HeaderIcon from '@navigation/components/HeaderIcon'
 
 export const CreateAlbumStack = createStackNavigator({
   CreateAlbum: {
-    screen: CreateAlbum,
+    screen: CreateAlbumScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Create Album',
       headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />

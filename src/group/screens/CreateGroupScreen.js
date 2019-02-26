@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { SafeAreaView, View, Text, StyleSheet } from 'react-native'
+import React from 'react'
+import { Text } from 'react-native'
 import { createGroup, createGroupLink } from '@group/GroupService'
 import SelectContactList from '@contact/components/SelectContactList'
 import { UserContext } from '@global/context'
@@ -11,14 +11,7 @@ import Button from '@global/components/Button'
 import { subtitleStyle, mt2 } from '@global/styles'
 
 class CreateGroup extends ComponentWithInputs {
-  constructor (props) {
-    super(props)
-    this.state = {
-      authUsers: [],
-      groupName: '',
-      step: 1
-    }
-  }
+  state = { authUsers: [], groupName: '' }
 
   toggleAuthUser = id => {
     const { authUsers } = this.state
@@ -71,9 +64,5 @@ const CreateGroupWithContext = props => (
     {user => <CreateGroup userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
-
-const styles = StyleSheet.create({
-
-})
 
 export default CreateGroupWithContext
