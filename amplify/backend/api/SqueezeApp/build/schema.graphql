@@ -28,6 +28,7 @@ type Album {
   name: String
   owner: String
   authUsers: [String]
+  albumGroupId: ID
   group: Group
   messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
   createdAt: String
@@ -67,6 +68,25 @@ type PhotoS3Info {
   key: String!
   width: Int!
   height: Int!
+}
+
+type Subscription {
+  onCreateAlbum(albumGroupId: ID): Album @aws_subscribe(mutations: ["createAlbum"])
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
+  onCreateGroupLink: GroupLink @aws_subscribe(mutations: ["createGroupLink"])
+  onUpdateGroupLink: GroupLink @aws_subscribe(mutations: ["updateGroupLink"])
+  onDeleteGroupLink: GroupLink @aws_subscribe(mutations: ["deleteGroupLink"])
+  onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
+  onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
+  onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
+  onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
+  onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
+  onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
+  onCreatePhoto: Photo @aws_subscribe(mutations: ["createPhoto"])
+  onUpdatePhoto: Photo @aws_subscribe(mutations: ["updatePhoto"])
+  onDeletePhoto: Photo @aws_subscribe(mutations: ["deletePhoto"])
 }
 
 enum ModelSortDirection {
@@ -188,35 +208,12 @@ type Mutation {
   updateGroup(input: UpdateGroupInput!): Group
   deleteGroup(input: DeleteGroupInput!): Group
   createAlbum(input: CreateAlbumInput!): Album
-  updateAlbum(input: UpdateAlbumInput!): Album
-  deleteAlbum(input: DeleteAlbumInput!): Album
   createMessage(input: CreateMessageInput!): Message
   updateMessage(input: UpdateMessageInput!): Message
   deleteMessage(input: DeleteMessageInput!): Message
   createPhoto(input: CreatePhotoInput!): Photo
   updatePhoto(input: UpdatePhotoInput!): Photo
   deletePhoto(input: DeletePhotoInput!): Photo
-}
-
-type Subscription {
-  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
-  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
-  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
-  onCreateGroupLink: GroupLink @aws_subscribe(mutations: ["createGroupLink"])
-  onUpdateGroupLink: GroupLink @aws_subscribe(mutations: ["updateGroupLink"])
-  onDeleteGroupLink: GroupLink @aws_subscribe(mutations: ["deleteGroupLink"])
-  onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
-  onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
-  onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
-  onCreateAlbum: Album @aws_subscribe(mutations: ["createAlbum"])
-  onUpdateAlbum: Album @aws_subscribe(mutations: ["updateAlbum"])
-  onDeleteAlbum: Album @aws_subscribe(mutations: ["deleteAlbum"])
-  onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
-  onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
-  onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
-  onCreatePhoto: Photo @aws_subscribe(mutations: ["createPhoto"])
-  onUpdatePhoto: Photo @aws_subscribe(mutations: ["updatePhoto"])
-  onDeletePhoto: Photo @aws_subscribe(mutations: ["deletePhoto"])
 }
 
 type ModelGroupLinkConnection {
@@ -296,6 +293,7 @@ input ModelAlbumFilterInput {
   name: ModelStringFilterInput
   owner: ModelStringFilterInput
   authUsers: ModelStringFilterInput
+  albumGroupId: ModelIDFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput
   and: [ModelAlbumFilterInput]
@@ -308,9 +306,9 @@ input CreateAlbumInput {
   name: String
   owner: String
   authUsers: [String]
+  albumGroupId: ID
   createdAt: String
   updatedAt: String
-  albumGroupId: ID
 }
 
 input UpdateAlbumInput {
@@ -318,9 +316,9 @@ input UpdateAlbumInput {
   name: String
   owner: String
   authUsers: [String]
+  albumGroupId: ID
   createdAt: String
   updatedAt: String
-  albumGroupId: ID
 }
 
 input DeleteAlbumInput {

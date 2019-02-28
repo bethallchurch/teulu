@@ -16,7 +16,7 @@ const AppNavigator = createAppContainer(AuthStack)
 class App extends Component {
   constructor (props) {
     super(props)
-    this.state = { fontLoaded: false, user: {} }
+    this.state = { fontLoaded: false, user: null }
     Hub.listen('auth', this)
   }
 
@@ -32,7 +32,7 @@ class App extends Component {
 
   async setUser () {
     const user = await getOrCreateUser()
-    this.setState({ user })
+    this.setState({ user: user || 'not authenticated' })
   }
 
   async onHubCapsule (capsule) {
@@ -42,10 +42,11 @@ class App extends Component {
   }
 
   render () {
-    return this.state.fontLoaded ? (
-      <UserContext.Provider value={this.state.user}>
+    const { fontLoaded, user } = this.state
+    return fontLoaded && user ? (
+      <UserContext.Provider value={user}>
         <AppNavigator
-          persistenceKey='persistenceKey000'
+          persistenceKey='persistenceKey001'
           renderLoadingExperimental={() => <Loading />}
         />
       </UserContext.Provider>

@@ -151,6 +151,7 @@ export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -179,6 +180,7 @@ export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -207,6 +209,7 @@ export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -223,78 +226,7 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
     name
     owner
     authUsers
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        nextToken
-      }
-      albums {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        text
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
-  updateAlbum(input: $input) {
-    id
-    name
-    owner
-    authUsers
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        nextToken
-      }
-      albums {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        text
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
-  deleteAlbum(input: $input) {
-    id
-    name
-    owner
-    authUsers
+    albumGroupId
     group {
       id
       name
@@ -337,6 +269,7 @@ export const createMessage = `mutation CreateMessage($input: CreateMessageInput!
       name
       owner
       authUsers
+      albumGroupId
       group {
         id
         name
@@ -379,6 +312,7 @@ export const updateMessage = `mutation UpdateMessage($input: UpdateMessageInput!
       name
       owner
       authUsers
+      albumGroupId
       group {
         id
         name
@@ -421,6 +355,7 @@ export const deleteMessage = `mutation DeleteMessage($input: DeleteMessageInput!
       name
       owner
       authUsers
+      albumGroupId
       group {
         id
         name
@@ -478,6 +413,7 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -519,6 +455,7 @@ export const updatePhoto = `mutation UpdatePhoto($input: UpdatePhotoInput!) {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -560,6 +497,7 @@ export const deletePhoto = `mutation DeletePhoto($input: DeletePhotoInput!) {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }

@@ -17,11 +17,8 @@ class SelectContactList extends Component {
     try {
       const { status } = await Permissions.askAsync(Permissions.CONTACTS)
       if (status === 'granted') {
-        const { data: { listUsers: { items: contacts } } } = await getContacts()
-        this.setState({
-          contacts: contacts.filter(({ id }) => !exclude.includes(id)).filter(({ id }) => id !== this.props.userId),
-          loading: false
-        })
+        const contacts = await getContacts()
+        this.setState({ contacts, loading: false })
       }
     } catch (error) {
       console.log('Error getting contacts:', error)
@@ -29,13 +26,13 @@ class SelectContactList extends Component {
     }
   }
 
-  renderItem = ({ item: { id, phoneNumber }}) => {
+  renderItem = ({ item: { id, name, phoneNumber }}) => {
     const { selectedContacts, onPressContact } = this.props
     const selected = selectedContacts.includes(id)
     return (
       <ListItem
         bottomDivider
-        title={phoneNumber}
+        title={name || phoneNumber}
         titleStyle={copyStyle.regular}
         rightIcon={{
           name: selected ? 'check-box' : 'check-box-outline-blank',

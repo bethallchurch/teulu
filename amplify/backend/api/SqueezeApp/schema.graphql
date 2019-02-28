@@ -32,7 +32,10 @@ type Group
 }
 
 type Album
-  @model
+  @model(
+    mutations: { create: "createAlbum" },
+    subscriptions: null
+  )
   @auth(rules: [
     { allow: owner },
     { allow: owner, ownerField: "authUsers", mutations: [update] }
@@ -41,6 +44,7 @@ type Album
   name: String
   owner: String
   authUsers: [String]
+  albumGroupId: ID
   group: Group @connection(name: "GroupAlbums")
   messages: [Message] @connection(name: "AlbumMessages")
   createdAt: String
@@ -90,4 +94,9 @@ type PhotoS3Info {
   key: String!
   width: Int!
   height: Int!
+}
+
+type Subscription {
+  onCreateAlbum(albumGroupId: ID): Album
+    @aws_subscribe(mutations: ["createAlbum"])
 }

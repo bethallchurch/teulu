@@ -159,7 +159,7 @@
 						]
 					},
 					"S3DeploymentBucket": "squeeze-20190207173156-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/325cc37efd0e88ba5d171d020756dd7a890fd2d5",
+					"S3DeploymentRootKey": "amplify-appsync-files/ddda92f4dd6ddf2f20b4e97c305164dddb013531",
 					"env": "NONE"
 				}
 			}

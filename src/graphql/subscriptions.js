@@ -1,6 +1,43 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
 
+export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
+  onCreateAlbum(albumGroupId: $albumGroupId) {
+    id
+    name
+    owner
+    authUsers
+    albumGroupId
+    group {
+      id
+      name
+      owner
+      authUsers
+      userLinks {
+        nextToken
+      }
+      albums {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
 export const onCreateUser = `subscription OnCreateUser {
   onCreateUser {
     id
@@ -151,6 +188,7 @@ export const onCreateGroup = `subscription OnCreateGroup {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -179,6 +217,7 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -207,114 +246,7 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
         name
         owner
         authUsers
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onCreateAlbum = `subscription OnCreateAlbum {
-  onCreateAlbum {
-    id
-    name
-    owner
-    authUsers
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        nextToken
-      }
-      albums {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        text
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onUpdateAlbum = `subscription OnUpdateAlbum {
-  onUpdateAlbum {
-    id
-    name
-    owner
-    authUsers
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        nextToken
-      }
-      albums {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        text
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onDeleteAlbum = `subscription OnDeleteAlbum {
-  onDeleteAlbum {
-    id
-    name
-    owner
-    authUsers
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        nextToken
-      }
-      albums {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        text
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -337,6 +269,7 @@ export const onCreateMessage = `subscription OnCreateMessage {
       name
       owner
       authUsers
+      albumGroupId
       group {
         id
         name
@@ -379,6 +312,7 @@ export const onUpdateMessage = `subscription OnUpdateMessage {
       name
       owner
       authUsers
+      albumGroupId
       group {
         id
         name
@@ -421,6 +355,7 @@ export const onDeleteMessage = `subscription OnDeleteMessage {
       name
       owner
       authUsers
+      albumGroupId
       group {
         id
         name
@@ -478,6 +413,7 @@ export const onCreatePhoto = `subscription OnCreatePhoto {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -519,6 +455,7 @@ export const onUpdatePhoto = `subscription OnUpdatePhoto {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }
@@ -560,6 +497,7 @@ export const onDeletePhoto = `subscription OnDeletePhoto {
         name
         owner
         authUsers
+        albumGroupId
         createdAt
         updatedAt
       }

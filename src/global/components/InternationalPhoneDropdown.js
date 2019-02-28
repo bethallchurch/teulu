@@ -29,21 +29,28 @@ const InternationalPhoneDropdown = ({ visible, getCountry, hide }) => (
         <FlatList
           data={COUNTRY_CODES}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item: { code, flag, dialCode, name } }) => (
-            <TouchableWithoutFeedback onPress={() => getCountry(code)}>
-              <View style={styles.countryStyle}>
-                <View style={{ flexDirection: 'row', paddingVertical: 8 }}>
-                  <Text style={styles.text}>{name}</Text>
-                  <Text style={styles.dialCodeStyle}>{dialCode}</Text>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>)
-          }
+          renderItem={item => {
+            return <ListItem item={item} getCountry={getCountry} />
+          }}
         />
       </View>
     </SafeAreaView>
   </Modal>
 )
+
+const ListItem = ({ item, getCountry }) => {
+  const { item: { code, dialCode, name }} = item
+  return (
+    <TouchableWithoutFeedback onPress={() => getCountry(code)}>
+      <View style={styles.countryStyle}>
+        <View style={{ flexDirection: 'row', paddingVertical: 8 }}>
+          <Text style={styles.text}>{name}</Text>
+          <Text style={styles.dialCodeStyle}>{dialCode}</Text>
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

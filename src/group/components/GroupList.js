@@ -6,6 +6,7 @@ import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { GROUP } from '@navigation/routes'
+import { uniqueBy } from '@global/helpers'
 import { UserContext } from '@global/context'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
@@ -58,24 +59,30 @@ class GroupList extends Component {
   }
 }
 
+// TODO: subscription query filter not working
 const ConnectedGroupList = props => {
-  const { userId } = props
+  const { userId, compact } = props
   const filter = { authUsers: { contains: userId }}
-  const queryParams = props.compact ? { filter, limit: 3 } : { filter }
+  // Limit is being WEIRD and showing just one group
+  const queryParams = compact ? {} : { filter } // { limit: 3 }
   return (
     <Connect
       query={graphqlOperation(queries.listGroups, queryParams)}
       subscription={graphqlOperation(subscriptions.onCreateGroup, queryParams)}
       onSubscriptionMsg={(previous, { onCreateGroup }) => {
         const { listGroups } = previous
-        const newItems = [ onCreateGroup, ...listGroups.items ]
+        if (!onCreateGroup.authUsers.includes(userId)) {
+          return previous
+        }
+        const newItems = uniqueBy([ onCreateGroup, ...listGroups.items ], 'id')
         return { ...previous, listGroups: { ...listGroups, items: newItems } }
       }}
     >
       {({ data: { listGroups }, loading, error }) => {
         if (error) return <Error />
         if (loading || !listGroups) return <Loading />
-        return <GroupList groups={listGroups.items} {...props} />
+        const items = compact ? listGroups.items.slice(0, 3) : listGroups.items
+        return <GroupList groups={items} {...props} />
       }}
     </Connect>
   )

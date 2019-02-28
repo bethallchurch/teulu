@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
-import { graphqlOperation }  from 'aws-amplify'
+import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet } from 'react-native'
+import { API, graphqlOperation }  from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
-import { ListItem } from 'react-native-elements'
+import { ListItem, Image } from 'react-native-elements'
 import { ALBUM } from '@navigation/routes'
+import { uniqueBy } from '@global/helpers'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
+import { colors } from '@global/styles'
+
+const PADDING = 4
+const GUTTER = 4
+const COLUMNS = 3
 
 class AlbumList extends Component {
   navigateToAlbum = (id, name) => this.props.navigation.navigate(ALBUM, {
@@ -15,44 +21,135 @@ class AlbumList extends Component {
     albumName: name
   })
 
-  render () {
+  get imageWidth () {
+    const {
+      numColumns = COLUMNS,
+      gutterWidth = GUTTER,
+      containerPadding = PADDING,
+      containerWidth = Dimensions.get('window').width
+    } = this.props
+    const gutterSpace = (numColumns - 1) * gutterWidth
+    const paddingSpace = containerPadding * 2
+    const spaceToDivide = containerWidth - (gutterSpace + paddingSpace)
+    return spaceToDivide / numColumns
+  }
+
+  itemMargin = index => {
+    const { gutterWidth = GUTTER, numColumns = COLUMNS, albums } = this.props
+    const numAlbums = albums.length
+    const firstRow = index + 1 <= numColumns
+    const lastRow = index > (numAlbums - numColumns) + (numAlbums % numColumns)
+    const firstColumn = index === 0 || index % numColumns === 0
+    const lastColumn = (index + 1) % numColumns === 0
+    return {
+      marginTop: firstRow ? 0 : gutterWidth / 2,
+      marginRight: lastColumn ? 0 : gutterWidth / 2,
+      marginBottom: lastRow ? 0 : gutterWidth / 2,
+      marginLeft: firstColumn ? 0 : gutterWidth / 2
+    }
+  }
+
+  renderItem = ({ item: { id, name }, index }) => {
     return (
-      <View>
-        {this.props.albums.map(({ id, name }) => (
-          <TouchableOpacity key={id} onPress={() => this.navigateToAlbum(id, name)}>
-            <ListItem key={id} title={name} />
-          </TouchableOpacity>
-        ))}
-      </View>
+      <AlbumItem
+        onPress={() => this.navigateToAlbum(id, name)}
+        width={this.imageWidth}
+        margin={this.itemMargin(index)}
+      />
     )
   }
 
+  render () {
+    const {
+      albums,
+      numColumns = COLUMNS,
+      containerPadding = PADDING
+    } = this.props
+    return (
+      <FlatList
+        style={{ padding: containerPadding }}
+        keyExtractor={({ id }) => id}
+        numColumns={numColumns}
+        data={albums}
+        renderItem={this.renderItem}
+      />
+    )
+  }
 }
 
-const ConnectedAlbumList = props => {
-  const groupId = props.navigation.getParam('groupId')
+const AlbumItem = ({ onPress, width, margin }) => {
   return (
-    <Connect
-      query={graphqlOperation(queries.listAlbums)}
-      subscription={graphqlOperation(subscriptions.onCreateAlbum)}
-      onSubscriptionMsg={(previous, { onCreateAlbum }) => {
-        const belongsToThisGroup = onCreateAlbum.group.id === groupId
-        if (!belongsToThisGroup) {
-          return previous
-        }
-        const { listAlbums } = previous
-        const newItems = [ onCreateAlbum, ...listAlbums.items ]
-        return { ...previous, listAlbums: { ...listAlbums, items: newItems } }
-      }}
-    >
-      {({ data: { listAlbums }, loading, error }) => {
-        if (error) return <Error />
-        if (loading || !listAlbums) return <Loading />
-        const groupAlbums = listAlbums.items.filter(({ group: { id } }) => id === groupId)
-        return <AlbumList albums={groupAlbums} {...props} />
-      }}
-    </Connect>
+    <TouchableOpacity onPress={onPress}>
+      <Image
+        resizeMode='cover'
+        source={require('@assets/img/placeholder.jpg')}
+        style={{ width, height: width, ...margin }}
+        PlaceholderContent={<ActivityIndicator color={colors.primary} />}
+      />
+    </TouchableOpacity>
   )
 }
 
-export default ConnectedAlbumList
+const ConnectedAlbumList = ({ query, subscription, onSubscriptionMsg, dataExtractor, ...props }) => (
+  <Connect query={query} subscription={subscription} onSubscriptionMsg={onSubscriptionMsg}>
+  {data => {
+    const { error, loading, items } = dataExtractor(data)
+    if (error) return <Error />
+    if (loading) return <Loading />
+    return <AlbumList albums={items} {...props} />
+  }}
+  </Connect>
+)
+
+export const GroupAlbumList = props => {
+  const { groupId } = props
+  const query = graphqlOperation(queries.getGroup, { id: groupId })
+  const subscription = graphqlOperation(subscriptions.onCreateAlbum, { albumGroupId: groupId })
+  const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
+    const { getGroup } = previous
+    const newItems = [ onCreateAlbum, ...getGroup.albums.items ]
+    return { ...previous, getGroup: { albums: { ...getGroup, items: newItems }}}
+  }
+  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+    error,
+    loading: loading || !getGroup,
+    items: getGroup ? getGroup.albums.items : []
+  })
+  return (
+    <ConnectedAlbumList
+      query={query}
+      subscription={subscription}
+      onSubscriptionMsg={onSubscriptionMsg}
+      dataExtractor={dataExtractor}
+      {...props}
+    />
+  )
+}
+
+
+const AlbumListAll = props => {
+  const queryParams = props.limit ? { limit: props.limit } : {}
+  const query = graphqlOperation(queries.listAlbums, queryParams)
+  const subscription = graphqlOperation(subscriptions.onCreateAlbum)
+  const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
+    const { listAlbums } = previous
+    const newItems = [ onCreateAlbum, ...listAlbums.items ]
+    return { ...previous, listAlbums: { ...listAlbums, items: newItems }}
+  }
+  const dataExtractor = ({ data: { listAlbums }, loading, error }) => ({
+    error,
+    loading: loading || !listAlbums,
+    items: listAlbums ? listAlbums.items : []
+  })
+  return (
+    <ConnectedAlbumList
+      query={query}
+      subscription={subscription}
+      onSubscriptionMsg={onSubscriptionMsg}
+      dataExtractor={dataExtractor}
+      {...props}
+    />
+  )
+}
+
+export default AlbumListAll

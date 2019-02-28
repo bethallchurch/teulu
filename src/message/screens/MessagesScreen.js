@@ -33,7 +33,7 @@ class MessagesScreen extends React.Component {
       const input = {
         owner: this.props.userId,
         messageAlbumId: this.props.navigation.getParam('albumId'),
-        viewers: this.props.contributors,
+        viewers: this.props.authUsers,
         content: m.text,
         type: 'TEXT'
       }
@@ -74,12 +74,13 @@ const ConnectedMessagesScreen = props => {
       {({ mutation, data: { listMessages }, loading, error }) => {
         if (error) return <Error />
         if (loading || !listMessages) return <Loading />
-        const albumMessages = listMessages.items
-          .filter(message => !!message)
-          .filter(({ album: { id } }) => id === albumId)
-          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        const contributors = albumMessages[0].album.contributors
-        return <MessagesScreen contributors={contributors} messages={albumMessages} sendMessage={mutation} {...props} />
+        console.log('MESSAGES:', listMessages)
+        // const albumMessages = listMessages.items
+        //   .filter(message => !!message)
+        //   .filter(({ album: { id } }) => id === albumId)
+        //   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        // const authUsers = albumMessages[0].album.authUsers
+        return <MessagesScreen authUsers={[]} messages={[]} sendMessage={mutation} {...props} />
       }}
     </Connect>
   )
