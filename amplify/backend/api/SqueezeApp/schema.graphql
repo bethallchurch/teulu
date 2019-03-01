@@ -26,6 +26,7 @@ type Group
   owner: String
   authUsers: [String]
   userLinks: [GroupLink] @connection(name: "GroupUserLinks")
+  messages: [Message] @connection(name: "GroupMessages", sortField: "createdAt")
   albums: [Album] @connection(name: "GroupAlbums")
   createdAt: String
   updatedAt: String
@@ -46,7 +47,7 @@ type Album
   authUsers: [String]
   albumGroupId: ID
   group: Group @connection(name: "GroupAlbums")
-  messages: [Message] @connection(name: "AlbumMessages")
+  photos: [Photo] @connection(name: "AlbumPhotos")
   createdAt: String
   updatedAt: String
 }
@@ -57,7 +58,10 @@ enum MessageType {
 }
 
 type Message
-@model
+@model(
+  mutations: { create: "createMessage" },
+  subscriptions: null
+)
 @auth(rules: [
   { allow: owner }
   { allow: owner, ownerField: "authUsers", mutations: null, queries: [get, list] }
@@ -67,7 +71,8 @@ type Message
   authUsers: [String]
   type: MessageType
   text: String
-  album: Album @connection(name: "AlbumMessages")
+  messageGroupId: ID
+  group: Group @connection(name: "GroupMessages")
   photos: [Photo] @connection(name: "MessagePhotos")
   createdAt: String
   updatedAt: String
@@ -86,6 +91,7 @@ type Photo
   fullsize: PhotoS3Info
   thumbnail: PhotoS3Info
   message: Message @connection(name: "MessagePhotos")
+  album: Album @connection(name: "AlbumPhotos")
   createdAt: String
   updatedAt: String
 }
@@ -99,4 +105,6 @@ type PhotoS3Info {
 type Subscription {
   onCreateAlbum(albumGroupId: ID): Album
     @aws_subscribe(mutations: ["createAlbum"])
+  onCreateMessage(messageGroupId: ID): Message
+    @aws_subscribe(mutations: ["createMessage"])
 }

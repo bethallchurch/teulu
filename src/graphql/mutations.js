@@ -66,6 +66,9 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
       userLinks {
         nextToken
       }
+      messages {
+        nextToken
+      }
       albums {
         nextToken
       }
@@ -93,6 +96,9 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
       owner
       authUsers
       userLinks {
+        nextToken
+      }
+      messages {
         nextToken
       }
       albums {
@@ -124,6 +130,9 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
       userLinks {
         nextToken
       }
+      messages {
+        nextToken
+      }
       albums {
         nextToken
       }
@@ -142,6 +151,18 @@ export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
     userLinks {
       items {
         id
+      }
+      nextToken
+    }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -174,6 +195,18 @@ export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
       }
       nextToken
     }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     albums {
       items {
         id
@@ -200,6 +233,18 @@ export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
     userLinks {
       items {
         id
+      }
+      nextToken
+    }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -235,18 +280,21 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
       userLinks {
         nextToken
       }
+      messages {
+        nextToken
+      }
       albums {
         nextToken
       }
       createdAt
       updatedAt
     }
-    messages {
+    photos {
       items {
         id
         owner
         authUsers
-        text
+        bucket
         createdAt
         updatedAt
       }
@@ -264,107 +312,19 @@ export const createMessage = `mutation CreateMessage($input: CreateMessageInput!
     authUsers
     type
     text
-    album {
+    messageGroupId
+    group {
       id
       name
       owner
       authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
+      userLinks {
+        nextToken
       }
       messages {
         nextToken
       }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const updateMessage = `mutation UpdateMessage($input: UpdateMessageInput!) {
-  updateMessage(input: $input) {
-    id
-    owner
-    authUsers
-    type
-    text
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      messages {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const deleteMessage = `mutation DeleteMessage($input: DeleteMessageInput!) {
-  deleteMessage(input: $input) {
-    id
-    owner
-    authUsers
-    type
-    text
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      messages {
+      albums {
         nextToken
       }
       createdAt
@@ -408,12 +368,32 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
       authUsers
       type
       text
-      album {
+      messageGroupId
+      group {
         id
         name
         owner
         authUsers
-        albumGroupId
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
         createdAt
         updatedAt
       }
@@ -450,12 +430,32 @@ export const updatePhoto = `mutation UpdatePhoto($input: UpdatePhotoInput!) {
       authUsers
       type
       text
-      album {
+      messageGroupId
+      group {
         id
         name
         owner
         authUsers
-        albumGroupId
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
         createdAt
         updatedAt
       }
@@ -492,12 +492,32 @@ export const deletePhoto = `mutation DeletePhoto($input: DeletePhotoInput!) {
       authUsers
       type
       text
-      album {
+      messageGroupId
+      group {
         id
         name
         owner
         authUsers
-        albumGroupId
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
         createdAt
         updatedAt
       }

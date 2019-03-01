@@ -1,16 +1,19 @@
 import React from 'react'
+import { View } from 'react-native'
 import { createStackNavigator } from 'react-navigation'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { headerTitleStyle } from '@navigation/styles'
 import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
-import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
+import GroupStack, { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 import GroupListScreen from '@group/screens/GroupListScreen'
-import GroupScreen from '@group/screens/GroupScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
 import { colors, w4 } from '@global/styles'
+import GroupScreen from '@album/screens/AlbumListScreen'
+
+const Temp = () => <View />
 
 const MainAppStack = createStackNavigator({
   [routes.HOME]: {
@@ -36,7 +39,7 @@ const MainAppStack = createStackNavigator({
     })
   },
   [routes.GROUP]: {
-    screen: GroupScreen,
+    screen: GroupStack,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('groupName'),
       headerTintColor: colors.textDefault,
@@ -52,14 +55,14 @@ const MainAppStack = createStackNavigator({
     })
   },
   [routes.ALBUM]: {
-    screen: AlbumStack,
+    screen: Temp,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('albumName'),
       headerTintColor: colors.textDefault,
       headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
-          iconName='settings'
+          icon={<MaterialCommunityIcons name='dots-vertical' size={w4.width} color={colors.textDefault} />}
           onPress={() => navigation.navigate(routes.ALBUM_SETTINGS, {
             albumId: navigation.getParam('albumId')
           })}

@@ -29,10 +29,10 @@ export const compact = arr => arr.filter(Boolean)
 
 export const flatten = arrs => [].concat.apply([], arrs)
 
-export const chunk = (arr, size) => {
+export const chunk = (x, size) => {
   let chunked = []
-  for (let i = 0; i < arr.length; i += size) {
-    chunked.push(arr.slice(i, i + size))
+  for (let i = 0; i < x.length; i += size) {
+    chunked.push(x.slice(i, i + size))
   }
   return chunked
 }

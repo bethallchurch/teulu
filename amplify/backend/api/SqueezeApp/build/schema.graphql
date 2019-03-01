@@ -18,6 +18,7 @@ type Group {
   owner: String
   authUsers: [String]
   userLinks(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
+  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
   albums(filter: ModelAlbumFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelAlbumConnection
   createdAt: String
   updatedAt: String
@@ -30,7 +31,7 @@ type Album {
   authUsers: [String]
   albumGroupId: ID
   group: Group
-  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
+  photos(filter: ModelPhotoFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPhotoConnection
   createdAt: String
   updatedAt: String
 }
@@ -46,7 +47,8 @@ type Message {
   authUsers: [String]
   type: MessageType
   text: String
-  album: Album
+  messageGroupId: ID
+  group: Group
   photos(filter: ModelPhotoFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPhotoConnection
   createdAt: String
   updatedAt: String
@@ -60,6 +62,7 @@ type Photo {
   fullsize: PhotoS3Info
   thumbnail: PhotoS3Info
   message: Message
+  album: Album
   createdAt: String
   updatedAt: String
 }
@@ -72,6 +75,7 @@ type PhotoS3Info {
 
 type Subscription {
   onCreateAlbum(albumGroupId: ID): Album @aws_subscribe(mutations: ["createAlbum"])
+  onCreateMessage(messageGroupId: ID): Message @aws_subscribe(mutations: ["createMessage"])
   onCreateUser: User @aws_subscribe(mutations: ["createUser"])
   onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
   onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
@@ -81,9 +85,6 @@ type Subscription {
   onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
   onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
   onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
-  onCreateMessage: Message @aws_subscribe(mutations: ["createMessage"])
-  onUpdateMessage: Message @aws_subscribe(mutations: ["updateMessage"])
-  onDeleteMessage: Message @aws_subscribe(mutations: ["deleteMessage"])
   onCreatePhoto: Photo @aws_subscribe(mutations: ["createPhoto"])
   onUpdatePhoto: Photo @aws_subscribe(mutations: ["updatePhoto"])
   onDeletePhoto: Photo @aws_subscribe(mutations: ["deletePhoto"])
@@ -209,8 +210,6 @@ type Mutation {
   deleteGroup(input: DeleteGroupInput!): Group
   createAlbum(input: CreateAlbumInput!): Album
   createMessage(input: CreateMessageInput!): Message
-  updateMessage(input: UpdateMessageInput!): Message
-  deleteMessage(input: DeleteMessageInput!): Message
   createPhoto(input: CreatePhotoInput!): Photo
   updatePhoto(input: UpdatePhotoInput!): Photo
   deletePhoto(input: DeletePhotoInput!): Photo
@@ -341,6 +340,7 @@ input ModelMessageFilterInput {
   authUsers: ModelStringFilterInput
   type: ModelMessageTypeFilterInput
   text: ModelStringFilterInput
+  messageGroupId: ModelIDFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput
   and: [ModelMessageFilterInput]
@@ -354,9 +354,9 @@ input CreateMessageInput {
   authUsers: [String]
   type: MessageType
   text: String
+  messageGroupId: ID
   createdAt: String
   updatedAt: String
-  messageAlbumId: ID
 }
 
 input UpdateMessageInput {
@@ -365,9 +365,9 @@ input UpdateMessageInput {
   authUsers: [String]
   type: MessageType
   text: String
+  messageGroupId: ID
   createdAt: String
   updatedAt: String
-  messageAlbumId: ID
 }
 
 input DeleteMessageInput {
@@ -407,6 +407,7 @@ input CreatePhotoInput {
   createdAt: String
   updatedAt: String
   photoMessageId: ID
+  photoAlbumId: ID
 }
 
 input UpdatePhotoInput {
@@ -419,6 +420,7 @@ input UpdatePhotoInput {
   createdAt: String
   updatedAt: String
   photoMessageId: ID
+  photoAlbumId: ID
 }
 
 input DeletePhotoInput {

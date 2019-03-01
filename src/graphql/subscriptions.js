@@ -16,18 +16,62 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
       userLinks {
         nextToken
       }
+      messages {
+        nextToken
+      }
       albums {
         nextToken
       }
       createdAt
       updatedAt
     }
-    messages {
+    photos {
       items {
         id
         owner
         authUsers
-        text
+        bucket
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
+export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID) {
+  onCreateMessage(messageGroupId: $messageGroupId) {
+    id
+    owner
+    authUsers
+    type
+    text
+    messageGroupId
+    group {
+      id
+      name
+      owner
+      authUsers
+      userLinks {
+        nextToken
+      }
+      messages {
+        nextToken
+      }
+      albums {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    photos {
+      items {
+        id
+        owner
+        authUsers
+        bucket
         createdAt
         updatedAt
       }
@@ -103,6 +147,9 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
       userLinks {
         nextToken
       }
+      messages {
+        nextToken
+      }
       albums {
         nextToken
       }
@@ -130,6 +177,9 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
       owner
       authUsers
       userLinks {
+        nextToken
+      }
+      messages {
         nextToken
       }
       albums {
@@ -161,6 +211,9 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
       userLinks {
         nextToken
       }
+      messages {
+        nextToken
+      }
       albums {
         nextToken
       }
@@ -179,6 +232,18 @@ export const onCreateGroup = `subscription OnCreateGroup {
     userLinks {
       items {
         id
+      }
+      nextToken
+    }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -211,6 +276,18 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
       }
       nextToken
     }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     albums {
       items {
         id
@@ -240,6 +317,18 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
       }
       nextToken
     }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     albums {
       items {
         id
@@ -247,135 +336,6 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
         owner
         authUsers
         albumGroupId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onCreateMessage = `subscription OnCreateMessage {
-  onCreateMessage {
-    id
-    owner
-    authUsers
-    type
-    text
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      messages {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onUpdateMessage = `subscription OnUpdateMessage {
-  onUpdateMessage {
-    id
-    owner
-    authUsers
-    type
-    text
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      messages {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onDeleteMessage = `subscription OnDeleteMessage {
-  onDeleteMessage {
-    id
-    owner
-    authUsers
-    type
-    text
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      messages {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
         createdAt
         updatedAt
       }
@@ -408,12 +368,32 @@ export const onCreatePhoto = `subscription OnCreatePhoto {
       authUsers
       type
       text
-      album {
+      messageGroupId
+      group {
         id
         name
         owner
         authUsers
-        albumGroupId
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
         createdAt
         updatedAt
       }
@@ -450,12 +430,32 @@ export const onUpdatePhoto = `subscription OnUpdatePhoto {
       authUsers
       type
       text
-      album {
+      messageGroupId
+      group {
         id
         name
         owner
         authUsers
-        albumGroupId
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
         createdAt
         updatedAt
       }
@@ -492,12 +492,32 @@ export const onDeletePhoto = `subscription OnDeletePhoto {
       authUsers
       type
       text
-      album {
+      messageGroupId
+      group {
         id
         name
         owner
         authUsers
-        albumGroupId
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
         createdAt
         updatedAt
       }

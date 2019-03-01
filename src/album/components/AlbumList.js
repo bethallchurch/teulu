@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet } from 'react-native'
 import { API, graphqlOperation }  from 'aws-amplify'
+import { LinearGradient } from 'expo'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
@@ -9,7 +10,7 @@ import { ALBUM } from '@navigation/routes'
 import { uniqueBy } from '@global/helpers'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
-import { colors } from '@global/styles'
+import { copyStyle, colors, f5, s2, fade } from '@global/styles'
 
 const PADDING = 4
 const GUTTER = 4
@@ -55,6 +56,7 @@ class AlbumList extends Component {
         onPress={() => this.navigateToAlbum(id, name)}
         width={this.imageWidth}
         margin={this.itemMargin(index)}
+        name={name}
       />
     )
   }
@@ -77,15 +79,23 @@ class AlbumList extends Component {
   }
 }
 
-const AlbumItem = ({ onPress, width, margin }) => {
+const AlbumItem = ({ onPress, width, margin, name }) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <Image
-        resizeMode='cover'
-        source={require('@assets/img/placeholder.jpg')}
-        style={{ width, height: width, ...margin }}
-        PlaceholderContent={<ActivityIndicator color={colors.primary} />}
-      />
+      <View style={{ flex: 1, position: 'relative', width, height: width, ...margin }}>
+        <Image
+          resizeMode='cover'
+          source={require('@assets/img/placeholder.jpg')}
+          style={{ width, height: width }}
+          PlaceholderContent={<ActivityIndicator color={colors.primary} />}
+        />
+        <LinearGradient
+          colors={['transparent', fade('#000000', 0.4)]}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', justifyContent: 'flex-end' }}
+        >
+          <Text style={{ padding: s2, ...copyStyle.bold, ...f5, color: colors.primaryBackground, width: '100%' }}>{name}</Text>
+        </LinearGradient>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -108,7 +118,7 @@ export const GroupAlbumList = props => {
   const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
     const { getGroup } = previous
     const newItems = [ onCreateAlbum, ...getGroup.albums.items ]
-    return { ...previous, getGroup: { albums: { ...getGroup, items: newItems }}}
+    return { ...previous, getGroup: { ...getGroup, albums: { ...getGroup.albums, items: newItems }}}
   }
   const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
     error,

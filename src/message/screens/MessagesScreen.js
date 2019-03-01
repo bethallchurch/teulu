@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { SafeAreaView, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import * as mutations from '@graphql/mutations'
@@ -9,6 +9,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import { UserContext } from '@global/context'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
+import { colors } from '@global/styles'
 
 class MessagesScreen extends React.Component {
   constructor (props) {
@@ -19,7 +20,7 @@ class MessagesScreen extends React.Component {
   get messages () {
     return this.props.messages.map(m => ({
       _id: m.id,
-      text: m.content,
+      text: m.text,
       createdAt: m.createdAt,
       user: {
         _id: m.owner,
@@ -32,9 +33,9 @@ class MessagesScreen extends React.Component {
     Promise.all(messages.map(async m => {
       const input = {
         owner: this.props.userId,
-        messageAlbumId: this.props.navigation.getParam('albumId'),
-        viewers: this.props.authUsers,
-        content: m.text,
+        messageGroupId: this.props.navigation.getParam('groupId'),
+        authUsers: this.props.authUsers,
+        text: m.text,
         type: 'TEXT'
       }
       await this.props.sendMessage({ input })
@@ -43,44 +44,41 @@ class MessagesScreen extends React.Component {
 
   render () {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <GiftedChat
-          messages={this.messages}
-          onSend={this.sendMessage}
-          user={{ _id: this.props.userId }}
-        />
+      <SafeAreaView style={{ flex: 1, backgroundColor: colors.primaryBackground }}>
+        <StatusBar />
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled keyboardVerticalOffset={130}>
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
+            <GiftedChat
+              messages={this.messages}
+              onSend={this.sendMessage}
+              user={{ _id: this.props.userId }}
+            />
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     )
   }
 }
 
 const ConnectedMessagesScreen = props => {
-  const albumId = props.navigation.getParam('albumId')
+  const groupId = props.navigation.getParam('groupId')
   return (
     <Connect
-      query={graphqlOperation(queries.listMessages)}
-      subscription={graphqlOperation(subscriptions.onCreateMessage)}
+      query={graphqlOperation(queries.getGroup, { id: groupId })}
+      subscription={graphqlOperation(subscriptions.onCreateMessage, { messageGroupId: groupId })}
       mutation={graphqlOperation(mutations.createMessage)}
       onSubscriptionMsg={(previous, { onCreateMessage }) => {
-        const belongsToThisGroup = onCreateMessage.album.id === albumId
-        if (!belongsToThisGroup) {
-          return previous
+        const { getGroup } = previous
+        const newItems = [ onCreateMessage, ...getGroup.messages.items ]
+        return { ...previous, getGroup: { ...getGroup, messages: { ...getGroup.messages, items: newItems } }
         }
-        const { listMessages } = previous
-        const newItems = [ onCreateMessage, ...listMessages.items ]
-        return { ...previous, listMessages: { ...listMessages, items: newItems } }
       }}
     >
-      {({ mutation, data: { listMessages }, loading, error }) => {
+      {({ mutation, data: { getGroup }, loading, error }) => {
         if (error) return <Error />
-        if (loading || !listMessages) return <Loading />
-        console.log('MESSAGES:', listMessages)
-        // const albumMessages = listMessages.items
-        //   .filter(message => !!message)
-        //   .filter(({ album: { id } }) => id === albumId)
-        //   .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        // const authUsers = albumMessages[0].album.authUsers
-        return <MessagesScreen authUsers={[]} messages={[]} sendMessage={mutation} {...props} />
+        if (loading || !getGroup) return <Loading />
+        const sortedMessages = getGroup.messages.items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        return <MessagesScreen authUsers={getGroup.authUsers} messages={sortedMessages} sendMessage={mutation} {...props} />
       }}
     </Connect>
   )
@@ -88,7 +86,7 @@ const ConnectedMessagesScreen = props => {
 
 const MessagesScreenWithContext = props => (
   <UserContext.Consumer>
-    {({ userId }) => <ConnectedMessagesScreen userId={userId} {...props} />}
+    {user => <ConnectedMessagesScreen userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
 
