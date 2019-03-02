@@ -10,7 +10,7 @@ class GroupScreen extends Component {
   get groupId () {
     return this.props.navigation.getParam('groupId')
   }
-  
+
   navigateToCreateAlbum = () => this.props.navigation.navigate(CREATE_ALBUM, {
     groupId: this.groupId
   })

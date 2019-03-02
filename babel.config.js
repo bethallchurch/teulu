@@ -14,7 +14,7 @@ module.exports = function (api) {
           '@album': './src/album',
           '@auth': './src/auth',
           '@contact': './src/contact',
-          '@customgraphql': './src/customgraphql',
+          '@mygraphql': './src/mygraphql',
           '@global': './src/global',
           '@graphql': './src/graphql',
           '@group': './src/group',

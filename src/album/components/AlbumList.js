@@ -12,9 +12,9 @@ import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
 import { copyStyle, colors, f5, s2, fade } from '@global/styles'
 
-const PADDING = 4
-const GUTTER = 4
-const COLUMNS = 3
+const PADDING = 16
+const GUTTER = 16
+const COLUMNS = 2
 
 class AlbumList extends Component {
   navigateToAlbum = (id, name) => this.props.navigation.navigate(ALBUM, {
@@ -139,6 +139,7 @@ export const GroupAlbumList = props => {
 
 
 const AlbumListAll = props => {
+  console.log('COLS:', props.numColumns)
   const queryParams = props.limit ? { limit: props.limit } : {}
   const query = graphqlOperation(queries.listAlbums, queryParams)
   const subscription = graphqlOperation(subscriptions.onCreateAlbum)

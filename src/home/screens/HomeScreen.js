@@ -34,6 +34,7 @@ export default class HomeScreen extends Component {
                 navigation={navigation}
                 containerWidth={this.sectionWidth}
                 limit={6}
+                numColumns={3}
               />
             )}
           />

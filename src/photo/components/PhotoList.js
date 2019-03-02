@@ -1,24 +1,25 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native'
 import { Connect, S3Image } from 'aws-amplify-react-native'
 import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
-import { getAlbum as customGetAlbum } from '@customgraphql/queries'
+import { getAlbum as customGetAlbum } from '@mygraphql/queries'
+import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
 
-export const PhotoListItem = ({ thumbnail: { height, width, key } }) => (
-  <S3Image style={{ width, height }} imgKey={key.replace('public/', '')} />
-)
-
-const PhotoList = ({ photos }) => (
-  <View>
-    {photos.map(photo => (
-      <PhotoListItem key={photo.thumbnail.key} {...photo} />
-    ))}
-  </View>
-)
+const PhotoList = ({ photos }) => {
+  const photoWidth = Dimensions.get('window').width / 2
+  return (
+    <FlatList
+      numColumns={2}
+      data={photos}
+      keyExtractor={({ thumbnail }) => thumbnail.key}
+      renderItem={({ item }) => <PhotoThumbnail width={photoWidth} height={photoWidth} {...item} />}
+    />
+  )
+}
 
 const ConnectedPhotoList = props => {
   const { albumId } = props

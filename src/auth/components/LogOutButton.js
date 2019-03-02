@@ -32,4 +32,3 @@ export default class LogOutButton extends Component {
 }
 
 const RightIcon = () => <AntDesign name='logout' size={w4.width} color={colors.primaryBackground} />
-

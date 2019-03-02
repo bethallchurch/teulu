@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { SafeAreaView, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
-import { getGroup as customGetGroup } from '@customgraphql/queries'
+import { getGroup as customGetGroup } from '@mygraphql/queries'
 import * as mutations from '@graphql/mutations'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
@@ -12,7 +12,9 @@ import Error from '@global/components/Error'
 import { colors } from '@global/styles'
 import { getMessage } from '@message/MessageService'
 import { getPhoto } from '@photo/PhotoService'
-import { PhotoListItem } from '@photo/components/PhotoList'
+import PhotoThumbnail from '@photo/components/PhotoThumbnail'
+import Bubble from '@message/components/Bubble'
+import MessageText from '@message/components/MessageText'
 
 class MessagesScreen extends React.Component {
   constructor (props) {
@@ -47,6 +49,10 @@ class MessagesScreen extends React.Component {
     }))
   }
 
+  renderMessageImage = props => {
+    return <PhotoThumbnail thumbnail={props.currentMessage.imageProps} />
+  }
+
   render () {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: colors.primaryBackground }}>
@@ -57,7 +63,9 @@ class MessagesScreen extends React.Component {
               messages={this.messages()}
               onSend={this.sendMessage}
               user={{ _id: this.props.userId }}
-              renderMessageImage={({ currentMessage }) => <PhotoListItem thumbnail={currentMessage.imageProps} />}
+              renderMessageImage={this.renderMessageImage}
+              renderBubble={props => <Bubble {...props} />}
+              renderMessageText={props => <MessageText {...props} />}
             />
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -74,6 +82,7 @@ const ConnectedMessagesScreen = props => {
       subscription={graphqlOperation(subscriptions.onCreateMessage, { messageGroupId: groupId })}
       mutation={graphqlOperation(mutations.createMessage)}
       onSubscriptionMsg={(previous, { onCreateMessage }) => {
+        console.log('ON CREATE MSG:', onCreateMessage)
         const { getGroup } = previous
         const newItems = [ onCreateMessage, ...getGroup.messages.items ]
         return { ...previous, getGroup: { ...getGroup, messages: { ...getGroup.messages, items: newItems } }

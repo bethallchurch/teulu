@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, Modal, TouchableOpacity, Dimensions, StatusBar } from 'react-native'
 import { Storage } from 'aws-amplify'
-import { Input, Button } from 'react-native-elements'
+import { Input, ListItem } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo'
 import { Connect, S3Image } from 'aws-amplify-react-native'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
 import { getAlbum } from '@album/AlbumService'
+import { logOutButtonStyle } from '@auth/styles'
+import { MaterialIcons, Feather } from '@expo/vector-icons'
+import { colors, w4, fade } from '@global/styles'
+
+const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
 class PhotoUpload extends Component {
   state = {
@@ -14,17 +19,22 @@ class PhotoUpload extends Component {
     uploadedImage: null,
     uploading: false,
     hasCameraRollPermission: null,
-    groupId: null
+    groupId: null,
+    modalVisible: false
   }
 
   async componentDidMount () {
-  const albumId = this.props.navigation.getParam('albumId')
+    const albumId = this.props.navigation.getParam('albumId')
     try {
       const album = await getAlbum(albumId)
       this.setState({ groupId: album.data.getAlbum.group.id })
     } catch (error) {
       console.log('Error getting album:', error)
     }
+  }
+
+  hideModal = () => {
+    this.setState({ modalVisible: false })
   }
 
   pickImage = async () => {
@@ -35,7 +45,7 @@ class PhotoUpload extends Component {
         allowsEditing: true
       })
       if (!pickedImage.cancelled) {
-        this.setState({ pickedImage })
+        this.setState({ pickedImage, modalVisible: true })
       }
     }
   }
@@ -46,41 +56,74 @@ class PhotoUpload extends Component {
     const groupId = this.state.groupId
     const authUsers = this.props.navigation.getParam('authUsers')
     const { userId } = this.props
-    console.log('GROUP ID:', groupId)
-    console.log('AUTH USERS:', JSON.stringify(authUsers))
     try {
       this.setState({ uploading: true })
       const { key } = await uploadImage({ uri, albumId, userId, groupId, authUsers: JSON.stringify(authUsers) })
-      console.log('UPLOADED IMAGE:', key)
-      this.setState({ uploadedImage: key })
+      console.log('Image successfully uploaded:', key)
+      this.setState({ uploadedImage: key, modalVisible: false })
     } catch (error) {
       console.log('Error uploading image:', error)
     } finally {
-      this.setState({ uploading: false })
+      this.setState({ uploading: false, modalVisible: false })
     }
   }
 
   render () {
-    if (this.state.hasCameraRollPermission === false) {
+    const {
+      hasCameraRollPermission,
+      uploadedImage,
+      pickedImage,
+      modalVisible
+    } = this.state
+    if (hasCameraRollPermission === false) {
       return <Text>No access to camera</Text>
-    } else {
-      return (
-        <View>
-          <Button onPress={this.pickImage} title='Choose Image' />
-          {this.state.pickedImage && <Button onPress={this.saveImage} title='Upload Image' />}
-          {this.state.uploadedImage && <Image style={{ width: 100, height: 100 }} source={{ uri: this.state.uploadedImage }} />}
-        </View>
-      )
     }
+    return (
+      <>
+        <ListItem
+          title='Add Photo'
+          onPress={this.pickImage}
+          containerStyle={logOutButtonStyle.container}
+          titleStyle={logOutButtonStyle.title}
+          rightIcon={<AddRightIcon />}
+        />
+        <Modal transparent visible={modalVisible} onRequestClose={this.hideModal}>
+          <TouchableOpacity style={{ flex: 1 }} onPress={this.hideModal}>
+            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: fade('#000000', 0.9) }}>
+              {pickedImage && (
+                <>
+                  <Image
+                    resizeMode='contain'
+                    style={{ width: windowWidth, height: windowHeight - 80 }}
+                    source={{ uri: pickedImage.uri }}
+                  />
+                  <ListItem
+                    title='Upload Photo'
+                    onPress={this.saveImage}
+                    containerStyle={logOutButtonStyle.container}
+                    titleStyle={logOutButtonStyle.title}
+                    rightIcon={<UploadRightIcon />}
+                  />
+                </>
+              )}
+            </View>
+          </TouchableOpacity>
+        </Modal>
+      </>
+    )
   }
 }
+
+// {this.state.uploadedImage && <Image style={{ width: 100, height: 100 }} source={{ uri: this.state.uploadedImage }} />}
+
+const AddRightIcon = () => <MaterialIcons name='photo' size={w4.width} color={colors.primaryBackground} />
+const UploadRightIcon = () => <Feather name='upload' size={w4.width} color={colors.primaryBackground}  />
 
 const PhotoUploadWithContext = props => (
   <UserContext.Consumer>
     {user => <PhotoUpload userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
-
 
 const styles = StyleSheet.create({
   container: {
