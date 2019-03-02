@@ -3,8 +3,6 @@ import { View, Text } from 'react-native'
 import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation'
 import CreateAlbumScreen from '@album/screens/CreateAlbumScreen'
 import AlbumSettings from '@album/screens/AlbumSettingsScreen'
-import MessagesScreen from '@message/screens/MessagesScreen'
-import PhotosScreen from '@photo/components/PhotosScreen'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 
 export const CreateAlbumStack = createStackNavigator({

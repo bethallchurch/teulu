@@ -82,6 +82,68 @@ export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID
   }
 }
 `;
+export const onCreatePhoto = `subscription OnCreatePhoto($photoGroupId: ID, $photoAlbumId: ID) {
+  onCreatePhoto(photoGroupId: $photoGroupId, photoAlbumId: $photoAlbumId) {
+    id
+    owner
+    authUsers
+    bucket
+    fullsize {
+      key
+      width
+      height
+    }
+    thumbnail {
+      key
+      width
+      height
+    }
+    message {
+      id
+      owner
+      authUsers
+      type
+      text
+      messageGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    album {
+      id
+      name
+      owner
+      authUsers
+      albumGroupId
+      group {
+        id
+        name
+        owner
+        authUsers
+        createdAt
+        updatedAt
+      }
+      photos {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+    createdAt
+    updatedAt
+  }
+}
+`;
 export const onCreateUser = `subscription OnCreateUser {
   onCreateUser {
     id
@@ -340,192 +402,6 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
         updatedAt
       }
       nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onCreatePhoto = `subscription OnCreatePhoto {
-  onCreatePhoto {
-    id
-    owner
-    authUsers
-    bucket
-    fullsize {
-      key
-      width
-      height
-    }
-    thumbnail {
-      key
-      width
-      height
-    }
-    message {
-      id
-      owner
-      authUsers
-      type
-      text
-      messageGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      photos {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      photos {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onUpdatePhoto = `subscription OnUpdatePhoto {
-  onUpdatePhoto {
-    id
-    owner
-    authUsers
-    bucket
-    fullsize {
-      key
-      width
-      height
-    }
-    thumbnail {
-      key
-      width
-      height
-    }
-    message {
-      id
-      owner
-      authUsers
-      type
-      text
-      messageGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      photos {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      photos {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    createdAt
-    updatedAt
-  }
-}
-`;
-export const onDeletePhoto = `subscription OnDeletePhoto {
-  onDeletePhoto {
-    id
-    owner
-    authUsers
-    bucket
-    fullsize {
-      key
-      width
-      height
-    }
-    thumbnail {
-      key
-      width
-      height
-    }
-    message {
-      id
-      owner
-      authUsers
-      type
-      text
-      messageGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      photos {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    album {
-      id
-      name
-      owner
-      authUsers
-      albumGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        createdAt
-        updatedAt
-      }
-      photos {
-        nextToken
-      }
-      createdAt
-      updatedAt
     }
     createdAt
     updatedAt

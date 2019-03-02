@@ -6,13 +6,26 @@ import { ImagePicker, Permissions } from 'expo'
 import { Connect, S3Image } from 'aws-amplify-react-native'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
+import { getAlbum } from '@album/AlbumService'
 
 class PhotoUpload extends Component {
   state = {
     pickedImage: null,
     uploadedImage: null,
     uploading: false,
-    hasCameraRollPermission: null
+    hasCameraRollPermission: null,
+    groupId: null
+  }
+
+  async componentDidMount () {
+  const albumId = this.props.navigation.getParam('albumId')
+    try {
+      const album = await getAlbum(albumId)
+      console.log('ALBUM:', album)
+      this.setState({ groupId: album.data.getAlbum.group.id })
+    } catch (error) {
+      console.log('Error getting album:', error)
+    }
   }
 
   pickImage = async () => {
@@ -31,10 +44,14 @@ class PhotoUpload extends Component {
   saveImage = async () => {
     const { pickedImage: { uri } } = this.state
     const albumId = this.props.navigation.getParam('albumId')
+    const groupId = this.state.groupId
+    const authUsers = this.props.navigation.getParam('authUsers')
     const { userId } = this.props
+    console.log('GROUP ID:', groupId)
+    console.log('AUTH USERS:', JSON.stringify(authUsers))
     try {
       this.setState({ uploading: true })
-      const { key } = await uploadImage({ uri, albumId, userId })
+      const { key } = await uploadImage({ uri, albumId, userId, groupId, authUsers: JSON.stringify(authUsers) })
       console.log('UPLOADED IMAGE:', key)
       this.setState({ uploadedImage: key })
     } catch (error) {
@@ -61,7 +78,7 @@ class PhotoUpload extends Component {
 
 const PhotoUploadWithContext = props => (
   <UserContext.Consumer>
-    {({ userId }) => <PhotoUpload userId={userId} {...props} />}
+    {user => <PhotoUpload userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
 

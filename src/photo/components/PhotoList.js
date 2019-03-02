@@ -40,13 +40,12 @@ const ConnectedPhotoList = props => {
         if (error) return <Error />
         if (loading || !listMessages) return <Loading />
 
-        const albumPhotos = listMessages.items
-          .filter(message => !!message)
-          .filter(({ album: { id } }) => id === albumId)
-          .filter(({ type }) => type === 'PHOTO')
+        // const albumPhotos = listMessages.items
+        //   .filter(message => !!message)
+        //   .filter(({ album: { id } }) => id === albumId)
+        //   .filter(({ type }) => type === 'PHOTO')
 
-        console.log('PHOTOS!', albumPhotos)
-        return <PhotoList photos={albumPhotos} {...props} />
+        return <PhotoList photos={[]} {...props} />
       }}
     </Connect>
   )

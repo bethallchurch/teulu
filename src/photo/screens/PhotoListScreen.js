@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, SafeAreaView, Image } from 'react-native'
 import PhotoUpload from '@photo/components/PhotoUpload'
 import PhotoList from '@photo/components/PhotoList'
 
-class PhotosScreen extends Component {
+class PhotoListScreen extends Component {
   get albumId () {
     return this.props.navigation.getParam('albumId')
   }
@@ -20,4 +20,4 @@ class PhotosScreen extends Component {
 
 const styles = StyleSheet.create({})
 
-export default PhotosScreen
+export default PhotoListScreen

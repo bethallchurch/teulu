@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import { SafeAreaView, Text, View } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
-import * as queries from '@graphql/queries'
 import { Connect } from 'aws-amplify-react-native'
 import { Card, ListItem, Button } from 'react-native-elements'
+import { MaterialIcons } from '@expo/vector-icons'
+import * as queries from '@graphql/queries'
+import Section from '@global/components/Section'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
+import { colors, subtitleStyle, copyStyle } from '@global/styles'
 
 const AlbumSettings = ({ album }) => (
   <SafeAreaView>
-    <Card containerStyle={{ paddingHorizontal: 0 }}>
-      <ListItem title={album.name} leftElement={<Text>Name</Text>} />
-      <ListItem title={album.owner} leftElement={<Text>Owner</Text>} />
-    </Card>
+    <View style={{ width: '100%', height: 200, backgroundColor: colors.textDefault, justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+      <MaterialIcons name='image' color={colors.primaryBackground} size={48} />
+      <Text style={{ ...subtitleStyle.style, position: 'absolute', bottom: 16, left: 16, color: colors.primaryBackground, marginBottom: 0 }}>{album.name}</Text>
+    </View>
   </SafeAreaView>
 )
 

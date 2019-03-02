@@ -8,6 +8,9 @@
 		"DynamoDBPhotosTableArn": {
 			"Type": "String"
 		},
+		"DynamoDBMessagesTableArn": {
+			"Type": "String"
+		},
 		"env": {
 			"Type": "String"
 		}
@@ -51,12 +54,20 @@
 					"Variables": {
 						"ENV": {
 							"Ref": "env"
+						},
+						"THUMBNAIL_WIDTH": "200",
+						"THUMBNAIL_HEIGHT": "200",
+						"DYNAMODB_PHOTO_TABLE_ARN": {
+							"Ref": "DynamoDBPhotosTableArn"
+						},
+						"DYNAMODB_MESSAGE_TABLE_ARN": {
+							"Ref": "DynamoDBMessagesTableArn"
 						}
 					}
 				},
 				"Code": {
 					"S3Bucket": "squeeze-20190207173156-deployment",
-					"S3Key": "amplify-builds/squeezephotoprocessor-1550414892-latest-build.zip"
+					"S3Key": "amplify-builds/squeezephotoprocessor-1551528866-latest-build.zip"
 				}
 			}
 		},
@@ -199,6 +210,15 @@
 							],
 							"Resource": {
 								"Ref": "DynamoDBPhotosTableArn"
+							}
+						},
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:*"
+							],
+							"Resource": {
+								"Ref": "DynamoDBMessagesTableArn"
 							}
 						}
 					]

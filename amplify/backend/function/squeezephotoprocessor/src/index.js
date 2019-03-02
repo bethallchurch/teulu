@@ -14,10 +14,10 @@ docker run -v "$PWD":/var/task lambci/lambda:build-nodejs8.10 npm install
 const Sharp = require('sharp')
 
 // We'll expect these environment variables to be defined when the Lambda function is deployed
-const THUMBNAIL_WIDTH = parseInt(process.env.THUMBNAIL_WIDTH, 10)
-const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT, 10)
+const THUMBNAIL_WIDTH = parseInt(process.env.THUMBNAIL_WIDTH || 50)
+const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT || 50)
 const DYNAMODB_PHOTO_TABLE_NAME = process.env.DYNAMODB_PHOTO_TABLE_ARN.split('/')[1]
-// const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
+const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
 
 const storePhotoInfo = ({ photo, message }) => {
   const photoParams = {
@@ -27,13 +27,13 @@ const storePhotoInfo = ({ photo, message }) => {
 
   console.log('MESSAGE!', message)
 
-  // const messageParams = {
-  //   Item: message,
-  //   TableName: DYNAMODB_MESSAGE_TABLE_NAME
-  // }
+  const messageParams = {
+    Item: message,
+    TableName: DYNAMODB_MESSAGE_TABLE_NAME
+  }
   return Promise.all([
-    DynamoDBDocClient.put(photoParams).promise()
-    // DynamoDBDocClient.put(messageParams).promise()
+    DynamoDBDocClient.put(photoParams).promise(),
+    DynamoDBDocClient.put(messageParams).promise()
   ])
 }
 
@@ -110,24 +110,26 @@ const processRecord = async record => {
 
   const sharedParams = {
     owner: metadata.userid,
-    authUsers: metadata.authusers,
+    authUsers: JSON.parse(metadata.authusers),
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
 
-  const photo = { ...sharedParams,
+  const photo = {
+    ...sharedParams,
     id: photoId,
     bucket: bucketName,
     fullsize: sizes.fullsize,
     thumbnail: sizes.thumbnail,
-    message: messageId
+    photoMessageId: messageId
   }
 
-  const message = { ...sharedParams,
+  const message = {
+    ...sharedParams,
     id: messageId,
     type: 'PHOTO',
     text: metadata.text,
-    album: metadata.albumid,
+    messageGroupId: metadata.groupid,
     photos: [ photoId ]
   }
 

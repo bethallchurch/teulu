@@ -79,7 +79,10 @@ type Message
 }
 
 type Photo
-@model
+@model(
+  mutations: { create: "createPhoto" },
+  subscriptions: null
+)
 @auth(rules: [
   { allow: owner }
   { allow: owner, ownerField: "authUsers", mutations: null, queries: [get, list] }
@@ -90,8 +93,9 @@ type Photo
   bucket: String
   fullsize: PhotoS3Info
   thumbnail: PhotoS3Info
-  message: Message @connection(name: "MessagePhotos")
+  photoAlbumId: ID
   album: Album @connection(name: "AlbumPhotos")
+  message: Message @connection(name: "MessagePhotos")
   createdAt: String
   updatedAt: String
 }
@@ -107,4 +111,6 @@ type Subscription {
     @aws_subscribe(mutations: ["createAlbum"])
   onCreateMessage(messageGroupId: ID): Message
     @aws_subscribe(mutations: ["createMessage"])
+  onCreatePhoto(photoAlbumId: ID): Photo
+    @aws_subscribe(mutations: ["createPhoto"])
 }

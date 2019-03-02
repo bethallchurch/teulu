@@ -8,12 +8,11 @@ import GroupStack, { CreateGroupStack, GroupSettingsStack } from '@group/GroupNa
 import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 import GroupListScreen from '@group/screens/GroupListScreen'
+import PhotoListScreen from '@photo/screens/PhotoListScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
 import { colors, w4 } from '@global/styles'
 import GroupScreen from '@album/screens/AlbumListScreen'
-
-const Temp = () => <View />
 
 const MainAppStack = createStackNavigator({
   [routes.HOME]: {
@@ -55,7 +54,7 @@ const MainAppStack = createStackNavigator({
     })
   },
   [routes.ALBUM]: {
-    screen: Temp,
+    screen: PhotoListScreen,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('albumName'),
       headerTintColor: colors.textDefault,

@@ -159,7 +159,7 @@
 						]
 					},
 					"S3DeploymentBucket": "squeeze-20190207173156-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/15e68e972549c45d77fe79f987b26dbd131252d6",
+					"S3DeploymentRootKey": "amplify-appsync-files/c3428f84926583184dd02d139b11866d152090e2",
 					"env": "NONE"
 				}
 			}
@@ -191,6 +191,7 @@
 				"Parameters": {
 					"S3UserfilesBucketName": "amplifysqueezes3storage0",
 					"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Photo-pm7skb4lkfao3ixpypmciic3ea",
+					"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message-pm7skb4lkfao3ixpypmciic3ea",
 					"env": "NONE"
 				}
 			}

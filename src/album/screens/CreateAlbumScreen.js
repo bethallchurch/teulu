@@ -27,7 +27,7 @@ class CreateAlbumScreen extends ComponentWithInputs {
     try {
       const result = await createAlbum({ name: albumName, albumGroupId: groupId, authUsers })
       const albumId = result.data.createAlbum.id
-      this.props.navigation.navigate(ALBUM, { albumId, albumName })
+      this.props.navigation.navigate(ALBUM, { groupId, authUsers, albumId, albumName })
     } catch (error) {
       console.log('Error creating album:', error)
     }

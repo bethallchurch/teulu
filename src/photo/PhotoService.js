@@ -17,12 +17,12 @@ const getImageBlob = uri => {
   })
 }
 
-export const uploadImage = async ({ uri, albumId, userId }) => {
+export const uploadImage = async ({ uri, groupId, authUsers, albumId, userId }) => {
   const blob = await getImageBlob(uri)
   const key = uuid()
   const snapshot = await Storage.put(key, blob, {
     customPrefix: { public: 'uploads/' },
-    metadata: { albumId, userId }
+    metadata: { groupId, authUsers, albumId, userId }
   })
   blob.close()
   return await snapshot

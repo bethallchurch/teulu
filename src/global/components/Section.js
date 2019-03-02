@@ -27,4 +27,3 @@ const Title = ({ title, pressable }) => (
 )
 
 export default Section
-

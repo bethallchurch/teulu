@@ -19,7 +19,8 @@ const COLUMNS = 3
 class AlbumList extends Component {
   navigateToAlbum = (id, name) => this.props.navigation.navigate(ALBUM, {
     albumId: id,
-    albumName: name
+    albumName: name,
+    authUsers: (this.props.albums[0] || {}).authUsers
   })
 
   get imageWidth () {

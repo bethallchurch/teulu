@@ -76,6 +76,7 @@ type PhotoS3Info {
 type Subscription {
   onCreateAlbum(albumGroupId: ID): Album @aws_subscribe(mutations: ["createAlbum"])
   onCreateMessage(messageGroupId: ID): Message @aws_subscribe(mutations: ["createMessage"])
+  onCreatePhoto(photoGroupId: ID, photoAlbumId: ID): Photo @aws_subscribe(mutations: ["createPhoto"])
   onCreateUser: User @aws_subscribe(mutations: ["createUser"])
   onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
   onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
@@ -85,9 +86,6 @@ type Subscription {
   onCreateGroup: Group @aws_subscribe(mutations: ["createGroup"])
   onUpdateGroup: Group @aws_subscribe(mutations: ["updateGroup"])
   onDeleteGroup: Group @aws_subscribe(mutations: ["deleteGroup"])
-  onCreatePhoto: Photo @aws_subscribe(mutations: ["createPhoto"])
-  onUpdatePhoto: Photo @aws_subscribe(mutations: ["updatePhoto"])
-  onDeletePhoto: Photo @aws_subscribe(mutations: ["deletePhoto"])
 }
 
 enum ModelSortDirection {
@@ -211,8 +209,6 @@ type Mutation {
   createAlbum(input: CreateAlbumInput!): Album
   createMessage(input: CreateMessageInput!): Message
   createPhoto(input: CreatePhotoInput!): Photo
-  updatePhoto(input: UpdatePhotoInput!): Photo
-  deletePhoto(input: DeletePhotoInput!): Photo
 }
 
 type ModelGroupLinkConnection {
