@@ -5,6 +5,7 @@ import PhotoList from '@photo/components/PhotoList'
 
 class PhotoListScreen extends Component {
   get albumId () {
+    console.log('ALBUM ID:', this.props.navigation.getParam('albumId'))
     return this.props.navigation.getParam('albumId')
   }
 

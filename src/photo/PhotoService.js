@@ -1,5 +1,12 @@
 import { Storage } from 'aws-amplify'
 import { v4 as uuid } from 'uuid'
+import { createQuery } from '@global/helpers'
+import * as mutations from '@graphql/mutations'
+import * as queries from '@graphql/queries'
+import * as subscriptions from '@graphql/subscriptions'
+
+// Queries
+export const getPhoto = id => createQuery(queries.getPhoto, { id })
 
 // Why are we using XMLHttpRequest? See:
 // https://github.com/expo/expo/issues/2402#issuecomment-443726662

@@ -73,7 +73,7 @@ type Message
   text: String
   messageGroupId: ID
   group: Group @connection(name: "GroupMessages")
-  photos: [Photo] @connection(name: "MessagePhotos")
+  photos: [Photo] @connection(name: "MessagePhotos", sortField: "createdAt")
   createdAt: String
   updatedAt: String
 }

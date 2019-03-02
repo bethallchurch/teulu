@@ -192,6 +192,7 @@ export const getAlbum = `query GetAlbum($id: ID!) {
         owner
         authUsers
         bucket
+        photoAlbumId
         createdAt
         updatedAt
       }
@@ -263,6 +264,7 @@ export const getMessage = `query GetMessage($id: ID!) {
         owner
         authUsers
         bucket
+        photoAlbumId
         createdAt
         updatedAt
       }
@@ -320,13 +322,13 @@ export const getPhoto = `query GetPhoto($id: ID!) {
       width
       height
     }
-    message {
+    photoAlbumId
+    album {
       id
+      name
       owner
       authUsers
-      type
-      text
-      messageGroupId
+      albumGroupId
       group {
         id
         name
@@ -341,12 +343,13 @@ export const getPhoto = `query GetPhoto($id: ID!) {
       createdAt
       updatedAt
     }
-    album {
+    message {
       id
-      name
       owner
       authUsers
-      albumGroupId
+      type
+      text
+      messageGroupId
       group {
         id
         name
@@ -387,21 +390,22 @@ export const listPhotos = `query ListPhotos(
         width
         height
       }
-      message {
-        id
-        owner
-        authUsers
-        text
-        messageGroupId
-        createdAt
-        updatedAt
-      }
+      photoAlbumId
       album {
         id
         name
         owner
         authUsers
         albumGroupId
+        createdAt
+        updatedAt
+      }
+      message {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
         createdAt
         updatedAt
       }

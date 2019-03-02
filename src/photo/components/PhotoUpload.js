@@ -21,7 +21,6 @@ class PhotoUpload extends Component {
   const albumId = this.props.navigation.getParam('albumId')
     try {
       const album = await getAlbum(albumId)
-      console.log('ALBUM:', album)
       this.setState({ groupId: album.data.getAlbum.group.id })
     } catch (error) {
       console.log('Error getting album:', error)

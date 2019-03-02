@@ -295,6 +295,7 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
         owner
         authUsers
         bucket
+        photoAlbumId
         createdAt
         updatedAt
       }
@@ -336,6 +337,7 @@ export const createMessage = `mutation CreateMessage($input: CreateMessageInput!
         owner
         authUsers
         bucket
+        photoAlbumId
         createdAt
         updatedAt
       }
@@ -362,13 +364,13 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
       width
       height
     }
-    message {
+    photoAlbumId
+    album {
       id
+      name
       owner
       authUsers
-      type
-      text
-      messageGroupId
+      albumGroupId
       group {
         id
         name
@@ -383,12 +385,13 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
       createdAt
       updatedAt
     }
-    album {
+    message {
       id
-      name
       owner
       authUsers
-      albumGroupId
+      type
+      text
+      messageGroupId
       group {
         id
         name

@@ -61,8 +61,9 @@ type Photo {
   bucket: String
   fullsize: PhotoS3Info
   thumbnail: PhotoS3Info
-  message: Message
+  photoAlbumId: ID
   album: Album
+  message: Message
   createdAt: String
   updatedAt: String
 }
@@ -76,7 +77,7 @@ type PhotoS3Info {
 type Subscription {
   onCreateAlbum(albumGroupId: ID): Album @aws_subscribe(mutations: ["createAlbum"])
   onCreateMessage(messageGroupId: ID): Message @aws_subscribe(mutations: ["createMessage"])
-  onCreatePhoto(photoGroupId: ID, photoAlbumId: ID): Photo @aws_subscribe(mutations: ["createPhoto"])
+  onCreatePhoto(photoAlbumId: ID): Photo @aws_subscribe(mutations: ["createPhoto"])
   onCreateUser: User @aws_subscribe(mutations: ["createUser"])
   onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
   onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
@@ -386,6 +387,7 @@ input ModelPhotoFilterInput {
   owner: ModelStringFilterInput
   authUsers: ModelStringFilterInput
   bucket: ModelStringFilterInput
+  photoAlbumId: ModelIDFilterInput
   createdAt: ModelStringFilterInput
   updatedAt: ModelStringFilterInput
   and: [ModelPhotoFilterInput]
@@ -400,10 +402,10 @@ input CreatePhotoInput {
   bucket: String
   fullsize: PhotoS3InfoInput
   thumbnail: PhotoS3InfoInput
+  photoAlbumId: ID
   createdAt: String
   updatedAt: String
   photoMessageId: ID
-  photoAlbumId: ID
 }
 
 input UpdatePhotoInput {
@@ -413,10 +415,10 @@ input UpdatePhotoInput {
   bucket: String
   fullsize: PhotoS3InfoInput
   thumbnail: PhotoS3InfoInput
+  photoAlbumId: ID
   createdAt: String
   updatedAt: String
   photoMessageId: ID
-  photoAlbumId: ID
 }
 
 input DeletePhotoInput {

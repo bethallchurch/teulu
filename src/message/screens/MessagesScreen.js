@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { SafeAreaView, Text, View, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
-import * as queries from '@graphql/queries'
+import { getGroup as customGetGroup } from '@customgraphql/queries'
 import * as mutations from '@graphql/mutations'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
@@ -10,6 +10,9 @@ import { UserContext } from '@global/context'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
 import { colors } from '@global/styles'
+import { getMessage } from '@message/MessageService'
+import { getPhoto } from '@photo/PhotoService'
+import { PhotoListItem } from '@photo/components/PhotoList'
 
 class MessagesScreen extends React.Component {
   constructor (props) {
@@ -17,10 +20,12 @@ class MessagesScreen extends React.Component {
     this.sendMessage = this.sendMessage.bind(this)
   }
 
-  get messages () {
+  messages () {
     return this.props.messages.map(m => ({
       _id: m.id,
       text: m.text,
+      image: m.photos.items.length ? m.photos.items[0].thumbnail.key : null,
+      imageProps: m.photos.items.length ? { ...m.photos.items[0].thumbnail } : null,
       createdAt: m.createdAt,
       user: {
         _id: m.owner,
@@ -49,9 +54,10 @@ class MessagesScreen extends React.Component {
         <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled keyboardVerticalOffset={130}>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
             <GiftedChat
-              messages={this.messages}
+              messages={this.messages()}
               onSend={this.sendMessage}
               user={{ _id: this.props.userId }}
+              renderMessageImage={({ currentMessage }) => <PhotoListItem thumbnail={currentMessage.imageProps} />}
             />
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -64,7 +70,7 @@ const ConnectedMessagesScreen = props => {
   const groupId = props.navigation.getParam('groupId')
   return (
     <Connect
-      query={graphqlOperation(queries.getGroup, { id: groupId })}
+      query={graphqlOperation(customGetGroup, { id: groupId })}
       subscription={graphqlOperation(subscriptions.onCreateMessage, { messageGroupId: groupId })}
       mutation={graphqlOperation(mutations.createMessage)}
       onSubscriptionMsg={(previous, { onCreateMessage }) => {

@@ -121,7 +121,8 @@ const processRecord = async record => {
     bucket: bucketName,
     fullsize: sizes.fullsize,
     thumbnail: sizes.thumbnail,
-    photoMessageId: messageId
+    photoMessageId: messageId,
+    photoAlbumId: metadata.albumid
   }
 
   const message = {

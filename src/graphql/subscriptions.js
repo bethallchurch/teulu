@@ -31,6 +31,7 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
         owner
         authUsers
         bucket
+        photoAlbumId
         createdAt
         updatedAt
       }
@@ -72,6 +73,7 @@ export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID
         owner
         authUsers
         bucket
+        photoAlbumId
         createdAt
         updatedAt
       }
@@ -82,8 +84,8 @@ export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID
   }
 }
 `;
-export const onCreatePhoto = `subscription OnCreatePhoto($photoGroupId: ID, $photoAlbumId: ID) {
-  onCreatePhoto(photoGroupId: $photoGroupId, photoAlbumId: $photoAlbumId) {
+export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
+  onCreatePhoto(photoAlbumId: $photoAlbumId) {
     id
     owner
     authUsers
@@ -98,13 +100,13 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoGroupId: ID, $pho
       width
       height
     }
-    message {
+    photoAlbumId
+    album {
       id
+      name
       owner
       authUsers
-      type
-      text
-      messageGroupId
+      albumGroupId
       group {
         id
         name
@@ -119,12 +121,13 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoGroupId: ID, $pho
       createdAt
       updatedAt
     }
-    album {
+    message {
       id
-      name
       owner
       authUsers
-      albumGroupId
+      type
+      text
+      messageGroupId
       group {
         id
         name
