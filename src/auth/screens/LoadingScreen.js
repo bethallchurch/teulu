@@ -5,7 +5,7 @@ import Loading from '@global/components/Loading'
 
 export default class AuthLoading extends Component {
   state = { userToken: null }
-  
+
   async componentDidMount () {
     await this.loadApp()
   }
@@ -24,4 +24,3 @@ export default class AuthLoading extends Component {
     return <Loading />
   }
 }
-

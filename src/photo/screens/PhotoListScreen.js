@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, StatusBar } from 'react-native'
+import { View, SafeAreaView, StatusBar } from 'react-native'
 import PhotoUpload from '@photo/components/PhotoUpload'
 import PhotoList from '@photo/components/PhotoList'
 import { colors } from '@global/styles'
@@ -21,7 +21,5 @@ class PhotoListScreen extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({})
 
 export default PhotoListScreen

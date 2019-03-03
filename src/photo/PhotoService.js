@@ -1,9 +1,8 @@
+/* global XMLHttpRequest */
 import { Storage } from 'aws-amplify'
 import { v4 as uuid } from 'uuid'
 import { createQuery } from '@global/helpers'
-import * as mutations from '@graphql/mutations'
 import * as queries from '@graphql/queries'
-import * as subscriptions from '@graphql/subscriptions'
 
 // Queries
 export const getPhoto = id => createQuery(queries.getPhoto, { id })
@@ -32,5 +31,5 @@ export const uploadImage = async ({ uri, groupId, authUsers, albumId, userId }) 
     metadata: { groupId, authUsers, albumId, userId }
   })
   blob.close()
-  return await snapshot
+  return snapshot
 }

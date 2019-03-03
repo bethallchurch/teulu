@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { graphqlOperation } from 'aws-amplify'
 import { SafeAreaView, Text, View, StyleSheet, FlatList, Modal, TouchableOpacity } from 'react-native'
 import { Connect } from 'aws-amplify-react-native'
-import { Card, ListItem } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as queries from '@graphql/queries'
 import { listUsers } from '@user/UserService'
@@ -18,8 +18,8 @@ class GroupSettingsScreen extends Component {
 
   async componentDidMount () {
     const { group } = this.props
-    const filter = { or: group.authUsers.map(id => ({ id: { eq: id }})) }
-    const { data: { listUsers: { items: authUsers }}} = await listUsers(filter)
+    const filter = { or: group.authUsers.map(id => ({ id: { eq: id } })) }
+    const { data: { listUsers: { items: authUsers } } } = await listUsers(filter)
     this.setState({ authUsers: authUsers.map(user => ({ ...user, isOwner: user.id === group.owner })) })
   }
 
@@ -33,9 +33,9 @@ class GroupSettingsScreen extends Component {
 
   toggleAuthUser = id => {
     const { newAuthUsers } = this.state
-    const updatedAuthUsers = newAuthUsers.includes(id) ?
-      newAuthUsers.filter(authUserId => authUserId !== id) :
-      [ id, ...newAuthUsers ]
+    const updatedAuthUsers = newAuthUsers.includes(id)
+      ? newAuthUsers.filter(authUserId => authUserId !== id)
+      : [ id, ...newAuthUsers ]
     this.setState({ newAuthUsers: updatedAuthUsers })
   }
 

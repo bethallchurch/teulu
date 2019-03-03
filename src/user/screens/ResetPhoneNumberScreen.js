@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Alert } from 'react-native'
-import { LOGIN } from '@navigation/routes'
+import { ACCOUNT } from '@navigation/routes'
 import { getAuthUser, updateUserAttributes, verifyCurrentUserAttributeSubmit } from '@auth/AuthService'
 import { updateUser } from '@user/UserService'
 import MinimalScreenBase from '@global/components/MinimalScreenBase'
@@ -17,16 +17,18 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
       newNationalNumber: '',
       verificationCode: '',
       codeRequested: false,
-      modalVisible: false
+      modalVisible: false,
+      user: {}
     }
   }
-  
+
   requestCode = async () => {
     const { newDialCode, newNationalNumber } = this.state
     const phoneNumber = `${newDialCode}${newNationalNumber}`
     try {
       const user = await getAuthUser()
-      await updateUserAttributes({ user, attributes: { phone_number: phoneNumber }})
+      this.setState({ user })
+      await updateUserAttributes({ user, attributes: { phone_number: phoneNumber } })
       Alert.alert(
         'Verification Code Sent',
         'A verification code has been sent via SMS to your new number.',
@@ -38,12 +40,12 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error requesting update phone number verification code:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
   resetPhoneNumber = async () => {
-    const { newDialCode, newNationalNumber, verificationCode } = this.state
+    const { user, newDialCode, newNationalNumber, verificationCode } = this.state
     const phoneNumber = `${newDialCode}${newNationalNumber}`
     try {
       await verifyCurrentUserAttributeSubmit({ attribute: phoneNumber, verificationCode })
@@ -55,7 +57,7 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error resetting phone number:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 

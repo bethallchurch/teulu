@@ -1,7 +1,6 @@
 import { Contacts } from 'expo'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
-import { COUNTRY_CODES } from '@global/constants'
-import { intersection, unique, compact, flatten, chunk } from '@global/helpers'
+import { unique, compact, flatten, chunk } from '@global/helpers'
 import { listUsers } from '@user/UserService'
 
 const contactStore = {}
@@ -33,7 +32,7 @@ export const getContacts = async () => {
 
   const result = await Promise.all(filters.map(filter => listUsers(filter)))
 
-  return flatten(result.map(({ data: { listUsers: { items }}}) => {
+  return flatten(result.map(({ data: { listUsers: { items } } }) => {
     return items.map(item => ({ ...item, name: contactStore[item.phoneNumber] }))
   }))
 }

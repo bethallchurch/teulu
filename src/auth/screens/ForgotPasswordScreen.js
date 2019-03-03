@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { StyleSheet, Text, Alert } from 'react-native'
 import { LOGIN } from '@navigation/routes'
 import { forgotPassword, forgotPasswordSubmit } from '@auth/AuthService'
@@ -41,7 +41,7 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error requesting forgot password authentication code:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
@@ -64,7 +64,7 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
       )
     } catch (error) {
       const { message } = error
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
@@ -113,7 +113,7 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
               value={newPassword}
               returnKeyType='next'
               autoCorrect={false}
-              secureTextEntry={true}
+              secureTextEntry
               ref='newPassword'
               refName='newPassword'
               onSubmitEditing={() => this.focusInput('repeatNewPassword')}
@@ -124,7 +124,7 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
               value={repeatNewPassword}
               returnKeyType='done'
               autoCorrect={false}
-              secureTextEntry={true}
+              secureTextEntry
               ref='repeatNewPassword'
               refName='repeatNewPassword'
               onChangeText={value => this.onChangeText('repeatNewPassword', value)}

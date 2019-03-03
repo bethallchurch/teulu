@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Dimensions, StyleSheet } from 'react-native'
-import { API, graphqlOperation }  from 'aws-amplify'
+import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native'
+import { graphqlOperation } from 'aws-amplify'
 import { LinearGradient } from 'expo'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
-import { ListItem, Image } from 'react-native-elements'
+import { Image } from 'react-native-elements'
 import { ALBUM } from '@navigation/routes'
-import { uniqueBy } from '@global/helpers'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
 import { copyStyle, colors, f5, s2, fade } from '@global/styles'
@@ -103,12 +102,12 @@ const AlbumItem = ({ onPress, width, margin, name }) => {
 
 const ConnectedAlbumList = ({ query, subscription, onSubscriptionMsg, dataExtractor, ...props }) => (
   <Connect query={query} subscription={subscription} onSubscriptionMsg={onSubscriptionMsg}>
-  {data => {
-    const { error, loading, items } = dataExtractor(data)
-    if (error) return <Error />
-    if (loading) return <Loading />
-    return <AlbumList albums={items} {...props} />
-  }}
+    {data => {
+      const { error, loading, items } = dataExtractor(data)
+      if (error) return <Error />
+      if (loading) return <Loading />
+      return <AlbumList albums={items} {...props} />
+    }}
   </Connect>
 )
 
@@ -119,7 +118,7 @@ export const GroupAlbumList = props => {
   const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
     const { getGroup } = previous
     const newItems = [ onCreateAlbum, ...getGroup.albums.items ]
-    return { ...previous, getGroup: { ...getGroup, albums: { ...getGroup.albums, items: newItems }}}
+    return { ...previous, getGroup: { ...getGroup, albums: { ...getGroup.albums, items: newItems } } }
   }
   const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
     error,
@@ -137,7 +136,6 @@ export const GroupAlbumList = props => {
   )
 }
 
-
 const AlbumListAll = props => {
   console.log('COLS:', props.numColumns)
   const queryParams = props.limit ? { limit: props.limit } : {}
@@ -146,7 +144,7 @@ const AlbumListAll = props => {
   const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
     const { listAlbums } = previous
     const newItems = [ onCreateAlbum, ...listAlbums.items ]
-    return { ...previous, listAlbums: { ...listAlbums, items: newItems }}
+    return { ...previous, listAlbums: { ...listAlbums, items: newItems } }
   }
   const dataExtractor = ({ data: { listAlbums }, loading, error }) => ({
     error,

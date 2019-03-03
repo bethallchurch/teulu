@@ -15,4 +15,3 @@ export const updateUserAttributes = ({ user, attributes }) => Auth.updateUserAtt
 export const verifyCurrentUserAttributeSubmit = ({ attribute, verificationCode }) => (
   Auth.verifyCurrentUserAttributeSubmit(attribute, verificationCode)
 )
-

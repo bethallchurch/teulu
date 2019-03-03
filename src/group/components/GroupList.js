@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList } from 'react-native'
-import { graphqlOperation }  from 'aws-amplify'
+import { FlatList } from 'react-native'
+import { graphqlOperation } from 'aws-amplify'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
@@ -18,7 +18,7 @@ class GroupList extends Component {
     groupName: name
   })
 
-  renderItem = ({ item: { id, name }}) => {
+  renderItem = ({ item: { id, name } }) => {
     return (
       <ListItem
         title={name}
@@ -26,20 +26,20 @@ class GroupList extends Component {
         onPress={() => this.navigateToGroup(id, name)}
         style={{ marginHorizontal: 16, marginVertical: 8 }}
         contentContainerStyle={{ padding: 8 }}
-        leftAvatar={{ rounded: true, title: name[0], overlayContainerStyle: { backgroundColor: colors.textDefault }}}
+        leftAvatar={{ rounded: true, title: name[0], overlayContainerStyle: { backgroundColor: colors.textDefault } }}
         rightIcon={{ name: 'chevron-right', color: colors.textLight }}
       />
     )
   }
 
-  renderItemCompact = ({ item: { id, name }, index}) =>  {
+  renderItemCompact = ({ item: { id, name }, index }) => {
     return (
       <ListItem
         title={name}
         titleStyle={copyStyle.regular}
         containerStyle={{ paddingVertical: 8 }}
         onPress={() => this.navigateToGroup(id, name)}
-        leftAvatar={{ rounded: true, title: name[0], overlayContainerStyle: { backgroundColor: colors.textDefault }}}
+        leftAvatar={{ rounded: true, title: name[0], overlayContainerStyle: { backgroundColor: colors.textDefault } }}
         rightIcon={{ name: 'chevron-right', color: colors.textLight }}
         topDivider={index !== 0}
       />
@@ -62,7 +62,7 @@ class GroupList extends Component {
 // TODO: subscription query filter not working
 const ConnectedGroupList = props => {
   const { userId, compact } = props
-  const filter = { authUsers: { contains: userId }}
+  const filter = { authUsers: { contains: userId } }
   // Limit is being WEIRD and showing just one group
   const queryParams = compact ? {} : { filter } // { limit: 3 }
   return (

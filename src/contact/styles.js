@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { colors, mb3, pa3, w100Pc } from '@global/styles'
+import { colors, mb3, w100Pc } from '@global/styles'
 
 export const selectContactListStyle = StyleSheet.create({
   list: {

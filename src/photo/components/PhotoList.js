@@ -1,8 +1,7 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native'
-import { Connect, S3Image } from 'aws-amplify-react-native'
+import React from 'react'
+import { FlatList, Dimensions } from 'react-native'
+import { Connect } from 'aws-amplify-react-native'
 import { graphqlOperation } from 'aws-amplify'
-import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import { getAlbum as customGetAlbum } from '@mygraphql/queries'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
@@ -30,9 +29,9 @@ const ConnectedPhotoList = props => {
       onSubscriptionMsg={(previous, { onCreatePhoto }) => {
         const { getAlbum } = previous
         const newItems = [ onCreatePhoto, ...getAlbum.messages.items ]
-        return { ...previous, getAlbum: { ...getAlbum, messages: { ...getAlbum.messages, items: newItems }}}
+        return { ...previous, getAlbum: { ...getAlbum, messages: { ...getAlbum.messages, items: newItems } } }
       }}
-     >
+    >
       {({ data: { getAlbum }, loading, error, errors }) => {
         if (error) return <Error />
         if (loading || !getAlbum) return <Loading />

@@ -39,7 +39,7 @@ const InternationalPhoneDropdown = ({ visible, getCountry, hide }) => (
 )
 
 const ListItem = ({ item, getCountry }) => {
-  const { item: { code, dialCode, name }} = item
+  const { item: { code, dialCode, name } } = item
   return (
     <TouchableWithoutFeedback onPress={() => getCountry(code)}>
       <View style={styles.countryStyle}>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Text, Alert } from 'react-native'
 import uuid from 'uuid/v4'
 import { LOGIN } from '@navigation/routes'
@@ -48,7 +48,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error requesting register verification code:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
@@ -60,7 +60,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error requesting new register verification code:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
@@ -80,12 +80,11 @@ class RegisterScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error confirming user registration:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
   render () {
-    const { navigation: { navigate } } = this.props
     const {
       modalVisible,
       dialCode,
@@ -114,7 +113,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
           value={password}
           returnKeyType='next'
           autoCorrect={false}
-          secureTextEntry={true}
+          secureTextEntry
           ref='password'
           refName='password'
           onSubmitEditing={() => this.focusInput('repeatPassword')}
@@ -125,7 +124,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
           value={repeatPassword}
           returnKeyType={codeRequested ? 'next' : 'done'}
           autoCorrect={false}
-          secureTextEntry={true}
+          secureTextEntry
           ref='repeatPassword'
           refName='repeatPassword'
           onSubmitEditing={() => codeRequested ? this.focusInput('verificationCode') : null}

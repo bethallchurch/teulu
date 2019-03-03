@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
 import { Connect } from 'aws-amplify-react-native'
-import { Card, ListItem, Button } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as queries from '@graphql/queries'
-import Section from '@global/components/Section'
 import Loading from '@global/components/Loading'
 import Error from '@global/components/Error'
-import { colors, subtitleStyle, copyStyle } from '@global/styles'
+import { colors, subtitleStyle } from '@global/styles'
 
 const AlbumSettings = ({ album }) => (
   <SafeAreaView>

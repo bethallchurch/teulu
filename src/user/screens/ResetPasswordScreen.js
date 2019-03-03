@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { SafeAreaView, Text, Alert } from 'react-native'
+import React from 'react'
+import { Alert } from 'react-native'
 import { ACCOUNT } from '@navigation/routes'
 import { getAuthUser, changePassword } from '@auth/AuthService'
 import ComponentWithInputs from '@global/components/ComponentWithInputs'
@@ -23,7 +23,7 @@ export default class ResetPasswordScreen extends ComponentWithInputs {
     } catch (error) {
       const { message } = error
       console.log('Error resetting password:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
@@ -36,7 +36,7 @@ export default class ResetPasswordScreen extends ComponentWithInputs {
           value={oldPassword}
           returnKeyType='next'
           autoCorrect={false}
-          secureTextEntry={true}
+          secureTextEntry
           onSubmitEditing={() => this.focusInput('newPassword')}
           onChangeText={value => this.onChangeText('oldPassword', value)}
         />
@@ -45,7 +45,7 @@ export default class ResetPasswordScreen extends ComponentWithInputs {
           value={newPassword}
           returnKeyType='next'
           autoCorrect={false}
-          secureTextEntry={true}
+          secureTextEntry
           ref='newPassword'
           refName='newPassword'
           onSubmitEditing={() => this.focusInput('repeatNewPassword')}
@@ -56,7 +56,7 @@ export default class ResetPasswordScreen extends ComponentWithInputs {
           value={repeatNewPassword}
           returnKeyType='done'
           autoCorrect={false}
-          secureTextEntry={true}
+          secureTextEntry
           ref='repeatNewPassword'
           refName='repeatNewPassword'
           onChangeText={value => this.onChangeText('repeatNewPassword', value)}

@@ -15,9 +15,9 @@ class CreateGroup extends ComponentWithInputs {
 
   toggleAuthUser = id => {
     const { authUsers } = this.state
-    const updatedAuthUsers = authUsers.includes(id) ?
-      authUsers.filter(authUserId => authUserId !== id) :
-      [ id, ...authUsers ]
+    const updatedAuthUsers = authUsers.includes(id)
+      ? authUsers.filter(authUserId => authUserId !== id)
+      : [ id, ...authUsers ]
     this.setState({ authUsers: updatedAuthUsers })
   }
 
@@ -25,7 +25,7 @@ class CreateGroup extends ComponentWithInputs {
     const { groupName, authUsers } = this.state
     const { userId } = this.props
     try {
-      const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ]})
+      const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ] })
       const groupId = result.data.createGroup.id
       await Promise.all(authUsers.map(username => createGroupLink({
         groupLinkUserId: username, groupLinkGroupId: groupId
@@ -39,7 +39,7 @@ class CreateGroup extends ComponentWithInputs {
   render () {
     const { groupName, authUsers } = this.state
     return (
-      <MinimalScreenBase>      
+      <MinimalScreenBase>
         <Text style={subtitleStyle.style}>Name your group</Text>
         <TextInput
           placeholder='Group Name'

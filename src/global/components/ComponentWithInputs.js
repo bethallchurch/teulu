@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 export default class ComponentWithInputs extends Component {
-
   onChangeText = (key, value) => {
     this.setState({ [key]: value })
   }
@@ -13,5 +12,4 @@ export default class ComponentWithInputs extends Component {
   focusInput = refName => {
     this.getInputRoot(refName).focus()
   }
-  
 }

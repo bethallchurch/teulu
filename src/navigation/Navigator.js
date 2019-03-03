@@ -1,9 +1,8 @@
 import React from 'react'
-import { View } from 'react-native'
 import { createStackNavigator } from 'react-navigation'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { headerTitleStyle } from '@navigation/styles'
-import AlbumStack, { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
+import { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
 import GroupStack, { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@navigation/components/HeaderIcon'
@@ -12,7 +11,6 @@ import PhotoListScreen from '@photo/screens/PhotoListScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
 import { colors, w4 } from '@global/styles'
-import GroupScreen from '@album/screens/AlbumListScreen'
 
 const MainAppStack = createStackNavigator({
   [routes.HOME]: {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SafeAreaView, Alert, View, Text, StyleSheet } from 'react-native'
+import { SafeAreaView, View, StyleSheet } from 'react-native'
 import { getAuthUser } from '@auth/AuthService'
 import { Avatar, ListItem } from 'react-native-elements'
 import { colors, copyStyle } from '@global/styles'
@@ -10,8 +10,8 @@ export default class UserSettingsScreen extends Component {
   state = { phoneNumber: '' }
 
   async componentDidMount () {
-    const { attributes: { phone_number } } = await getAuthUser()
-    this.setState({ phoneNumber: phone_number })
+    const { attributes: { phone_number } } = await getAuthUser() // eslint-disable-line camelcase
+    this.setState({ phoneNumber: phone_number }) // eslint-disable-line camelcase
   }
 
   get chevronProps () {

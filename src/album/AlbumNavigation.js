@@ -1,6 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
-import { createStackNavigator, createMaterialTopTabNavigator } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation'
 import CreateAlbumScreen from '@album/screens/CreateAlbumScreen'
 import AlbumSettings from '@album/screens/AlbumSettingsScreen'
 import HeaderIcon from '@navigation/components/HeaderIcon'

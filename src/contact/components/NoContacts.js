@@ -1,7 +1,6 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { copyStyle, f5 } from '@global/styles'
+import { copyStyle } from '@global/styles'
 import { noContactsStyle } from '@contact/styles'
 
 const NoContacts = ({

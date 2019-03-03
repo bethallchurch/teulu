@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
 import { COUNTRY_CODES } from '@global/constants'
 import ComponentWithInputs from '@global/components/ComponentWithInputs'
 
 export const defaultDialCode = COUNTRY_CODES.find(({ code }) => code === 'GB').dialCode
 
 export default class ComponentWithPhoneInput extends ComponentWithInputs {
-
   get phoneNumber () {
     const { dialCode, nationalNumber } = this.state
     return `${dialCode}${nationalNumber}`
@@ -24,5 +22,4 @@ export default class ComponentWithPhoneInput extends ComponentWithInputs {
     this.setState({ dialCode })
     this.hideModal()
   }
-
 }

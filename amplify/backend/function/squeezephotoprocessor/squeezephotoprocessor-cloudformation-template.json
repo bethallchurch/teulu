@@ -67,7 +67,7 @@
 				},
 				"Code": {
 					"S3Bucket": "squeeze-20190207173156-deployment",
-					"S3Key": "amplify-builds/squeezephotoprocessor-1551542491-latest-build.zip"
+					"S3Key": "amplify-builds/squeezephotoprocessor-1551608947-latest-build.zip"
 				}
 			}
 		},

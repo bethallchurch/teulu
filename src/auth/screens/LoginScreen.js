@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Text, Alert } from 'react-native'
 import { signIn } from '@auth/AuthService'
 import Link, { LinkContainer } from '@global/components/Link'
@@ -32,7 +32,7 @@ export default class LoginScreen extends ComponentWithPhoneInput {
     } catch (error) {
       const { message } = error
       console.log('Error logging in user:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 
@@ -57,7 +57,7 @@ export default class LoginScreen extends ComponentWithPhoneInput {
           value={password}
           returnKeyType='done'
           autoCorrect={false}
-          secureTextEntry={true}
+          secureTextEntry
           ref='password'
           refName='password'
           onChangeText={value => this.onChangeText('password', value)}

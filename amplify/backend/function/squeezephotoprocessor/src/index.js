@@ -25,8 +25,6 @@ const storePhotoInfo = ({ photo, message }) => {
     TableName: DYNAMODB_PHOTO_TABLE_NAME
   }
 
-  console.log('MESSAGE!', message)
-
   const messageParams = {
     Item: message,
     TableName: DYNAMODB_MESSAGE_TABLE_NAME
@@ -98,15 +96,12 @@ const processRecord = async record => {
   const bucketName = record.s3.bucket.name
   const key = record.s3.object.key
 
-  if (key.indexOf('uploads') != 0) return
+  if (key.indexOf('uploads') !== 0) return
 
   const metadata = await getMetadata(bucketName, key)
   const sizes = await resize(bucketName, key)
   const photoId = uuid()
   const messageId = uuid()
-
-  console.log('AUTH USERS:', metadata.authusers)
-  console.log('TEXT:', metadata.text)
 
   const sharedParams = {
     owner: metadata.userid,

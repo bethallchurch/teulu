@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { fBold, colors, w4 } from '@global/styles'
+import { fBold, colors } from '@global/styles'
 
 export const logOutButtonStyle = StyleSheet.create({
   container: {

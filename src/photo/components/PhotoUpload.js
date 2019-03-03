@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, Modal, TouchableOpacity, Dimensions, StatusBar } from 'react-native'
-import { Storage } from 'aws-amplify'
-import { Input, ListItem } from 'react-native-elements'
+import { Text, View, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
+import { ListItem } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo'
-import { Connect, S3Image } from 'aws-amplify-react-native'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
 import { getAlbum } from '@album/AlbumService'
@@ -71,7 +69,6 @@ class PhotoUpload extends Component {
   render () {
     const {
       hasCameraRollPermission,
-      uploadedImage,
       pickedImage,
       modalVisible
     } = this.state
@@ -117,19 +114,12 @@ class PhotoUpload extends Component {
 // {this.state.uploadedImage && <Image style={{ width: 100, height: 100 }} source={{ uri: this.state.uploadedImage }} />}
 
 const AddRightIcon = () => <MaterialIcons name='photo' size={w4.width} color={colors.primaryBackground} />
-const UploadRightIcon = () => <Feather name='upload' size={w4.width} color={colors.primaryBackground}  />
+const UploadRightIcon = () => <Feather name='upload' size={w4.width} color={colors.primaryBackground} />
 
 const PhotoUploadWithContext = props => (
   <UserContext.Consumer>
     {user => <PhotoUpload userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'red'
-  }
-})
 
 export default PhotoUploadWithContext

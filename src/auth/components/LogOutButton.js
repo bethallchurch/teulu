@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Alert } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { AntDesign } from '@expo/vector-icons'
 import { AUTH_LOADING } from '@navigation/routes'
@@ -14,7 +15,7 @@ export default class LogOutButton extends Component {
     } catch (error) {
       const { message } = error
       console.log('Error signing out:', error)
-      Alert.alert('Something went wrong!', message ? message : error)
+      Alert.alert('Something went wrong!', message || error)
     }
   }
 

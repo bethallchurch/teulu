@@ -6,7 +6,7 @@ import Loading from '@auth/screens/LoadingScreen'
 import LoginScreen from '@auth/screens/LoginScreen'
 import RegisterScreen from '@auth/screens/RegisterScreen'
 import TabBarIcon from '@navigation/components/TabBarIcon'
-import { default as MainApp } from '@navigation/Navigator'
+import MainApp from '@navigation/Navigator'
 import { tabBarStyle, tabBarLabelStyle } from '@navigation/styles'
 
 const AuthTabs = createBottomTabNavigator({

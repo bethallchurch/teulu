@@ -20,4 +20,3 @@ export const RESET_PASSWORD = 'ResetPassword'
 export const RESET_PHONE_NUMBER = 'ResetPhoneNumber'
 export const NOTIFICATION_SETTINGS = 'NotificationSettings'
 export const HOME = 'Home'
-
