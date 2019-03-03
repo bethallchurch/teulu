@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
+import { SafeAreaView, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
 import { ImagePicker, Permissions } from 'expo'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
@@ -10,6 +10,7 @@ import { colors, layout } from '@global/styles'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
+// TODO: Modal upload wrong on iPhone X
 class PhotoUpload extends Component {
   state = {
     pickedImage: null,
@@ -23,7 +24,7 @@ class PhotoUpload extends Component {
   async componentDidMount () {
     const albumId = this.props.navigation.getParam('albumId')
     try {
-      const album = await getAlbum(albumId)
+      const album = await getAlbum(albumId, true)
       this.setState({ groupId: album.data.getAlbum.group.id })
     } catch (error) {
       console.log('Error getting album:', error)
@@ -83,7 +84,7 @@ class PhotoUpload extends Component {
         />
         <Modal transparent visible={modalVisible} onRequestClose={this.hideModal}>
           <TouchableOpacity style={{ flex: 1 }} onPress={this.hideModal}>
-            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.overlayBackground }}>
+            <SafeAreaView style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.overlayBackground }}>
               {pickedImage && (
                 <>
                   <Image
@@ -98,7 +99,7 @@ class PhotoUpload extends Component {
                   />
                 </>
               )}
-            </View>
+            </SafeAreaView>
           </TouchableOpacity>
         </Modal>
       </>

@@ -11,17 +11,18 @@ class CreateAlbumScreen extends WithInputs {
   async componentDidMount () {
     const id = this.props.navigation.getParam('groupId')
     try {
-      const result = await getGroup(id)
+      const result = await getGroup(id, true)
       this.setState({ groupId: id, authUsers: result.data.getGroup.authUsers })
     } catch (error) {
       console.log('Error getting group:', error)
     }
   }
 
+  // TODO: Connect
   createAlbum = async () => {
     const { albumName, groupId, authUsers } = this.state
     try {
-      const result = await createAlbum({ name: albumName, albumGroupId: groupId, authUsers })
+      const result = await createAlbum({ name: albumName, albumGroupId: groupId, authUsers }, true)
       const albumId = result.data.createAlbum.id
       this.props.navigation.navigate(ALBUM, { groupId, authUsers, albumId, albumName })
     } catch (error) {

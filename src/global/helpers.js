@@ -71,4 +71,7 @@ export const withoutKeys = (obj, keys) => objectFilter(obj, {
   callback: ([ key ]) => !keys.includes(key)
 })
 
-export const createQuery = (query, input) => API.graphql(graphqlOperation(query, input))
+export const createQuery = (query, input, execute = false) => {
+  const operation = graphqlOperation(query, input)
+  return execute ? API.graphql(operation) : operation
+}

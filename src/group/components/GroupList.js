@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
 import { FlatList } from 'react-native'
-import { graphqlOperation } from 'aws-amplify'
-import * as queries from '@graphql/queries'
-import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { GROUP } from '@navigation/routes'
 import { uniqueBy } from '@global/helpers'
+import { listGroups, onCreateGroup } from '@group/GroupService'
 import { UserContext } from '@global/context'
 import { Error, Loading, Text } from '@global/components'
 import { colors } from '@global/styles'
@@ -64,8 +62,8 @@ const ConnectedGroupList = props => {
   const queryParams = compact ? {} : { filter } // { limit: 3 }
   return (
     <Connect
-      query={graphqlOperation(queries.listGroups, queryParams)}
-      subscription={graphqlOperation(subscriptions.onCreateGroup, queryParams)}
+      query={listGroups(queryParams)}
+      subscription={onCreateGroup(queryParams)}
       onSubscriptionMsg={(previous, { onCreateGroup }) => {
         const { listGroups } = previous
         if (!onCreateGroup.authUsers.includes(userId)) {

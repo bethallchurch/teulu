@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { graphqlOperation } from 'aws-amplify'
 import { View, FlatList, StyleSheet } from 'react-native'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
-import * as queries from '@graphql/queries'
+import { getGroup } from '@group/GroupService'
 import { listUsers } from '@user/UserService'
 import { ScreenBase, Text, Button, Badge, Section, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
@@ -18,7 +17,7 @@ class GroupSettingsScreen extends Component {
   async componentDidMount () {
     const { group } = this.props
     const filter = { or: group.authUsers.map(id => ({ id: { eq: id } })) }
-    const { data: { listUsers: { items: authUsers } } } = await listUsers(filter)
+    const { data: { listUsers: { items: authUsers } } } = await listUsers({ filter }, true)
     this.setState({ authUsers: authUsers.map(user => ({ ...user, isOwner: user.id === group.owner })) })
   }
 
@@ -77,9 +76,7 @@ class GroupSettingsScreen extends Component {
 }
 
 const ConnectedGroupSettingsScreen = props => (
-  <Connect
-    query={graphqlOperation(queries.getGroup, { id: props.navigation.getParam('groupId') })}
-  >
+  <Connect query={getGroup(props.navigation.getParam('groupId'))}>
     {({ data: { getGroup }, loading, error }) => {
       if (error) return <Error />
       if (loading || !getGroup) return <Loading />

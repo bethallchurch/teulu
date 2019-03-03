@@ -2,8 +2,8 @@ import React from 'react'
 import { FlatList, Dimensions } from 'react-native'
 import { Connect } from 'aws-amplify-react-native'
 import { graphqlOperation } from 'aws-amplify'
-import * as subscriptions from '@graphql/subscriptions'
 import { getAlbum as customGetAlbum } from '@mygraphql/queries'
+import { onCreatePhoto } from '@photo/PhotoService'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import { Error, Loading } from '@global/components'
 
@@ -24,7 +24,7 @@ const ConnectedPhotoList = props => {
   return (
     <Connect
       query={graphqlOperation(customGetAlbum, { id: albumId })}
-      subscription={graphqlOperation(subscriptions.onCreatePhoto)}
+      subscription={onCreatePhoto()}
       onSubscriptionMsg={(previous, { onCreatePhoto }) => {
         const { getAlbum } = previous
         const newItems = [ onCreatePhoto, ...getAlbum.messages.items ]

@@ -1,15 +1,14 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { graphqlOperation } from 'aws-amplify'
 import { Connect } from 'aws-amplify-react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import * as queries from '@graphql/queries'
 import { ScreenBase, Error, Loading, Text } from '@global/components'
 import { colors, layout } from '@global/styles'
+import { getAlbum } from '@album/AlbumService'
 
 // TODO: Top same as GroupSettingsScreen
 const AlbumSettings = ({ album }) => (
-  <ScreenBase>
+  <ScreenBase style={styles.container}>
     <View style={styles.imageContainer}>
       <MaterialIcons name='image' color={colors.primaryBackground} size={layout.s6} />
       <Text h4 color={colors.primaryBackground} style={styles.imageCaption}>{album.name}</Text>
@@ -18,9 +17,7 @@ const AlbumSettings = ({ album }) => (
 )
 
 const ConnectedAlbumSettings = props => (
-  <Connect
-    query={graphqlOperation(queries.getAlbum, { id: props.navigation.getParam('albumId') })}
-  >
+  <Connect query={getAlbum(props.navigation.getParam('albumId'))}>
     {({ data: { getAlbum }, loading, error }) => {
       if (error) return <Error />
       if (loading || !getAlbum) return <Loading />
@@ -30,6 +27,9 @@ const ConnectedAlbumSettings = props => (
 )
 
 const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'flex-start'
+  },
   imageContainer: {
     width: '100%',
     height: 200,

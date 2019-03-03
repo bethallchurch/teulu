@@ -8,7 +8,8 @@ import {
   FlatList
 } from 'react-native'
 import { Icon } from 'react-native-elements'
-import { ScreenBase, Text } from '@global/components'
+import ScreenBase from '@global/components/ScreenBase'
+import Text from '@global/components/Text'
 import { COUNTRY_CODES } from '@global/constants'
 import { colors, layout } from '@global/styles'
 

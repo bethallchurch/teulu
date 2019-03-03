@@ -54,7 +54,7 @@ ScreenBase.propTypes = {
   avoidKeyboard: PropTypes.bool,
   contentContainer: PropTypes.bool,
   style: ViewPropTypes.style,
-  keyboardAvoidingViewProps: ViewPropTypes.style,
+  keyboardAvoidingViewProps: PropTypes.object,
   children: PropTypes.node.isRequired
 }
 
@@ -64,6 +64,5 @@ ScreenBase.defaultTypes = {
   style: {},
   keyboardAvoidingViewProps: {}
 }
-
 
 export default ScreenBase

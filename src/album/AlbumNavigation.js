@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation'
 import CreateAlbumScreen from '@album/screens/CreateAlbumScreen'
 import AlbumSettings from '@album/screens/AlbumSettingsScreen'
 import HeaderIcon from '@navigation/components/HeaderIcon'
+import { stackNavigatorStyle } from '@navigation/styles'
 
 export const CreateAlbumStack = createStackNavigator({
   CreateAlbum: {
@@ -12,6 +13,8 @@ export const CreateAlbumStack = createStackNavigator({
       headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
     })
   }
+}, {
+  defaultNavigationOptions: stackNavigatorStyle
 })
 
 export const AlbumSettingsStack = createStackNavigator({
@@ -22,4 +25,6 @@ export const AlbumSettingsStack = createStackNavigator({
       headerRight: <HeaderIcon iconName='close' onPress={() => navigation.goBack(null)} />
     })
   }
+}, {
+  defaultNavigationOptions: stackNavigatorStyle
 })

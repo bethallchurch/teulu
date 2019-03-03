@@ -6,6 +6,7 @@ import { GROUP } from '@navigation/routes'
 import { WithInputs, ScreenBase, TextInput, Button, Text } from '@global/components'
 import { layout } from '@global/styles'
 
+// TODO: Connect
 class CreateGroup extends WithInputs {
   state = { authUsers: [], groupName: '' }
 
@@ -21,11 +22,11 @@ class CreateGroup extends WithInputs {
     const { groupName, authUsers } = this.state
     const { userId } = this.props
     try {
-      const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ] })
+      const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ] }, true)
       const groupId = result.data.createGroup.id
       await Promise.all(authUsers.map(username => createGroupLink({
         groupLinkUserId: username, groupLinkGroupId: groupId
-      })))
+      }, true)))
       this.props.navigation.navigate(GROUP, { groupId, groupName })
     } catch (error) {
       console.log('Error creating group:', error)

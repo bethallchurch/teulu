@@ -30,7 +30,7 @@ export const getContacts = async () => {
     )
   )), 5).map(batch => ({ or: batch }))
 
-  const result = await Promise.all(filters.map(filter => listUsers(filter)))
+  const result = await Promise.all(filters.map(filter => listUsers({ filter }, true)))
 
   return flatten(result.map(({ data: { listUsers: { items } } }) => {
     return items.map(item => ({ ...item, name: contactStore[item.phoneNumber] }))

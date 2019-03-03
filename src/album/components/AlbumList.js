@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native'
-import { graphqlOperation } from 'aws-amplify'
 import { LinearGradient } from 'expo'
-import * as queries from '@graphql/queries'
-import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { Image } from 'react-native-elements'
+import { getGroup } from '@group/GroupService'
+import { onCreateAlbum, listAlbums } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
 import { Text, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
@@ -112,8 +111,8 @@ const ConnectedAlbumList = ({ query, subscription, onSubscriptionMsg, dataExtrac
 
 export const GroupAlbumList = props => {
   const { groupId } = props
-  const query = graphqlOperation(queries.getGroup, { id: groupId })
-  const subscription = graphqlOperation(subscriptions.onCreateAlbum, { albumGroupId: groupId })
+  const query = getGroup(groupId)
+  const subscription = onCreateAlbum({ albumGroupId: groupId })
   const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
     const { getGroup } = previous
     const newItems = [ onCreateAlbum, ...getGroup.albums.items ]
@@ -136,10 +135,9 @@ export const GroupAlbumList = props => {
 }
 
 const AlbumListAll = props => {
-  console.log('COLS:', props.numColumns)
   const queryParams = props.limit ? { limit: props.limit } : {}
-  const query = graphqlOperation(queries.listAlbums, queryParams)
-  const subscription = graphqlOperation(subscriptions.onCreateAlbum)
+  const query = listAlbums(queryParams)
+  const subscription = onCreateAlbum()
   const onSubscriptionMsg = (previous, { onCreateAlbum }) => {
     const { listAlbums } = previous
     const newItems = [ onCreateAlbum, ...listAlbums.items ]

@@ -2,7 +2,6 @@ import React from 'react'
 import { graphqlOperation } from 'aws-amplify'
 import { getGroup as customGetGroup } from '@mygraphql/queries'
 import * as mutations from '@graphql/mutations'
-import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { UserContext } from '@global/context'
@@ -10,6 +9,7 @@ import { ScreenBase, Error, Loading } from '@global/components'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import Bubble from '@message/components/Bubble'
 import MessageText from '@message/components/MessageText'
+import { onCreateMessage } from '@message/MessageService'
 
 class MessagesScreen extends React.Component {
   constructor (props) {
@@ -69,10 +69,9 @@ const ConnectedMessagesScreen = props => {
   return (
     <Connect
       query={graphqlOperation(customGetGroup, { id: groupId })}
-      subscription={graphqlOperation(subscriptions.onCreateMessage, { messageGroupId: groupId })}
+      subscription={onCreateMessage({ messageGroupId: groupId })}
       mutation={graphqlOperation(mutations.createMessage)}
       onSubscriptionMsg={(previous, { onCreateMessage }) => {
-        console.log('ON CREATE MSG:', onCreateMessage)
         const { getGroup } = previous
         const newItems = [ onCreateMessage, ...getGroup.messages.items ]
         return { ...previous, getGroup: { ...getGroup, messages: { ...getGroup.messages, items: newItems } }
