@@ -46,14 +46,12 @@ class App extends Component {
     return fontLoaded && user ? (
       <UserContext.Provider value={user}>
         <AppNavigator
-
+          persistenceKey='persistenceKey004'
           renderLoadingExperimental={() => <Loading />}
         />
       </UserContext.Provider>
     ) : <Loading />
   }
 }
-
-// persistenceKey='persistenceKey004'
 
 export default App

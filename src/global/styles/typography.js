@@ -1,7 +1,7 @@
 // Based on https://material.io/design/typography/the-type-system.html
 
 import { StyleSheet } from 'react-native'
-import { colors } from '@global/styles'
+import { textDefault } from '@global/styles/colors'
 
 const { create, flatten } = StyleSheet
 
@@ -38,23 +38,23 @@ const l9 = { letterSpacing: -0.5 }
 const l10 = { letterSpacing: -1.5 }
 
 // Colors
-const colorDefault = { color: colors.textDefault }
+const color = { color: textDefault }
 
 // StyleSheet
 const typography = (styles = {}) => create({
-  h1: flatten([ fontLight, f1, l10, colorDefault, styles ]),
-  h2: flatten([ fontLight, f2, l9, colorDefault, styles ]),
-  h3: flatten([ fontRegular, f3, l8, colorDefault, styles ]),
-  h4: flatten([ fontRegular, f4, l5, colorDefault, styles ]),
-  h5: flatten([ fontRegular, f5, l8, colorDefault, styles ]),
-  h6: flatten([ fontMedium, f6, l6, colorDefault, styles ]),
-  subtitleOne: flatten([ fontRegular, f7, l6, colorDefault, styles ]),
-  subtitleTwo: flatten([ fontMedium, f8, l7, colorDefault, styles ]),
-  bodyOne: flatten([ fontRegular, f7, l3, colorDefault, styles ]),
-  bodyTwo: flatten([ fontRegular, f8, l5, colorDefault, styles ]),
-  button: flatten([ fontMedium, f8, l2, uppercase, colorDefault, styles ]),
-  caption: flatten([ fontRegular, f9, l4, colorDefault, styles ]),
-  overline: flatten([ fontRegular, f10, l1, uppercase, colorDefault, styles ])
+  h1: flatten([ fontLight, f1, l10, color, styles ]),
+  h2: flatten([ fontLight, f2, l9, color, styles ]),
+  h3: flatten([ fontRegular, f3, l8, color, styles ]),
+  h4: flatten([ fontRegular, f4, l5, color, styles ]),
+  h5: flatten([ fontRegular, f5, l8, color, styles ]),
+  h6: flatten([ fontMedium, f6, l6, color, styles ]),
+  subtitleOne: flatten([ fontRegular, f7, l6, color, styles ]),
+  subtitleTwo: flatten([ fontMedium, f8, l7, color, styles ]),
+  bodyOne: flatten([ fontRegular, f7, l3, color, styles ]),
+  bodyTwo: flatten([ fontRegular, f8, l5, color, styles ]),
+  button: flatten([ fontMedium, f8, l2, uppercase, color, styles ]),
+  caption: flatten([ fontRegular, f9, l4, color, styles ]),
+  overline: flatten([ fontRegular, f10, l1, uppercase, color, styles ])
 })
 
 export default typography

@@ -31,7 +31,7 @@ class CreateAlbumScreen extends WithInputs {
 
   render () {
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <Text h5 style={{ width: '100%', marginBottom: layout.s2 }}>Name your album</Text>
         <TextInput
           placeholder='Album Name'

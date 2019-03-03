@@ -35,7 +35,7 @@ class CreateGroup extends WithInputs {
   render () {
     const { groupName, authUsers } = this.state
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <Text h5 style={{ width: '100%', marginBottom: layout.s2 }}>Name your group</Text>
         <TextInput
           placeholder='Group Name'

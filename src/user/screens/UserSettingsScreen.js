@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { SafeAreaView, View, StyleSheet } from 'react-native'
+import { View } from 'react-native'
 import { getAuthUser } from '@auth/AuthService'
 import { Avatar, ListItem } from 'react-native-elements'
 import { colors } from '@global/styles'
 import * as routes from '@navigation/routes'
 import { LogOutButton } from '@auth/components'
-import { Text } from '@global/components'
+import { ScreenBase, Text } from '@global/components'
 
 export default class UserSettingsScreen extends Component {
   state = { phoneNumber: '' }
@@ -23,7 +23,7 @@ export default class UserSettingsScreen extends Component {
     const { phoneNumber } = this.state
     const { navigation: { navigate } } = this.props
     return (
-      <SafeAreaView style={styles.container}>
+      <ScreenBase>
         <View style={{ alignItems: 'center', paddingVertical: 32 }}>
           <Avatar
             rounded
@@ -58,14 +58,7 @@ export default class UserSettingsScreen extends Component {
           </View>
           <LogOutButton navigation={this.props.navigation} />
         </View>
-      </SafeAreaView>
+      </ScreenBase>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.primaryBackground
-  }
-})

@@ -1,13 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { TouchableOpacity, StyleSheet } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, ViewPropTypes } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { colors, layout } from '@global/styles'
 import Text from '@global/components/Text'
 
 const Button = ({ children, onPress, containerStyle }) => (
-  <TouchableOpacity onPress={onPress} style={[ styles.container, styles.button, containerStyle ]}>
-    <Text button color={colors.primaryBackground}>{children.toUpperCase()}</Text>
+  <TouchableOpacity onPress={onPress} style={styles.buttonTouchable}>
+    <View style={[ styles.container, styles.button, containerStyle ]}>
+      <Text button color={colors.primaryBackground}>{children.toUpperCase()}</Text>
+    </View>
   </TouchableOpacity>
 )
 
@@ -24,6 +26,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary
   },
+  buttonTouchable: {
+    width: '100%'
+  },
   button: {
     alignItems: 'center',
     padding: layout.s3,
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
 Button.propTypes = {
   children: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
-  containerStyle: PropTypes.objectOf(PropTypes.string)
+  containerStyle: ViewPropTypes.style
 }
 
 Button.defaultProps = {

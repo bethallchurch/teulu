@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { SafeAreaView, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import { ActionButton } from '@global/components'
+import { ScreenBase, ActionButton } from '@global/components'
 import { GroupAlbumList as AlbumList } from '@album/components/AlbumList'
 import { CREATE_ALBUM } from '@navigation/routes'
-import { colors } from '@global/styles'
+import { colors, layout } from '@global/styles'
 
 class GroupScreen extends Component {
   get groupId () {
@@ -17,21 +16,14 @@ class GroupScreen extends Component {
 
   render () {
     return (
-      <SafeAreaView style={{ ...styles.container, backgroundColor: colors.primaryBackground }}>
+      <ScreenBase>
         <AlbumList groupId={this.groupId} navigation={this.props.navigation} />
         <ActionButton onPress={this.navigateToCreateAlbum}>
-          <MaterialIcons name='add-to-photos' color='#fff' size={32} />
+          <MaterialIcons name='add-to-photos' color={colors.primaryBackground} size={layout.s5} />
         </ActionButton>
-      </SafeAreaView>
+      </ScreenBase>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: 'relative'
-  }
-})
 
 export default GroupScreen

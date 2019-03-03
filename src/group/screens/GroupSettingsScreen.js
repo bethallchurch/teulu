@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
 import { graphqlOperation } from 'aws-amplify'
-import { SafeAreaView, View, FlatList, Modal, TouchableOpacity } from 'react-native'
+import { View, FlatList, StyleSheet } from 'react-native'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as queries from '@graphql/queries'
 import { listUsers } from '@user/UserService'
-import { Text, Button, Badge, Section, Error, Loading } from '@global/components'
-import SelectContactList from '@contact/components/SelectContactList'
+import { ScreenBase, Text, Button, Badge, Section, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
+import AddUsersModal from '@group/components/AddUsersModal'
 
 // TODO: Top same as AlbumSettingsScreen
 class GroupSettingsScreen extends Component {
   state = { modalVisible: false, authUsers: [], newAuthUsers: [] }
 
+  // TODO: move to service
   async componentDidMount () {
     const { group } = this.props
     const filter = { or: group.authUsers.map(id => ({ id: { eq: id } })) }
@@ -53,32 +54,24 @@ class GroupSettingsScreen extends Component {
     const { group } = this.props
     const { authUsers, newAuthUsers, modalVisible } = this.state
     return (
-      <SafeAreaView style={{ backgroundColor: colors.primaryBackground, flex: 1 }}>
-        <View style={{ width: '100%', height: 200, backgroundColor: colors.textDefault, justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-          <MaterialIcons name='image' color={colors.primaryBackground} size={48} />
-          <Text h4 color={colors.primaryBackground} style={{ position: 'absolute', bottom: 16, left: 16, marginBottom: 0 }}>{group.name}</Text>
+      <ScreenBase style={styles.container}>
+        <View style={styles.imageContainer}>
+          <MaterialIcons name='image' color={colors.primaryBackground} size={layout.s6} />
+          <Text h4 color={colors.primaryBackground} style={styles.imageCaption}>{group.name}</Text>
         </View>
         <Section
           title='Members'
           listComponent={<FlatList keyExtractor={({ id }) => id} data={authUsers} renderItem={this.renderItem} />}
         />
-        <Button containerStyle={{ marginTop: 16, marginHorizontal: 16, width: 'auto' }} onPress={this.showModal}>Add Members</Button>
-        <Modal transparent visible={modalVisible} onRequestClose={this.hideModal}>
-          <TouchableOpacity style={{ flex: 1 }} onPress={this.hideModal}>
-            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.4)' }}>
-              <View style={{ padding: 16, backgroundColor: colors.primaryBackground, margin: 16 }}>
-                <Text h5 style={{ marginBottom: layout.s2 }}>Add New Members</Text>
-                <SelectContactList
-                  exclude={authUsers.map(({ id }) => id)}
-                  selectedContacts={newAuthUsers}
-                  onPressContact={this.toggleAuthUser}
-                />
-                <Text subtitleTwo>Coming Soon!</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </Modal>
-      </SafeAreaView>
+        <Button containerStyle={styles.buttonContainer} onPress={this.showModal}>Add Members</Button>
+        <AddUsersModal
+          visible={modalVisible}
+          hide={this.hideModal}
+          toggleUser={this.toggleAuthUser}
+          users={authUsers}
+          newUsers={newAuthUsers}
+        />
+      </ScreenBase>
     )
   }
 }
@@ -94,5 +87,30 @@ const ConnectedGroupSettingsScreen = props => (
     }}
   </Connect>
 )
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'flex-start'
+  },
+  imageContainer: {
+    width: '100%',
+    height: 200,
+    backgroundColor: colors.textDefault,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative'
+  },
+  imageCaption: {
+    position: 'absolute',
+    bottom: layout.s3,
+    left: layout.s3,
+    marginBottom: 0
+  },
+  buttonContainer: {
+    marginTop: layout.s3,
+    marginHorizontal: layout.s3,
+    width: 'auto'
+  }
+})
 
 export default ConnectedGroupSettingsScreen

@@ -84,7 +84,7 @@ export default class ForgotPasswordScreen extends WithPhoneInput {
       repeatNewPassword
     } = this.state
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <Title>Forgot Password?</Title>
         <Text bodyOne style={{ marginBottom: 16 }}>We'll text you a verification code that you can use to reset it.</Text>
         <PhoneInput

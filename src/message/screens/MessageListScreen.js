@@ -1,5 +1,4 @@
 import React from 'react'
-import { SafeAreaView, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, StatusBar } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
 import { getGroup as customGetGroup } from '@mygraphql/queries'
 import * as mutations from '@graphql/mutations'
@@ -7,8 +6,7 @@ import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { GiftedChat } from 'react-native-gifted-chat'
 import { UserContext } from '@global/context'
-import { Error, Loading } from '@global/components'
-import { colors } from '@global/styles'
+import { ScreenBase, Error, Loading } from '@global/components'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import Bubble from '@message/components/Bubble'
 import MessageText from '@message/components/MessageText'
@@ -52,21 +50,16 @@ class MessagesScreen extends React.Component {
 
   render () {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.primaryBackground }}>
-        <StatusBar />
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior='padding' enabled keyboardVerticalOffset={130}>
-          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={Keyboard.dismiss}>
-            <GiftedChat
-              messages={this.messages()}
-              onSend={this.sendMessage}
-              user={{ _id: this.props.userId }}
-              renderMessageImage={this.renderMessageImage}
-              renderBubble={props => <Bubble {...props} />}
-              renderMessageText={props => <MessageText {...props} />}
-            />
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+      <ScreenBase avoidKeyboard keyboardAvoidingViewProps={{ keyboardVerticalOffset: 130 }}>
+        <GiftedChat
+          messages={this.messages()}
+          onSend={this.sendMessage}
+          user={{ _id: this.props.userId }}
+          renderMessageImage={this.renderMessageImage}
+          renderBubble={props => <Bubble {...props} />}
+          renderMessageText={props => <MessageText {...props} />}
+        />
+      </ScreenBase>
     )
   }
 }

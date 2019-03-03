@@ -27,7 +27,7 @@ export default class ResetPasswordScreen extends WithInputs {
   render () {
     const { oldPassword, newPassword, repeatNewPassword } = this.state
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <TextInput
           placeholder='Old Password'
           value={oldPassword}

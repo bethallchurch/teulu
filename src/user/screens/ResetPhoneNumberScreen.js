@@ -73,7 +73,7 @@ export default class ResetPhoneNumberScreen extends WithPhoneInput {
       verificationCode
     } = this.state
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}

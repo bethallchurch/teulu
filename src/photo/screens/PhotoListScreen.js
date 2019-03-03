@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, SafeAreaView, StatusBar } from 'react-native'
+import { View, StyleSheet } from 'react-native'
+import { ScreenBase } from '@global/components'
 import PhotoUpload from '@photo/components/PhotoUpload'
 import PhotoList from '@photo/components/PhotoList'
-import { colors } from '@global/styles'
 
 class PhotoListScreen extends Component {
   get albumId () {
@@ -11,15 +11,21 @@ class PhotoListScreen extends Component {
 
   render () {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: colors.primaryBackground }}>
-        <StatusBar />
-        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+      <ScreenBase>
+        <View style={styles.container}>
           <PhotoList albumId={this.albumId} {...this.props} />
           <PhotoUpload {...this.props} />
         </View>
-      </SafeAreaView>
+      </ScreenBase>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between'
+  }
+})
 
 export default PhotoListScreen

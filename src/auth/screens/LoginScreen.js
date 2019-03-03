@@ -43,7 +43,7 @@ export default class LoginScreen extends WithPhoneInput {
     const { navigation: { navigate } } = this.props
     const { dialCode, modalVisible, nationalNumber, password } = this.state
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <Title>Log In</Title>
         <PhoneInput
           showModal={this.showModal}

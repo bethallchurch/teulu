@@ -6,7 +6,7 @@ import { UserContext } from '@global/context'
 import { Text, FullWidthButton } from '@global/components'
 import { getAlbum } from '@album/AlbumService'
 import { MaterialIcons, Feather } from '@expo/vector-icons'
-import { colors, layout, helpers } from '@global/styles'
+import { colors, layout } from '@global/styles'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
@@ -83,7 +83,7 @@ class PhotoUpload extends Component {
         />
         <Modal transparent visible={modalVisible} onRequestClose={this.hideModal}>
           <TouchableOpacity style={{ flex: 1 }} onPress={this.hideModal}>
-            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: helpers.fade('#000000', 0.9) }}>
+            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.overlayBackground }}>
               {pickedImage && (
                 <>
                   <Image

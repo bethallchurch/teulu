@@ -8,7 +8,7 @@ import { Connect } from 'aws-amplify-react-native'
 import { Image } from 'react-native-elements'
 import { ALBUM } from '@navigation/routes'
 import { Text, Error, Loading } from '@global/components'
-import { colors, layout, helpers } from '@global/styles'
+import { colors, layout } from '@global/styles'
 
 const PADDING = 16
 const GUTTER = 16
@@ -89,7 +89,7 @@ const AlbumItem = ({ onPress, width, margin, name }) => {
           PlaceholderContent={<ActivityIndicator color={colors.primary} />}
         />
         <LinearGradient
-          colors={['transparent', helpers.fade('#000000', 0.4)]}
+          colors={['transparent', colors.overlayBackground]}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', justifyContent: 'flex-end' }}
         >
           <Text subtitleTwo color={colors.primaryBackground} style={{ padding: layout.s2, width: '100%' }}>{name}</Text>

@@ -97,7 +97,7 @@ class RegisterScreen extends WithPhoneInput {
       codeRequested
     } = this.state
     return (
-      <ScreenBase>
+      <ScreenBase avoidKeyboard contentContainer>
         <Title>Register</Title>
         <PhoneInput
           showModal={this.showModal}
