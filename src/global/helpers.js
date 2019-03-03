@@ -7,6 +7,8 @@ export const intersection = (a, b) => {
   return [ ...new Set(a) ].filter(x => setB.has(x))
 }
 
+export const difference = (a, b) => a.filter(x => !b.includes(x))
+
 export const unique = arr => [ ...new Set(arr) ]
 
 export const uniqueBy = (arr, key) => {
@@ -36,5 +38,37 @@ export const chunk = (x, size) => {
   }
   return chunked
 }
+
+export const arrayToObject = (arr, options = {}) => {
+  const { setKey = item => item, setValue = () => null } = options
+  return arr.reduce((obj, item) => {
+    obj[setKey(item)] = setValue(item)
+    return obj
+  }, {})
+}
+
+export const objectFind = (obj, options = {}) => {
+  const { callback = ([ _, value ]) => value } = options
+  return (
+    arrayToObject(Object.entries(obj).find(callback), {
+      setKey: ([ key ]) => key,
+      setValue: ([ _, value ]) => value
+    })
+  )
+}
+
+export const objectFilter = (obj, options = {}) => {
+  const { callback = ([ _, value ]) => value } = options
+  return (
+    arrayToObject(Object.entries(obj).filter(callback), {
+      setKey: ([ key ]) => key,
+      setValue: ([ _, value ]) => value
+    })
+  )
+}
+
+export const withoutKeys = (obj, keys) => objectFilter(obj, {
+  callback: ([ key ]) => !keys.includes(key)
+})
 
 export const createQuery = (query, input) => API.graphql(graphqlOperation(query, input))

@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Alert } from 'react-native'
-import { ListItem } from 'react-native-elements'
 import { AntDesign } from '@expo/vector-icons'
 import { AUTH_LOADING } from '@navigation/routes'
 import { signOut } from '@auth/AuthService'
-import { colors, w4 } from '@global/styles'
-import { logOutButtonStyle } from '@auth/styles'
+import { colors, layout } from '@global/styles'
+import { FullWidthButton } from '@global/components'
 
 export default class LogOutButton extends Component {
   logOut = async () => {
@@ -21,15 +20,13 @@ export default class LogOutButton extends Component {
 
   render () {
     return (
-      <ListItem
+      <FullWidthButton
         title='Log Out'
         onPress={this.logOut}
-        containerStyle={logOutButtonStyle.container}
-        titleStyle={logOutButtonStyle.title}
         rightIcon={<RightIcon />}
       />
     )
   }
 }
 
-const RightIcon = () => <AntDesign name='logout' size={w4.width} color={colors.primaryBackground} />
+const RightIcon = () => <AntDesign name='logout' size={layout.s4} color={colors.primaryBackground} />

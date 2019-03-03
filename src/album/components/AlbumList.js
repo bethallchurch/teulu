@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native'
 import { graphqlOperation } from 'aws-amplify'
 import { LinearGradient } from 'expo'
 import * as queries from '@graphql/queries'
@@ -7,9 +7,8 @@ import * as subscriptions from '@graphql/subscriptions'
 import { Connect } from 'aws-amplify-react-native'
 import { Image } from 'react-native-elements'
 import { ALBUM } from '@navigation/routes'
-import Loading from '@global/components/Loading'
-import Error from '@global/components/Error'
-import { copyStyle, colors, f5, s2, fade } from '@global/styles'
+import { Text, Error, Loading } from '@global/components'
+import { colors, layout, helpers } from '@global/styles'
 
 const PADDING = 16
 const GUTTER = 16
@@ -90,10 +89,10 @@ const AlbumItem = ({ onPress, width, margin, name }) => {
           PlaceholderContent={<ActivityIndicator color={colors.primary} />}
         />
         <LinearGradient
-          colors={['transparent', fade('#000000', 0.4)]}
+          colors={['transparent', helpers.fade('#000000', 0.4)]}
           style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', justifyContent: 'flex-end' }}
         >
-          <Text style={{ padding: s2, ...copyStyle.bold, ...f5, color: colors.primaryBackground, width: '100%' }}>{name}</Text>
+          <Text subtitleTwo color={colors.primaryBackground} style={{ padding: layout.s2, width: '100%' }}>{name}</Text>
         </LinearGradient>
       </View>
     </TouchableOpacity>

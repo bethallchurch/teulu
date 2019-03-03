@@ -9,7 +9,7 @@ import {
   Keyboard
 } from 'react-native'
 
-const MinimalScreenBase = ({ children }) => (
+const ScreenBase = ({ children }) => (
   <SafeAreaView style={styles.container}>
     <StatusBar />
     <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default MinimalScreenBase
+export default ScreenBase

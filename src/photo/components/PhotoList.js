@@ -5,8 +5,7 @@ import { graphqlOperation } from 'aws-amplify'
 import * as subscriptions from '@graphql/subscriptions'
 import { getAlbum as customGetAlbum } from '@mygraphql/queries'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
-import Loading from '@global/components/Loading'
-import Error from '@global/components/Error'
+import { Error, Loading } from '@global/components'
 
 const PhotoList = ({ photos }) => {
   const photoWidth = Dimensions.get('window').width / 2

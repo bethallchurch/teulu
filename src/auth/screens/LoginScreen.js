@@ -1,17 +1,20 @@
 import React from 'react'
-import { Text, Alert } from 'react-native'
+import { Alert } from 'react-native'
 import { signIn } from '@auth/AuthService'
-import Link, { LinkContainer } from '@global/components/Link'
-import Button from '@global/components/Button'
-import TextInput from '@global/components/TextInput'
-import PhoneInput from '@global/components/PhoneInput'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
+import {
+  Link,
+  LinkContainer,
+  Button,
+  TextInput,
+  PhoneInput,
+  ScreenBase,
+  WithPhoneInput,
+  defaultDialCode
+} from '@global/components'
 import { AUTH_LOADING, FORGOT_PASSWORD } from '@navigation/routes'
+import { Title } from '@auth/components'
 
-import { titleStyle } from '@global/styles'
-
-export default class LoginScreen extends ComponentWithPhoneInput {
+export default class LoginScreen extends WithPhoneInput {
   constructor (props) {
     super(props)
     const nationalNumber = props.navigation.getParam('nationalNumber') || ''
@@ -40,8 +43,8 @@ export default class LoginScreen extends ComponentWithPhoneInput {
     const { navigation: { navigate } } = this.props
     const { dialCode, modalVisible, nationalNumber, password } = this.state
     return (
-      <MinimalScreenBase>
-        <Text style={titleStyle.style}>Log In</Text>
+      <ScreenBase>
+        <Title>Log In</Title>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -66,7 +69,7 @@ export default class LoginScreen extends ComponentWithPhoneInput {
         <LinkContainer>
           <Link onPress={() => navigate(FORGOT_PASSWORD, { dialCode, nationalNumber })}>Forgot password?</Link>
         </LinkContainer>
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }

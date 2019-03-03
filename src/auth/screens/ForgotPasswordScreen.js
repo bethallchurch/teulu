@@ -1,17 +1,21 @@
 import React from 'react'
-import { StyleSheet, Text, Alert } from 'react-native'
+import { Alert } from 'react-native'
 import { LOGIN } from '@navigation/routes'
 import { forgotPassword, forgotPasswordSubmit } from '@auth/AuthService'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
-import Link, { LinkContainer } from '@global/components/Link'
-import TextInput from '@global/components/TextInput'
-import PhoneInput from '@global/components/PhoneInput'
-import Button from '@global/components/Button'
+import {
+  ScreenBase,
+  WithPhoneInput,
+  defaultDialCode,
+  Link,
+  LinkContainer,
+  PhoneInput,
+  Button,
+  Text,
+  TextInput
+} from '@global/components'
+import { Title } from '@auth/components'
 
-import { titleStyle } from '@global/styles'
-
-export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
+export default class ForgotPasswordScreen extends WithPhoneInput {
   constructor (props) {
     super(props)
     const nationalNumber = props.navigation.getParam('nationalNumber') || ''
@@ -80,9 +84,9 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
       repeatNewPassword
     } = this.state
     return (
-      <MinimalScreenBase>
-        <Text style={titleStyle.style}>Forgot Password?</Text>
-        <Text style={styles.text}>We'll text you a verification code that you can use to reset it.</Text>
+      <ScreenBase>
+        <Title>Forgot Password?</Title>
+        <Text bodyOne style={{ marginBottom: 16 }}>We'll text you a verification code that you can use to reset it.</Text>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -139,16 +143,7 @@ export default class ForgotPasswordScreen extends ComponentWithPhoneInput {
             <Link onPress={() => this.setState({ codeRequested: true })}>Already have a code?</Link>
           )}
         </LinkContainer>
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  text: {
-    fontFamily: 'OpenSans-Regular',
-    fontSize: 16,
-    color: '#555',
-    marginBottom: 16
-  }
-})

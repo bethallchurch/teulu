@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { textInputStyle, colors } from '@global/styles'
+import { StyleSheet } from 'react-native'
 import { Input } from 'react-native-elements'
+import { colors, layout, typography } from '@global/styles'
 
 export default class TextInput extends Component {
   render () {
@@ -15,9 +16,9 @@ export default class TextInput extends Component {
     return (
       <Input
         placeholder={placeholder}
-        inputStyle={{ ...textInputStyle.input, ...inputStyle }}
-        inputContainerStyle={{ ...textInputStyle.inputInputContainer, ...inputContainerStyle }}
-        containerStyle={{ ...textInputStyle.inputContainer, ...containerStyle }}
+        inputStyle={[ styles.input, inputStyle ]}
+        inputContainerStyle={[ styles.inputInputContainer, inputContainerStyle ]}
+        containerStyle={[ styles.inputContainer, containerStyle ]}
         ref={refName}
         textInputRef={refName}
         placeholderTextColor={colors.textLight}
@@ -26,3 +27,14 @@ export default class TextInput extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  input: typography.bodyOne,
+  inputContainer: {
+    paddingHorizontal: 0,
+    marginBottom: layout.s3
+  },
+  inputInputContainer: {
+    borderBottomColor: colors.textLight
+  }
+})

@@ -2,12 +2,12 @@ import React from 'react'
 import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import * as routes from '@navigation/routes'
 import ForgotPasswordScreen from '@auth/screens/ForgotPasswordScreen'
-import Loading from '@auth/screens/LoadingScreen'
+import LoadingScreen from '@auth/screens/LoadingScreen'
 import LoginScreen from '@auth/screens/LoginScreen'
 import RegisterScreen from '@auth/screens/RegisterScreen'
 import TabBarIcon from '@navigation/components/TabBarIcon'
 import MainApp from '@navigation/Navigator'
-import { tabBarStyle, tabBarLabelStyle } from '@navigation/styles'
+import { bottomTabNavigatorStyle } from '@navigation/styles'
 
 const AuthTabs = createBottomTabNavigator({
   [routes.LOGIN]: {
@@ -22,7 +22,7 @@ const AuthTabs = createBottomTabNavigator({
       tabBarIcon: ({ focused }) => <TabBarIcon name='adduser' focused={focused} />
     }
   }
-}, { tabBarOptions: { style: tabBarStyle.style, labelStyle: tabBarLabelStyle.style }
+}, { tabBarOptions: { style: bottomTabNavigatorStyle.container, labelStyle: bottomTabNavigatorStyle.label }
 })
 
 const AuthStack = createStackNavigator({
@@ -33,7 +33,7 @@ const AuthStack = createStackNavigator({
 })
 
 export default createSwitchNavigator({
-  [routes.AUTH_LOADING]: Loading,
+  [routes.AUTH_LOADING]: LoadingScreen,
   [routes.AUTH]: AuthStack,
   [routes.APP]: MainApp
 })

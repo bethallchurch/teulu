@@ -1,7 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { headerTitleStyle } from '@navigation/styles'
 import { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
 import GroupStack, { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
@@ -10,15 +9,14 @@ import GroupListScreen from '@group/screens/GroupListScreen'
 import PhotoListScreen from '@photo/screens/PhotoListScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
-import { colors, w4 } from '@global/styles'
+import { colors, layout } from '@global/styles'
+import { stackNavigatorStyle } from '@navigation/styles'
 
 const MainAppStack = createStackNavigator({
   [routes.HOME]: {
     screen: HomeScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
-      headerTintColor: colors.textDefault,
-      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
           iconName='person-outline'
@@ -30,20 +28,16 @@ const MainAppStack = createStackNavigator({
   [routes.GROUP_LIST]: {
     screen: GroupListScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'Groups',
-      headerTintColor: colors.textDefault,
-      headerTitleStyle: headerTitleStyle.style
+      title: 'Groups'
     })
   },
   [routes.GROUP]: {
     screen: GroupStack,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('groupName'),
-      headerTintColor: colors.textDefault,
-      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
-          icon={<MaterialCommunityIcons name='dots-vertical' size={w4.width} color={colors.textDefault} />}
+          icon={<MaterialCommunityIcons name='dots-vertical' size={layout.s4} color={colors.textDefault} />}
           onPress={() => navigation.navigate(routes.GROUP_SETTINGS, {
             groupId: navigation.getParam('groupId')
           })}
@@ -55,11 +49,9 @@ const MainAppStack = createStackNavigator({
     screen: PhotoListScreen,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('albumName'),
-      headerTintColor: colors.textDefault,
-      headerTitleStyle: headerTitleStyle.style,
       headerRight: (
         <HeaderIcon
-          icon={<MaterialCommunityIcons name='dots-vertical' size={w4.width} color={colors.textDefault} />}
+          icon={<MaterialCommunityIcons name='dots-vertical' size={layout.s4} color={colors.textDefault} />}
           onPress={() => navigation.navigate(routes.ALBUM_SETTINGS, {
             albumId: navigation.getParam('albumId')
           })}
@@ -67,6 +59,8 @@ const MainAppStack = createStackNavigator({
       )
     })
   }
+}, {
+  defaultNavigationOptions: stackNavigatorStyle
 })
 
 const Navigator = createStackNavigator({

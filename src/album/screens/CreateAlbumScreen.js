@@ -1,15 +1,11 @@
 import React from 'react'
-import { Text } from 'react-native'
 import { getGroup } from '@group/GroupService'
 import { createAlbum } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
-import ComponentWithInputs from '@global/components/ComponentWithInputs'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import TextInput from '@global/components/TextInput'
-import Button from '@global/components/Button'
-import { subtitleStyle } from '@global/styles'
+import { WithInputs, ScreenBase, TextInput, Button, Text } from '@global/components'
+import { layout } from '@global/styles'
 
-class CreateAlbumScreen extends ComponentWithInputs {
+class CreateAlbumScreen extends WithInputs {
   state = { albumName: '', groupId: '', authUsers: [] }
 
   async componentDidMount () {
@@ -35,8 +31,8 @@ class CreateAlbumScreen extends ComponentWithInputs {
 
   render () {
     return (
-      <MinimalScreenBase>
-        <Text style={subtitleStyle.style}>Name your album</Text>
+      <ScreenBase>
+        <Text h5 style={{ width: '100%', marginBottom: layout.s2 }}>Name your album</Text>
         <TextInput
           placeholder='Album Name'
           value={this.state.albumName}
@@ -45,7 +41,7 @@ class CreateAlbumScreen extends ComponentWithInputs {
           onChangeText={value => this.onChangeText('albumName', value)}
         />
         <Button onPress={this.createAlbum}>Create Album</Button>
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }

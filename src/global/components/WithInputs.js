@@ -1,6 +1,6 @@
 import { Component } from 'react'
 
-export default class ComponentWithInputs extends Component {
+export default class WithInputs extends Component {
   onChangeText = (key, value) => {
     this.setState({ [key]: value })
   }

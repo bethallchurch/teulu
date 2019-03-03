@@ -2,7 +2,6 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   SafeAreaView,
@@ -10,6 +9,7 @@ import {
   FlatList
 } from 'react-native'
 import { Icon } from 'react-native-elements'
+import Text from '@global/components/Text'
 import { COUNTRY_CODES } from '@global/constants'
 
 const InternationalPhoneDropdown = ({ visible, getCountry, hide }) => (
@@ -44,8 +44,8 @@ const ListItem = ({ item, getCountry }) => {
     <TouchableWithoutFeedback onPress={() => getCountry(code)}>
       <View style={styles.countryStyle}>
         <View style={{ flexDirection: 'row', paddingVertical: 8 }}>
-          <Text style={styles.text}>{name}</Text>
-          <Text style={styles.dialCodeStyle}>{dialCode}</Text>
+          <Text bodyOne>{name}</Text>
+          <Text bodyOne color='#aaa' style={styles.dialCodeStyle}>{dialCode}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -59,15 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'column'
   },
-  text: {
-    fontFamily: 'OpenSans-Regular',
-    fontSize: 16,
-    color: '#555'
-  },
   dialCodeStyle: {
-    fontFamily: 'OpenSans-Regular',
-    fontSize: 16,
-    color: '#aaa',
     marginLeft: 8
   },
   countryStyle: {

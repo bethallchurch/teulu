@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
 import { graphqlOperation } from 'aws-amplify'
-import { SafeAreaView, Text, View, StyleSheet, FlatList, Modal, TouchableOpacity } from 'react-native'
+import { SafeAreaView, View, FlatList, Modal, TouchableOpacity } from 'react-native'
 import { Connect } from 'aws-amplify-react-native'
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import * as queries from '@graphql/queries'
 import { listUsers } from '@user/UserService'
-import Section from '@global/components/Section'
-import Loading from '@global/components/Loading'
-import Error from '@global/components/Error'
-import Button from '@global/components/Button'
+import { Text, Button, Badge, Section, Error, Loading } from '@global/components'
 import SelectContactList from '@contact/components/SelectContactList'
-import { colors, subtitleStyle, copyStyle, fBold } from '@global/styles'
+import { colors, layout } from '@global/styles'
 
+// TODO: Top same as AlbumSettingsScreen
 class GroupSettingsScreen extends Component {
   state = { modalVisible: false, authUsers: [], newAuthUsers: [] }
 
@@ -42,9 +40,11 @@ class GroupSettingsScreen extends Component {
   renderItem = ({ item: { id, phoneNumber, isOwner }, index }) => (
     <ListItem
       key={id}
-      title={phoneNumber}
-      titleStyle={copyStyle.regular}
-      badge={isOwner ? { value: 'owner', textStyle: { color: colors.primary, ...fBold, fontSize: 12, lineHeight: 15 }, badgeStyle: { borderRadius: 4, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.primary, backgroundColor: colors.secondaryBackground }, badgeContainerStyle: { padding: 20 } } : null}
+      title={<Text subtitleOne>{phoneNumber}</Text>}
+      badge={isOwner ? {
+        value: <Badge>owner</Badge>,
+        badgeStyle: { backgroundColor: colors.secondaryBackground }
+      } : null}
       topDivider={index !== 0}
     />
   )
@@ -56,24 +56,24 @@ class GroupSettingsScreen extends Component {
       <SafeAreaView style={{ backgroundColor: colors.primaryBackground, flex: 1 }}>
         <View style={{ width: '100%', height: 200, backgroundColor: colors.textDefault, justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           <MaterialIcons name='image' color={colors.primaryBackground} size={48} />
-          <Text style={{ ...subtitleStyle.style, position: 'absolute', bottom: 16, left: 16, color: colors.primaryBackground, marginBottom: 0 }}>{group.name}</Text>
+          <Text h4 color={colors.primaryBackground} style={{ position: 'absolute', bottom: 16, left: 16, marginBottom: 0 }}>{group.name}</Text>
         </View>
         <Section
           title='Members'
           listComponent={<FlatList keyExtractor={({ id }) => id} data={authUsers} renderItem={this.renderItem} />}
         />
-        <Button containerStyle={{ marginHorizontal: 16, width: 'auto' }} onPress={this.showModal}>Add Members</Button>
+        <Button containerStyle={{ marginTop: 16, marginHorizontal: 16, width: 'auto' }} onPress={this.showModal}>Add Members</Button>
         <Modal transparent visible={modalVisible} onRequestClose={this.hideModal}>
           <TouchableOpacity style={{ flex: 1 }} onPress={this.hideModal}>
             <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(0, 0, 0, 0.4)' }}>
               <View style={{ padding: 16, backgroundColor: colors.primaryBackground, margin: 16 }}>
-                <Text style={subtitleStyle.style}>Add New Members</Text>
+                <Text h5 style={{ marginBottom: layout.s2 }}>Add New Members</Text>
                 <SelectContactList
                   exclude={authUsers.map(({ id }) => id)}
                   selectedContacts={newAuthUsers}
                   onPressContact={this.toggleAuthUser}
                 />
-                <Text style={copyStyle.regular}>Coming Soon!</Text>
+                <Text subtitleTwo>Coming Soon!</Text>
               </View>
             </View>
           </TouchableOpacity>

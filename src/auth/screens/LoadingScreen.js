@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { APP, AUTH } from '@navigation/routes'
 import { getAuthUser } from '@auth/AuthService'
-import Loading from '@global/components/Loading'
+import { Loading } from '@global/components'
 
 export default class AuthLoading extends Component {
   state = { userToken: null }

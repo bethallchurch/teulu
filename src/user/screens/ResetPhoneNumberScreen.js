@@ -3,13 +3,16 @@ import { Alert } from 'react-native'
 import { ACCOUNT } from '@navigation/routes'
 import { getAuthUser, updateUserAttributes, verifyCurrentUserAttributeSubmit } from '@auth/AuthService'
 import { updateUser } from '@user/UserService'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
-import PhoneInput from '@global/components/PhoneInput'
-import TextInput from '@global/components/TextInput'
-import Button from '@global/components/Button'
+import {
+  ScreenBase,
+  WithPhoneInput,
+  defaultDialCode,
+  PhoneInput,
+  TextInput,
+  Button
+} from '@global/components'
 
-export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
+export default class ResetPhoneNumberScreen extends WithPhoneInput {
   constructor (props) {
     super(props)
     this.state = {
@@ -70,7 +73,7 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
       verificationCode
     } = this.state
     return (
-      <MinimalScreenBase>
+      <ScreenBase>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -98,7 +101,7 @@ export default class ResetPhoneNumberScreen extends ComponentWithPhoneInput {
             <Button onPress={this.resetPhoneNumber}>Confirm Update</Button>
           </>
         )}
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }

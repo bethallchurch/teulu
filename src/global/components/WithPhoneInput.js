@@ -1,9 +1,9 @@
 import { COUNTRY_CODES } from '@global/constants'
-import ComponentWithInputs from '@global/components/ComponentWithInputs'
+import WithInputs from '@global/components/WithInputs'
 
 export const defaultDialCode = COUNTRY_CODES.find(({ code }) => code === 'GB').dialCode
 
-export default class ComponentWithPhoneInput extends ComponentWithInputs {
+export default class WithPhoneInput extends WithInputs {
   get phoneNumber () {
     const { dialCode, nationalNumber } = this.state
     return `${dialCode}${nationalNumber}`

@@ -8,9 +8,8 @@ import { ListItem } from 'react-native-elements'
 import { GROUP } from '@navigation/routes'
 import { uniqueBy } from '@global/helpers'
 import { UserContext } from '@global/context'
-import Loading from '@global/components/Loading'
-import Error from '@global/components/Error'
-import { colors, copyStyle } from '@global/styles'
+import { Error, Loading, Text } from '@global/components'
+import { colors } from '@global/styles'
 
 class GroupList extends Component {
   navigateToGroup = (id, name) => this.props.navigation.navigate(GROUP, {
@@ -21,8 +20,7 @@ class GroupList extends Component {
   renderItem = ({ item: { id, name } }) => {
     return (
       <ListItem
-        title={name}
-        titleStyle={copyStyle.regular}
+        title={<Text subtitleOne>{name}</Text>}
         onPress={() => this.navigateToGroup(id, name)}
         style={{ marginHorizontal: 16, marginVertical: 8 }}
         contentContainerStyle={{ padding: 8 }}
@@ -35,8 +33,7 @@ class GroupList extends Component {
   renderItemCompact = ({ item: { id, name }, index }) => {
     return (
       <ListItem
-        title={name}
-        titleStyle={copyStyle.regular}
+        title={<Text subtitleOne>{name}</Text>}
         containerStyle={{ paddingVertical: 8 }}
         onPress={() => this.navigateToGroup(id, name)}
         leftAvatar={{ rounded: true, title: name[0], overlayContainerStyle: { backgroundColor: colors.textDefault } }}

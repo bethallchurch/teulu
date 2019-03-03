@@ -5,9 +5,9 @@ import { Font } from 'expo'
 import config from './aws-exports'
 import AuthStack from '@auth/AuthNavigation'
 import { getOrCreateUser } from '@user/UserService'
-import { fDefault, fBold, fItalic } from '@global/styles'
+import { fontRegular, fontLight, fontMedium } from '@global/styles/typography'
 import { UserContext } from '@global/context'
-import Loading from '@global/components/Loading'
+import { Loading } from '@global/components'
 
 Amplify.configure(config)
 
@@ -23,9 +23,9 @@ class App extends Component {
   async componentDidMount () {
     this.setUser()
     await Font.loadAsync({
-      [fDefault.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Regular.ttf'),
-      [fBold.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Bold.ttf'),
-      [fItalic.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Italic.ttf')
+      [fontRegular.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Regular.ttf'),
+      [fontMedium.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-SemiBold.ttf'),
+      [fontLight.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Light.ttf')
     })
     this.setState({ fontLoaded: true })
   }
@@ -46,12 +46,14 @@ class App extends Component {
     return fontLoaded && user ? (
       <UserContext.Provider value={user}>
         <AppNavigator
-          persistenceKey='persistenceKey004'
+
           renderLoadingExperimental={() => <Loading />}
         />
       </UserContext.Provider>
     ) : <Loading />
   }
 }
+
+// persistenceKey='persistenceKey004'
 
 export default App

@@ -1,35 +1,24 @@
 import { StyleSheet } from 'react-native'
-import { colors, fBold, fDefault, f3, f6, mt1, pb2, mr2, pa1, br100 } from '@global/styles'
+import { colors, layout, typography } from '@global/styles'
 
-export const headerTitleStyle = StyleSheet.create({
-  style: {
-    color: colors.textDefault,
-    ...fBold,
-    ...f3
-  }
-})
+const { create, flatten } = StyleSheet
 
-export const tabBarStyle = StyleSheet.create({
-  style: {
+export const stackNavigatorStyle = {
+  headerStyle: {
+    backgroundColor: '#fff'
+  },
+  headerTintColor: typography.h6.color,
+  headerTitleStyle: flatten(typography.h6, { fontWeight: '500' })
+}
+
+export const bottomTabNavigatorStyle = create({
+  container: {
     backgroundColor: colors.primaryBackground,
     borderTopWidth: 0,
-    ...pb2
-  }
-})
-
-export const tabBarLabelStyle = StyleSheet.create({
-  style: {
-    color: colors.textLight,
-    ...f6,
-    ...fDefault,
-    ...mt1
-  }
-})
-
-export const headerIconStyle = StyleSheet.create({
-  style: {
-    ...br100,
-    ...pa1,
-    ...mr2
-  }
+    paddingBottom: layout.s2
+  },
+  label: flatten([
+    typography.caption,
+    { color: colors.textLight, marginTop: layout.s1 }
+  ])
 })

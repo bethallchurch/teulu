@@ -1,19 +1,21 @@
 import React from 'react'
-import { Text, Alert } from 'react-native'
+import { Alert } from 'react-native'
 import uuid from 'uuid/v4'
 import { LOGIN } from '@navigation/routes'
 import { signUp, resendSignUp, confirmSignUp } from '@auth/AuthService'
-import Button from '@global/components/Button'
-import TextInput from '@global/components/TextInput'
-import PhoneInput from '@global/components/PhoneInput'
-import Link, { LinkContainer } from '@global/components/Link'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import ComponentWithPhoneInput, { defaultDialCode } from '@global/components/ComponentWithPhoneInput'
-import { titleStyle } from '@global/styles'
+import {
+  Button,
+  TextInput,
+  PhoneInput,
+  Link,
+  LinkContainer,
+  ScreenBase,
+  WithPhoneInput,
+  defaultDialCode
+} from '@global/components'
+import { Title } from '@auth/components'
 
-// TODO: check if user with phone number already exists
-
-class RegisterScreen extends ComponentWithPhoneInput {
+class RegisterScreen extends WithPhoneInput {
   constructor (props) {
     super(props)
     this.state = {
@@ -95,8 +97,8 @@ class RegisterScreen extends ComponentWithPhoneInput {
       codeRequested
     } = this.state
     return (
-      <MinimalScreenBase>
-        <Text style={titleStyle.style}>Register</Text>
+      <ScreenBase>
+        <Title>Register</Title>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -149,7 +151,7 @@ class RegisterScreen extends ComponentWithPhoneInput {
         <LinkContainer>
           {codeRequested && <Link onPress={this.resendCode}>Resend code</Link>}
         </LinkContainer>
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }

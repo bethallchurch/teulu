@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { Text, View, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import { View, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
 import { ImagePicker, Permissions } from 'expo'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
+import { Text, FullWidthButton } from '@global/components'
 import { getAlbum } from '@album/AlbumService'
-import { logOutButtonStyle } from '@auth/styles'
 import { MaterialIcons, Feather } from '@expo/vector-icons'
-import { colors, w4, fade } from '@global/styles'
+import { colors, layout, helpers } from '@global/styles'
 
 const { width: windowWidth, height: windowHeight } = Dimensions.get('window')
 
@@ -73,20 +72,18 @@ class PhotoUpload extends Component {
       modalVisible
     } = this.state
     if (hasCameraRollPermission === false) {
-      return <Text>No access to camera</Text>
+      return <Text subtitleTwo>No access to camera</Text>
     }
     return (
       <>
-        <ListItem
+        <FullWidthButton
           title='Add Photo'
           onPress={this.pickImage}
-          containerStyle={logOutButtonStyle.container}
-          titleStyle={logOutButtonStyle.title}
           rightIcon={<AddRightIcon />}
         />
         <Modal transparent visible={modalVisible} onRequestClose={this.hideModal}>
           <TouchableOpacity style={{ flex: 1 }} onPress={this.hideModal}>
-            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: fade('#000000', 0.9) }}>
+            <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: helpers.fade('#000000', 0.9) }}>
               {pickedImage && (
                 <>
                   <Image
@@ -94,11 +91,9 @@ class PhotoUpload extends Component {
                     style={{ width: windowWidth, height: windowHeight - 80 }}
                     source={{ uri: pickedImage.uri }}
                   />
-                  <ListItem
+                  <FullWidthButton
                     title='Upload Photo'
                     onPress={this.saveImage}
-                    containerStyle={logOutButtonStyle.container}
-                    titleStyle={logOutButtonStyle.title}
                     rightIcon={<UploadRightIcon />}
                   />
                 </>
@@ -111,10 +106,8 @@ class PhotoUpload extends Component {
   }
 }
 
-// {this.state.uploadedImage && <Image style={{ width: 100, height: 100 }} source={{ uri: this.state.uploadedImage }} />}
-
-const AddRightIcon = () => <MaterialIcons name='photo' size={w4.width} color={colors.primaryBackground} />
-const UploadRightIcon = () => <Feather name='upload' size={w4.width} color={colors.primaryBackground} />
+const AddRightIcon = () => <MaterialIcons name='photo' size={layout.s4} color={colors.primaryBackground} />
+const UploadRightIcon = () => <Feather name='upload' size={layout.s4} color={colors.primaryBackground} />
 
 const PhotoUploadWithContext = props => (
   <UserContext.Consumer>

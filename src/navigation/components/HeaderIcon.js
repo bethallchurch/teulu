@@ -1,16 +1,36 @@
 import React from 'react'
-import { View, TouchableOpacity } from 'react-native'
+import PropTypes from 'prop-types'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import { colors, w4 } from '@global/styles'
-import { headerIconStyle } from '@navigation/styles'
+import { colors, layout } from '@global/styles'
+
+// TODO: need to wrap in TouchableOpacity?
 
 const HeaderIcon = ({ onPress, iconName, icon = null }) => (
   <TouchableOpacity onPress={onPress}>
-    <View style={headerIconStyle.style}>
+    <View style={styles.container}>
       {icon}
-      {!icon && <MaterialIcons name={iconName} size={w4.width} color={colors.textDefault} />}
+      {!icon && <MaterialIcons name={iconName} size={layout.s4} color={colors.textDefault} />}
     </View>
   </TouchableOpacity>
 )
+
+const styles = StyleSheet.create({
+  container: {
+    padding: layout.s1,
+    marginRight: layout.s2
+  }
+})
+
+HeaderIcon.propTypes = {
+  onPress: PropTypes.func.isRequired,
+  iconName: PropTypes.string,
+  icon: PropTypes.node
+}
+
+HeaderIcon.defaultProps = {
+  iconName: '',
+  icon: null
+}
 
 export default HeaderIcon

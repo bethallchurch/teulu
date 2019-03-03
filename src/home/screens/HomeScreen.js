@@ -3,8 +3,8 @@ import { SafeAreaView, StyleSheet, Dimensions, ScrollView } from 'react-native'
 import { GROUP_LIST } from '@navigation/routes'
 import GroupList from '@group/components/GroupList'
 import AlbumList from '@album/components/AlbumList'
-import Section from '@global/components/Section'
-import { homeScreenStyle } from '@home/styles'
+import { Section } from '@global/components'
+import { colors } from '@global/styles'
 
 export default class HomeScreen extends Component {
   get sectionWidth () {
@@ -14,7 +14,7 @@ export default class HomeScreen extends Component {
   render () {
     const { navigation } = this.props
     return (
-      <SafeAreaView style={homeScreenStyle.container}>
+      <SafeAreaView style={styles.container}>
         <ScrollView>
           <Section
             title='Groups'
@@ -40,3 +40,10 @@ export default class HomeScreen extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: colors.primaryBackground,
+    flex: 1
+  }
+})

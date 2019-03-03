@@ -1,16 +1,12 @@
 import React from 'react'
-import { Text } from 'react-native'
 import { createGroup, createGroupLink } from '@group/GroupService'
 import SelectContactList from '@contact/components/SelectContactList'
 import { UserContext } from '@global/context'
 import { GROUP } from '@navigation/routes'
-import ComponentWithInputs from '@global/components/ComponentWithInputs'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import TextInput from '@global/components/TextInput'
-import Button from '@global/components/Button'
-import { subtitleStyle, mt2 } from '@global/styles'
+import { WithInputs, ScreenBase, TextInput, Button, Text } from '@global/components'
+import { layout } from '@global/styles'
 
-class CreateGroup extends ComponentWithInputs {
+class CreateGroup extends WithInputs {
   state = { authUsers: [], groupName: '' }
 
   toggleAuthUser = id => {
@@ -39,8 +35,8 @@ class CreateGroup extends ComponentWithInputs {
   render () {
     const { groupName, authUsers } = this.state
     return (
-      <MinimalScreenBase>
-        <Text style={subtitleStyle.style}>Name your group</Text>
+      <ScreenBase>
+        <Text h5 style={{ width: '100%', marginBottom: layout.s2 }}>Name your group</Text>
         <TextInput
           placeholder='Group Name'
           value={groupName}
@@ -48,13 +44,13 @@ class CreateGroup extends ComponentWithInputs {
           autoCorrect={false}
           onChangeText={value => this.onChangeText('groupName', value)}
         />
-        <Text style={{ ...mt2, ...subtitleStyle.style }}>Add members</Text>
+        <Text h5 style={{ width: '100%', marginVertical: layout.s2 }}>Add members</Text>
         <SelectContactList
           selectedContacts={authUsers}
           onPressContact={this.toggleAuthUser}
         />
         <Button onPress={this.createGroup}>Create Group</Button>
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }

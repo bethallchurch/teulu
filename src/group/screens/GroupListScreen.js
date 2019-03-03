@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { SafeAreaView, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
-import ActionButton from '@global/components/ActionButton'
+import { ActionButton } from '@global/components'
 import GroupList from '@group/components/GroupList'
 import { CREATE_GROUP } from '@navigation/routes'
 import { colors } from '@global/styles'

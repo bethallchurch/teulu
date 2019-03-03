@@ -1,16 +1,31 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import { StyleSheet } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { copyStyle } from '@global/styles'
-import { noContactsStyle } from '@contact/styles'
+import { Text } from '@global/components'
+import { colors, layout } from '@global/styles'
 
-const NoContacts = ({
-  onEmptyMessage = 'No results.'
-}) => (
+const NoContacts = ({ onEmptyMessage }) => (
   <ListItem
-    title={onEmptyMessage}
-    titleStyle={copyStyle.regular}
-    containerStyle={noContactsStyle.container}
+    title={<Text bodyTwo>{onEmptyMessage}</Text>}
+    containerStyle={styles.container}
   />
 )
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: layout.s3,
+    backgroundColor: colors.secondaryBackground,
+    width: '100%'
+  }
+})
+
+NoContacts.propTypes = {
+  onEmptyMessage: PropTypes.string
+}
+
+NoContacts.defaultProps = {
+  onEmptyMessage: 'No results.'
+}
 
 export default NoContacts

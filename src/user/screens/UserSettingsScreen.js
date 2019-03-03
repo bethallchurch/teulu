@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { SafeAreaView, View, StyleSheet } from 'react-native'
 import { getAuthUser } from '@auth/AuthService'
 import { Avatar, ListItem } from 'react-native-elements'
-import { colors, copyStyle } from '@global/styles'
+import { colors } from '@global/styles'
 import * as routes from '@navigation/routes'
-import LogOutButton from '@auth/components/LogOutButton'
+import { LogOutButton } from '@auth/components'
+import { Text } from '@global/components'
 
 export default class UserSettingsScreen extends Component {
   state = { phoneNumber: '' }
@@ -35,24 +36,21 @@ export default class UserSettingsScreen extends Component {
         <View style={{ justifyContent: 'space-between', flex: 1 }}>
           <View>
             <ListItem
-              title={phoneNumber}
-              titleStyle={copyStyle.regular}
+              title={<Text subtitleOne>{phoneNumber}</Text>}
               bottomDivider
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'smartphone' }}
               onPress={() => navigate(routes.RESET_PHONE_NUMBER)}
             />
             <ListItem
-              title='Notifications'
-              titleStyle={copyStyle.regular}
+              title={<Text subtitleOne>Notifications</Text>}
               bottomDivider
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'notifications-none' }}
               onPress={() => navigate(routes.NOTIFICATION_SETTINGS)}
             />
             <ListItem
-              title='Reset Password'
-              titleStyle={copyStyle.regular}
+              title={<Text subtitleOne>Reset Password</Text>}
               rightIcon={this.chevronProps}
               leftIcon={{ name: 'lock-outline' }}
               onPress={() => navigate(routes.RESET_PASSWORD)}

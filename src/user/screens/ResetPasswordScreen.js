@@ -2,12 +2,9 @@ import React from 'react'
 import { Alert } from 'react-native'
 import { ACCOUNT } from '@navigation/routes'
 import { getAuthUser, changePassword } from '@auth/AuthService'
-import ComponentWithInputs from '@global/components/ComponentWithInputs'
-import MinimalScreenBase from '@global/components/MinimalScreenBase'
-import TextInput from '@global/components/TextInput'
-import Button from '@global/components/Button'
+import { WithInputs, ScreenBase, TextInput, Button } from '@global/components'
 
-export default class ResetPasswordScreen extends ComponentWithInputs {
+export default class ResetPasswordScreen extends WithInputs {
   state = { user: {}, oldPassword: '', newPassword: '', repeatNewPassword: '' }
 
   resetPassword = async () => {
@@ -30,7 +27,7 @@ export default class ResetPasswordScreen extends ComponentWithInputs {
   render () {
     const { oldPassword, newPassword, repeatNewPassword } = this.state
     return (
-      <MinimalScreenBase>
+      <ScreenBase>
         <TextInput
           placeholder='Old Password'
           value={oldPassword}
@@ -62,7 +59,7 @@ export default class ResetPasswordScreen extends ComponentWithInputs {
           onChangeText={value => this.onChangeText('repeatNewPassword', value)}
         />
         <Button onPress={this.resetPassword}>Reset Password</Button>
-      </MinimalScreenBase>
+      </ScreenBase>
     )
   }
 }

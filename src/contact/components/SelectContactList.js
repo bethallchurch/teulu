@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { Permissions } from 'expo'
 import { getContacts } from '@contact/ContactService'
 import { UserContext } from '@global/context'
-import Loading from '@global/components/Loading'
+import { Loading, Text } from '@global/components'
 import NoContacts from '@contact/components/NoContacts'
-import { colors, copyStyle } from '@global/styles'
-import { selectContactListStyle } from '@contact/styles'
+import { colors, layout } from '@global/styles'
 
 class SelectContactList extends Component {
   state = { contacts: [], loading: true }
@@ -31,8 +30,7 @@ class SelectContactList extends Component {
     return (
       <ListItem
         bottomDivider
-        title={name || phoneNumber}
-        titleStyle={copyStyle.regular}
+        title={<Text bodyOne>{name || phoneNumber}</Text>}
         rightIcon={{
           name: selected ? 'check-box' : 'check-box-outline-blank',
           color: selected ? colors.primary : colors.textDefault
@@ -51,7 +49,7 @@ class SelectContactList extends Component {
     if (loading) return <Loading />
     return contacts.length > 0 ? (<FlatList
       extraData={this.props.selectedContacts}
-      style={selectContactListStyle.list}
+      style={styles.list}
       keyExtractor={({ id }) => id}
       data={contacts}
       renderItem={this.renderItem}
@@ -64,5 +62,13 @@ const SelectContactListWithContext = props => (
     {user => <SelectContactList userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
+
+const styles = StyleSheet.create({
+  list: {
+    backgroundColor: colors.secondaryBackground,
+    marginBottom: layout.s3,
+    width: '100%'
+  }
+})
 
 export default SelectContactListWithContext
