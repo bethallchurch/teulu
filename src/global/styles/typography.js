@@ -6,9 +6,9 @@ import { textDefault } from '@global/styles/colors'
 const { create, flatten } = StyleSheet
 
 // Font families
-export const fontLight = { fontFamily: 'OpenSans-Light' }
-export const fontRegular = { fontFamily: 'OpenSans-Regular' }
-export const fontMedium = { fontFamily: 'OpenSans-SemiBold' }
+export const fontLight = { fontFamily: 'Lato-Light' }
+export const fontRegular = { fontFamily: 'Lato-Regular' }
+export const fontMedium = { fontFamily: 'Lato-Bold' }
 
 // Font sizes
 const f1 = { fontSize: 96 }

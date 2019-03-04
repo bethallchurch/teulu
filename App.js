@@ -23,9 +23,9 @@ class App extends Component {
   async componentDidMount () {
     this.setUser()
     await Font.loadAsync({
-      [fontRegular.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Regular.ttf'),
-      [fontMedium.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-SemiBold.ttf'),
-      [fontLight.fontFamily]: require('@assets/fonts/OpenSans/OpenSans-Light.ttf')
+      [fontRegular.fontFamily]: require('@assets/fonts/Lato/Lato-Regular.ttf'),
+      [fontMedium.fontFamily]: require('@assets/fonts/Lato/Lato-Bold.ttf'),
+      [fontLight.fontFamily]: require('@assets/fonts/Lato/Lato-Light.ttf')
     })
     this.setState({ fontLoaded: true })
   }
