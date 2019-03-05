@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import Amplify, { Hub } from 'aws-amplify'
+import AWSAppSyncClient from 'aws-appsync'
+import { ApolloProvider } from 'react-apollo'
+import { Rehydrated } from 'aws-appsync-react'
 import { createAppContainer } from 'react-navigation'
 import { Font } from 'expo'
 import config from './aws-exports'
@@ -10,6 +13,14 @@ import { UserContext } from '@global/context'
 import { Loading } from '@global/components'
 
 Amplify.configure(config)
+
+const client = new AWSAppSyncClient({
+  url: config.aws_appsync_graphqlEndpoint,
+  region: config.aws_appsync_region,
+  auth: {
+    type: config.aws_appsync_authenticationType
+  }
+})
 
 const AppNavigator = createAppContainer(AuthStack)
 
@@ -54,4 +65,12 @@ class App extends Component {
   }
 }
 
-export default App
+const AppWithProvider = () => (
+  <ApolloProvider client={client}>
+    <Rehydrated>
+      <App />
+    </Rehydrated>
+  </ApolloProvider>
+)
+
+export default AppWithProvider
