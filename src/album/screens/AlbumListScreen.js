@@ -17,7 +17,13 @@ class GroupScreen extends Component {
   render () {
     return (
       <ScreenBase>
-        <AlbumList groupId={this.groupId} navigation={this.props.navigation} />
+        <AlbumList
+          groupId={this.groupId}
+          navigation={this.props.navigation}
+          containerPadding={layout.s3}
+          gutterWidth={layout.s3}
+          numColumns={2}
+        />
         <ActionButton onPress={this.navigateToCreateAlbum}>
           <MaterialIcons name='add-to-photos' color={colors.primaryBackground} size={layout.s5} />
         </ActionButton>

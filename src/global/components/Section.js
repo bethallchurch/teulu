@@ -5,8 +5,8 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { colors, layout } from '@global/styles'
 import Text from '@global/components/Text'
 
-const Section = ({ title, onPressTitle = null, listComponent }) => (
-  <View>
+const Section = ({ title, onPressTitle = null, listComponent, containerStyle = {} }) => (
+  <View style={containerStyle}>
     {onPressTitle && (
       <TouchableOpacity onPress={onPressTitle}>
         <Title pressable title={title} />

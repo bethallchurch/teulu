@@ -1,101 +1,52 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, ActivityIndicator, FlatList, Dimensions } from 'react-native'
-import { LinearGradient } from 'expo'
 import { Connect } from 'aws-amplify-react-native'
-import { Image } from 'react-native-elements'
 import { getGroup } from '@group/GroupService'
 import { onCreateAlbum, listAlbums } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
-import { Text, Error, Loading } from '@global/components'
-import { colors, layout } from '@global/styles'
-
-const PADDING = 16
-const GUTTER = 16
-const COLUMNS = 2
+import { Error, Loading, SquareGrid } from '@global/components'
+import AlbumListItem from '@album/components/AlbumListItem'
 
 class AlbumList extends Component {
-  navigateToAlbum = (id, name) => this.props.navigation.navigate(ALBUM, {
-    albumId: id,
-    albumName: name,
-    authUsers: (this.props.albums[0] || {}).authUsers
-  })
-
-  get imageWidth () {
-    const {
-      numColumns = COLUMNS,
-      gutterWidth = GUTTER,
-      containerPadding = PADDING,
-      containerWidth = Dimensions.get('window').width
-    } = this.props
-    const gutterSpace = (numColumns - 1) * gutterWidth
-    const paddingSpace = containerPadding * 2
-    const spaceToDivide = containerWidth - (gutterSpace + paddingSpace)
-    return spaceToDivide / numColumns
+  navigateToAlbum = (id, name) => {
+    const { navigation: { navigate } } = this.props
+    navigate(ALBUM, {
+      albumId: id,
+      albumName: name,
+      authUsers: (this.props.albums[0] || {}).authUsers
+    })
   }
 
-  itemMargin = index => {
-    const { gutterWidth = GUTTER, numColumns = COLUMNS, albums } = this.props
-    const numAlbums = albums.length
-    const firstRow = index + 1 <= numColumns
-    const lastRow = index > (numAlbums - numColumns) + (numAlbums % numColumns)
-    const firstColumn = index === 0 || index % numColumns === 0
-    const lastColumn = (index + 1) % numColumns === 0
-    return {
-      marginTop: firstRow ? 0 : gutterWidth / 2,
-      marginRight: lastColumn ? 0 : gutterWidth / 2,
-      marginBottom: lastRow ? 0 : gutterWidth / 2,
-      marginLeft: firstColumn ? 0 : gutterWidth / 2
-    }
-  }
-
-  renderItem = ({ item: { id, name }, index }) => {
-    return (
-      <AlbumItem
-        onPress={() => this.navigateToAlbum(id, name)}
-        width={this.imageWidth}
-        margin={this.itemMargin(index)}
-        name={name}
-      />
-    )
-  }
+  renderItem = ({ item: { id, name }, width, margin, index }) => (
+    <AlbumListItem
+      onPress={() => this.navigateToAlbum(id, name)}
+      width={width}
+      margin={margin}
+      name={name}
+    />
+  )
 
   render () {
     const {
       albums,
-      numColumns = COLUMNS,
-      containerPadding = PADDING
+      numColumns,
+      containerStyle,
+      containerPadding,
+      gutterWidth,
+      containerWidth
     } = this.props
     return (
-      <FlatList
-        style={{ padding: containerPadding }}
+      <SquareGrid
         keyExtractor={({ id }) => id}
-        numColumns={numColumns}
-        data={albums}
         renderItem={this.renderItem}
+        data={albums}
+        containerStyle={containerStyle}
+        containerPadding={containerPadding}
+        containerWidth={containerWidth}
+        gutterWidth={gutterWidth}
+        numColumns={numColumns}
       />
     )
   }
-}
-
-const AlbumItem = ({ onPress, width, margin, name }) => {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={{ flex: 1, position: 'relative', width, height: width, ...margin }}>
-        <Image
-          resizeMode='cover'
-          source={require('@assets/img/placeholder.jpg')}
-          style={{ width, height: width }}
-          PlaceholderContent={<ActivityIndicator color={colors.primary} />}
-        />
-        <LinearGradient
-          colors={['transparent', colors.overlayBackground]}
-          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', justifyContent: 'flex-end' }}
-        >
-          <Text subtitleTwo color={colors.primaryBackground} style={{ padding: layout.s2, width: '100%' }}>{name}</Text>
-        </LinearGradient>
-      </View>
-    </TouchableOpacity>
-  )
 }
 
 const ConnectedAlbumList = ({ query, subscription, onSubscriptionMsg, dataExtractor, ...props }) => (

@@ -1,6 +1,7 @@
 export { default as ActionButton } from '@global/components/ActionButton'
 export { default as Badge } from '@global/components/Badge'
 export { default as Button, FullWidthButton } from '@global/components/Button'
+export { SquareGrid } from '@global/components/Grid'
 export { default as WithInputs } from '@global/components/WithInputs'
 export { default as WithPhoneInput, defaultDialCode } from '@global/components/WithPhoneInput'
 export { default as InternationalPhoneDropdown } from '@global/components/InternationalPhoneDropdown'

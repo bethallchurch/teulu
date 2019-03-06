@@ -7,6 +7,7 @@ import * as subscriptions from '@graphql/subscriptions'
 
 // Queries
 export const getPhoto = (id, execute = false) => createQuery(queries.getPhoto, { id }, execute)
+export const listPhotos = (params = {}, execute = false) => createQuery(queries.listPhotos, params, execute)
 
 // Subscriptions
 export const onCreatePhoto = (params = {}, execute = false) => createQuery(subscriptions.onCreatePhoto, params, execute)
