@@ -1,12 +1,14 @@
 import React from 'react'
-import { createGroup, createGroupLink } from '@group/GroupService'
+import { Mutation } from 'react-apollo'
+import { adopt } from 'react-adopt'
+import uuid from 'uuid/v4'
+import { createGroup, createGroupLink, listGroups } from '@group/GroupService'
 import SelectContactList from '@contact/components/SelectContactList'
 import { UserContext } from '@global/context'
 import { GROUP } from '@navigation/routes'
 import { WithInputs, ScreenBase, TextInput, Button, Text } from '@global/components'
 import { layout } from '@global/styles'
 
-// TODO: Connect
 class CreateGroup extends WithInputs {
   state = { authUsers: [], groupName: '' }
 
@@ -18,19 +20,12 @@ class CreateGroup extends WithInputs {
     this.setState({ authUsers: updatedAuthUsers })
   }
 
-  createGroup = async () => {
-    const { groupName, authUsers } = this.state
-    const { userId } = this.props
-    try {
-      const result = await createGroup({ name: groupName, authUsers: [ userId, ...authUsers ] }, true)
-      const groupId = result.data.createGroup.id
-      await Promise.all(authUsers.map(username => createGroupLink({
-        groupLinkUserId: username, groupLinkGroupId: groupId
-      }, true)))
-      this.props.navigation.navigate(GROUP, { groupId, groupName })
-    } catch (error) {
-      console.log('Error creating group:', error)
-    }
+  createGroup = () => {
+    const { userId, createGroup } = this.props
+    const { groupName: name, authUsers } = this.state
+    const groupUsers = [ userId, ...authUsers ]
+    const input = { id: uuid(), name, owner: userId, authUsers: groupUsers }
+    createGroup({ input })
   }
 
   render () {
@@ -56,10 +51,74 @@ class CreateGroup extends WithInputs {
   }
 }
 
-const CreateGroupWithContext = props => (
-  <UserContext.Consumer>
-    {user => <CreateGroup userId={user.id} {...props} />}
-  </UserContext.Consumer>
+const mapper = {
+  user: <UserContext.Consumer />,
+  createGroup: ({ navigate, render }) => (
+    <Mutation
+      mutation={createGroup}
+      onCompleted={async ({ createGroup }) => {
+        const { id, authUsers } = createGroup
+        await Promise.all(authUsers.map(username => {
+          const input = { groupLinkUserId: username, groupLinkGroupId: id }
+          return createGroupLink(input)
+        }))
+      }}
+    >
+      {mutation => render({
+        mutation,
+        navigateToGroup: ({ groupId, groupName }) => navigate(GROUP, ({ groupId, groupName }))
+      })}
+    </Mutation>
+  )
+}
+
+const mapProps = ({ user, createGroup }) => ({
+  user,
+  createGroup: ({ input }) => {
+    const { navigateToGroup } = createGroup
+    const time = new Date().toISOString()
+    const optimisticResponse = {
+      createGroup: {
+        __typename: 'Group',
+        ...input,
+        messages: {
+          __typename: 'ModelMessageConnection',
+          items: [],
+          nextToken: null
+        },
+        albums: {
+          __typename: 'ModelAlbumConnection',
+          items: [],
+          nextToken: null
+        },
+        userLinks: {
+          __typename: 'ModelGroupLinkConnection',
+          items: [],
+          nextToken: null
+        },
+        createdAt: time,
+        updatedAt: time
+      }
+    }
+    const update = (cache, { data: { createGroup } }) => {
+      const query = listGroups
+      const groups = cache.readQuery({ query })
+      groups.listGroups.items = [ createGroup, ...groups.listGroups.items ]
+      cache.writeQuery({ query, data: groups })
+      navigateToGroup({ groupId: createGroup.id, groupName: createGroup.name })
+    }
+    createGroup.mutation({ variables: { input }, optimisticResponse, update })
+  }
+})
+
+const Connect = adopt(mapper, mapProps)
+
+const ConnectedCreateGroup = props => (
+  <Connect navigate={props.navigation.navigate}>
+    {({ user, ...connectProps }) => (
+      <CreateGroup userId={user.id} {...connectProps} {...props} />
+    )}
+  </Connect>
 )
 
-export default CreateGroupWithContext
+export default ConnectedCreateGroup

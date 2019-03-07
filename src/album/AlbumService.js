@@ -1,14 +1,14 @@
-import { createQuery } from '@global/helpers'
+import gql from 'graphql-tag'
 import * as mutations from '@graphql/mutations'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 
 // Mutations
-export const createAlbum = (input, execute = false) => createQuery(mutations.createAlbum, { input }, execute)
+export const createAlbum = gql(mutations.createAlbum)
 
 // Queries
-export const getAlbum = (id, execute = false) => createQuery(queries.getAlbum, { id }, execute)
-export const listAlbums = (params = {}, execute = false) => createQuery(queries.listAlbums, params, execute)
+export const getAlbum = gql(queries.getAlbum)
+export const listAlbums = gql(queries.listAlbums)
 
 // Subscriptions
-export const onCreateAlbum = (params = {}, execute = false) => createQuery(subscriptions.onCreateAlbum, params, execute)
+export const onCreateAlbum = gql(subscriptions.onCreateAlbum)

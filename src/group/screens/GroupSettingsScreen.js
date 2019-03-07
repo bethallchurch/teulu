@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
-import { Connect } from 'aws-amplify-react-native'
+import { Query } from 'react-apollo'
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import { getGroup } from '@group/GroupService'
-import { listUsers } from '@user/UserService'
 import { ScreenBase, Text, Button, Badge, Section, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
 import AddUsersModal from '@group/components/AddUsersModal'
@@ -15,10 +14,11 @@ class GroupSettingsScreen extends Component {
 
   // TODO: move to service
   async componentDidMount () {
-    const { group } = this.props
-    const filter = { or: group.authUsers.map(id => ({ id: { eq: id } })) }
-    const { data: { listUsers: { items: authUsers } } } = await listUsers({ filter }, true)
-    this.setState({ authUsers: authUsers.map(user => ({ ...user, isOwner: user.id === group.owner })) })
+    console.log('TODO: Group Settings Auth Users')
+    // const { group } = this.props
+    // const filter = { or: group.authUsers.map(id => ({ id: { eq: id } })) }
+    // const { data: { listUsers: { items: authUsers } } } = await listUsers({ filter }, true)
+    // this.setState({ authUsers: authUsers.map(user => ({ ...user, isOwner: user.id === group.owner })) })
   }
 
   showModal = () => {
@@ -75,15 +75,25 @@ class GroupSettingsScreen extends Component {
   }
 }
 
-const ConnectedGroupSettingsScreen = props => (
-  <Connect query={getGroup(props.navigation.getParam('groupId'))}>
-    {({ data: { getGroup }, loading, error }) => {
-      if (error) return <Error />
-      if (loading || !getGroup) return <Loading />
-      return <GroupSettingsScreen group={getGroup} {...props} />
-    }}
-  </Connect>
-)
+const ConnectedGroupSettingsScreen = props => {
+  const query = getGroup
+  const variables = { id: props.navigation.getParam('groupId') }
+  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+    error,
+    loading: loading || !getGroup,
+    item: getGroup
+  })
+  return (
+    <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
+      {data => {
+        const { error, loading, item } = dataExtractor(data)
+        if (error) return <Error />
+        if (loading) return <Loading />
+        return <GroupSettingsScreen group={item} {...props} />
+      }}
+    </Query>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {

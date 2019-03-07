@@ -1,13 +1,13 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Connect } from 'aws-amplify-react-native'
+import { Query } from 'react-apollo'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ScreenBase, Error, Loading, Text } from '@global/components'
 import { colors, layout } from '@global/styles'
 import { getAlbum } from '@album/AlbumService'
 
 // TODO: Top same as GroupSettingsScreen
-const AlbumSettings = ({ album }) => (
+const AlbumSettingsScreen = ({ album }) => (
   <ScreenBase style={styles.container}>
     <View style={styles.imageContainer}>
       <MaterialIcons name='image' color={colors.primaryBackground} size={layout.s6} />
@@ -16,15 +16,25 @@ const AlbumSettings = ({ album }) => (
   </ScreenBase>
 )
 
-const ConnectedAlbumSettings = props => (
-  <Connect query={getAlbum(props.navigation.getParam('albumId'))}>
-    {({ data: { getAlbum }, loading, error }) => {
-      if (error) return <Error />
-      if (loading || !getAlbum) return <Loading />
-      return <AlbumSettings album={getAlbum} {...props} />
-    }}
-  </Connect>
-)
+const ConnectedAlbumSettingsScreen = props => {
+  const query = getAlbum
+  const variables = { id: props.navigation.getParam('albumId') }
+  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+    error,
+    loading: loading || !getAlbum,
+    item: getAlbum
+  })
+  return (
+    <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
+      {data => {
+        const { error, loading, item } = dataExtractor(data)
+        if (error) return <Error />
+        if (loading) return <Loading />
+        return <AlbumSettingsScreen album={item} {...props} />
+      }}
+    </Query>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -46,4 +56,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ConnectedAlbumSettings
+export default ConnectedAlbumSettingsScreen

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { SafeAreaView, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
+import { Query } from 'react-apollo'
 import { ImagePicker, Permissions } from 'expo'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
-import { Text, FullWidthButton } from '@global/components'
+import { Text, FullWidthButton, Error, Loading } from '@global/components'
 import { getAlbum } from '@album/AlbumService'
 import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { colors, layout } from '@global/styles'
@@ -17,18 +18,7 @@ class PhotoUpload extends Component {
     uploadedImage: null,
     uploading: false,
     hasCameraRollPermission: null,
-    groupId: null,
     modalVisible: false
-  }
-
-  async componentDidMount () {
-    const albumId = this.props.navigation.getParam('albumId')
-    try {
-      const album = await getAlbum(albumId, true)
-      this.setState({ groupId: album.data.getAlbum.group.id })
-    } catch (error) {
-      console.log('Error getting album:', error)
-    }
   }
 
   hideModal = () => {
@@ -50,10 +40,7 @@ class PhotoUpload extends Component {
 
   saveImage = async () => {
     const { pickedImage: { uri } } = this.state
-    const albumId = this.props.navigation.getParam('albumId')
-    const groupId = this.state.groupId
-    const authUsers = this.props.navigation.getParam('authUsers')
-    const { userId } = this.props
+    const { albumId, groupId, authUsers, userId } = this.props
     try {
       this.setState({ uploading: true })
       const { key } = await uploadImage({ uri, albumId, userId, groupId, authUsers: JSON.stringify(authUsers) })
@@ -110,9 +97,29 @@ class PhotoUpload extends Component {
 const AddRightIcon = () => <MaterialIcons name='photo' size={layout.s4} color={colors.primaryBackground} />
 const UploadRightIcon = () => <Feather name='upload' size={layout.s4} color={colors.primaryBackground} />
 
+const ConnectedPhotoUpload = props => {
+  const query = getAlbum
+  const variables = { id: props.navigation.getParam('albumId') }
+  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+    error,
+    loading: loading || !getAlbum,
+    item: getAlbum
+  })
+  return (
+    <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
+      {data => {
+        const { error, loading, item } = dataExtractor(data)
+        if (error) return <Error />
+        if (loading) return <Loading />
+        return <PhotoUpload albumId={item.id} groupId={item.group.id} authUsers={item.group.authUsers} {...props} />
+      }}
+    </Query>
+  )
+}
+
 const PhotoUploadWithContext = props => (
   <UserContext.Consumer>
-    {user => <PhotoUpload userId={user.id} {...props} />}
+    {user => <ConnectedPhotoUpload userId={user.id} {...props} />}
   </UserContext.Consumer>
 )
 

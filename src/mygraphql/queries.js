@@ -1,5 +1,5 @@
-export const getGroup = `query GetGroup($id: ID!) {
-  getGroup(id: $id) {
+export const listGroupMessages = `query GetGroup($groupId: ID!) {
+  getGroup(id: $groupId) {
     id
     name
     owner
@@ -37,30 +37,10 @@ export const getGroup = `query GetGroup($id: ID!) {
 }
 `
 
-export const getAlbum = `query GetAlbum($id: ID!) {
-  getAlbum(id: $id) {
+export const listAlbumPhotos = `query GetAlbum($albumId: ID!) {
+  getAlbum(id: $albumId) {
     id
     name
-    owner
-    authUsers
-    albumGroupId
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        nextToken
-      }
-      messages {
-        nextToken
-      }
-      albums {
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
     photos {
       items {
         id

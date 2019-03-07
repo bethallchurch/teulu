@@ -1,16 +1,18 @@
 /* global XMLHttpRequest */
+import gql from 'graphql-tag'
 import { Storage } from 'aws-amplify'
 import { v4 as uuid } from 'uuid'
-import { createQuery } from '@global/helpers'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
+import * as myQueries from '@mygraphql/queries'
 
 // Queries
-export const getPhoto = (id, execute = false) => createQuery(queries.getPhoto, { id }, execute)
-export const listPhotos = (params = {}, execute = false) => createQuery(queries.listPhotos, params, execute)
+export const getPhoto = gql(queries.getPhoto)
+export const listPhotos = gql(queries.listPhotos)
+export const listAlbumPhotos = gql(myQueries.listAlbumPhotos)
 
 // Subscriptions
-export const onCreatePhoto = (params = {}, execute = false) => createQuery(subscriptions.onCreatePhoto, params, execute)
+export const onCreatePhoto = gql(subscriptions.onCreatePhoto)
 
 // Why are we using XMLHttpRequest? See:
 // https://github.com/expo/expo/issues/2402#issuecomment-443726662

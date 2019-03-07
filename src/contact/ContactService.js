@@ -1,11 +1,14 @@
 import { Contacts } from 'expo'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 import { unique, compact, flatten, chunk } from '@global/helpers'
-import { listUsers } from '@user/UserService'
+import { API, graphqlOperation } from 'aws-amplify'
+import * as queries from '@graphql/queries'
 
 const contactStore = {}
 
 export const getPhoneContacts = () => Contacts.getContactsAsync()
+
+const listUsers = ({ filter }) => API.graphql(graphqlOperation(queries.listUsers, { filter }))
 
 export const getContacts = async () => {
   const { data: phoneContacts } = await getPhoneContacts()
@@ -30,7 +33,7 @@ export const getContacts = async () => {
     )
   )), 5).map(batch => ({ or: batch }))
 
-  const result = await Promise.all(filters.map(filter => listUsers({ filter }, true)))
+  const result = await Promise.all(filters.map(filter => listUsers({ filter })))
 
   return flatten(result.map(({ data: { listUsers: { items } } }) => {
     return items.map(item => ({ ...item, name: contactStore[item.phoneNumber] }))

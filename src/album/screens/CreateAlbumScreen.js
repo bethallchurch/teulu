@@ -1,33 +1,23 @@
 import React from 'react'
+import { Query, Mutation } from 'react-apollo'
 import { getGroup } from '@group/GroupService'
 import { createAlbum } from '@album/AlbumService'
-import { ALBUM } from '@navigation/routes'
-import { WithInputs, ScreenBase, TextInput, Button, Text } from '@global/components'
+// import { ALBUM } from '@navigation/routes'
+import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error } from '@global/components'
 import { layout } from '@global/styles'
 
 class CreateAlbumScreen extends WithInputs {
   state = { albumName: '', groupId: '', authUsers: [] }
 
-  async componentDidMount () {
-    const id = this.props.navigation.getParam('groupId')
-    try {
-      const result = await getGroup(id, true)
-      this.setState({ groupId: id, authUsers: result.data.getGroup.authUsers })
-    } catch (error) {
-      console.log('Error getting group:', error)
-    }
+  componentDidMount () {
+    console.log(this.props)
   }
 
-  // TODO: Connect
-  createAlbum = async () => {
-    const { albumName, groupId, authUsers } = this.state
-    try {
-      const result = await createAlbum({ name: albumName, albumGroupId: groupId, authUsers }, true)
-      const albumId = result.data.createAlbum.id
-      this.props.navigation.navigate(ALBUM, { groupId, authUsers, albumId, albumName })
-    } catch (error) {
-      console.log('Error creating album:', error)
-    }
+  createAlbum = () => {
+    const { albumName } = this.state
+    console.log('CALLING CREATE ALBUM (commented out)', albumName)
+
+    // this.props.createAlbum({ variables: { { name: albumName, albumGroupId: groupId, authUsers } } })
   }
 
   render () {
@@ -47,4 +37,34 @@ class CreateAlbumScreen extends WithInputs {
   }
 }
 
-export default CreateAlbumScreen
+const ConnectedCreateAlbumScreen = props => {
+  const query = getGroup
+  const queryVariables = { id: props.navigation.getParam('groupId') }
+  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+    error,
+    loading: loading || !getGroup,
+    item: getGroup
+  })
+  const mutation = createAlbum
+  const onMutationCompleted = params => {
+    console.log('ALBUM CREATED:', params)
+  }
+  return (
+    <Query query={query} variables={queryVariables} fetchPolicy='cache-and-network'>
+      {({ subscribeToMore, ...data }) => {
+        const { error, loading, item } = dataExtractor(data)
+        if (error) return <Error />
+        if (loading) return <Loading />
+        return (
+          <Mutation mutation={mutation} onCompleted={onMutationCompleted}>
+            {mutate => (
+              <CreateAlbumScreen group={item} createAlbum={mutate} {...props} />
+            )}
+          </Mutation>
+        )
+      }}
+    </Query>
+  )
+}
+
+export default ConnectedCreateAlbumScreen

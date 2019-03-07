@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Amplify, { Hub } from 'aws-amplify'
+import Amplify, { Hub, Auth } from 'aws-amplify'
 import AWSAppSyncClient from 'aws-appsync'
 import { ApolloProvider } from 'react-apollo'
 import { Rehydrated } from 'aws-appsync-react'
@@ -17,9 +17,13 @@ Amplify.configure(config)
 const client = new AWSAppSyncClient({
   url: config.aws_appsync_graphqlEndpoint,
   region: config.aws_appsync_region,
+  complexObjectsCredentials: () => Auth.currentCredentials(),
   auth: {
-    type: config.aws_appsync_authenticationType
-  }
+    type: config.aws_appsync_authenticationType,
+    credentials: () => Auth.currentCredentials(),
+    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken()
+  },
+  disableOffline: true
 })
 
 const AppNavigator = createAppContainer(AuthStack)
@@ -57,7 +61,7 @@ class App extends Component {
     return fontLoaded && user ? (
       <UserContext.Provider value={user}>
         <AppNavigator
-          persistenceKey='persistenceKey004'
+          // persistenceKey='persistenceKey005'
           renderLoadingExperimental={() => <Loading />}
         />
       </UserContext.Provider>

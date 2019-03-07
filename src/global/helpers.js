@@ -1,5 +1,3 @@
-import { API, graphqlOperation } from 'aws-amplify'
-
 export const union = (a, b) => [ ...new Set([ ...a, ...b ]) ]
 
 export const intersection = (a, b) => {
@@ -71,7 +69,18 @@ export const withoutKeys = (obj, keys) => objectFilter(obj, {
   callback: ([ key ]) => !keys.includes(key)
 })
 
-export const createQuery = (query, input, execute = false) => {
-  const operation = graphqlOperation(query, input)
-  return execute ? API.graphql(operation) : operation
+export const cancellable = promise => {
+  let cancelled = false
+  const wrapped = new Promise((resolve, reject) => {
+    promise.then(
+      result => cancelled ? reject({ cancelled }) : resolve(result), // eslint-disable-line
+      error => cancelled ? reject({ cancelled }) : reject(error) // eslint-disable-line
+    )
+  })
+  return {
+    promise: wrapped,
+    cancel () {
+      cancelled = true
+    }
+  }
 }

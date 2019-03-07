@@ -1,11 +1,15 @@
-import { createQuery } from '@global/helpers'
+import gql from 'graphql-tag'
+import * as mutations from '@graphql/mutations'
 import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
+import * as myQueries from '@mygraphql/queries'
 
 // Mutations
+export const createMessage = gql(mutations.createMessage)
 
 // Queries
-export const getMessage = (id, execute = false) => createQuery(queries.getMessage, { id }, execute)
+export const getMessage = gql(queries.getMessage)
+export const listGroupMessages = gql(myQueries.listGroupMessages)
 
 // Subscriptions
-export const onCreateMessage = (params = {}, execute = false) => createQuery(subscriptions.onCreateMessage, params, execute)
+export const onCreateMessage = gql(subscriptions.onCreateMessage)

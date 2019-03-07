@@ -1,15 +1,24 @@
 import React, { Component } from 'react'
 import { FlatList } from 'react-native'
-import { Connect } from 'aws-amplify-react-native'
+import { Query } from 'react-apollo'
+import { adopt } from 'react-adopt'
 import { ListItem } from 'react-native-elements'
 import { GROUP } from '@navigation/routes'
-import { uniqueBy } from '@global/helpers'
 import { listGroups, onCreateGroup } from '@group/GroupService'
+import { uniqueBy } from '@global/helpers'
 import { UserContext } from '@global/context'
 import { Error, Loading, Text } from '@global/components'
 import { colors } from '@global/styles'
 
 class GroupList extends Component {
+  componentDidMount () {
+    this.unsubscribe = this.props.subscribe()
+  }
+
+  componentWillUnmount () {
+    this.unsubscribe && this.unsubscribe()
+  }
+
   navigateToGroup = (id, name) => this.props.navigation.navigate(GROUP, {
     groupId: id,
     groupName: name
@@ -54,39 +63,53 @@ class GroupList extends Component {
   }
 }
 
-// TODO: subscription query filter not working
-const ConnectedGroupList = props => {
-  const { userId, compact } = props
-  const filter = { authUsers: { contains: userId } }
-  // Limit is being WEIRD and showing just one group
-  const queryParams = compact ? {} : { filter } // { limit: 3 }
-  return (
-    <Connect
-      query={listGroups(queryParams)}
-      subscription={onCreateGroup(queryParams)}
-      onSubscriptionMsg={(previous, { onCreateGroup }) => {
-        const { listGroups } = previous
-        if (!onCreateGroup.authUsers.includes(userId)) {
-          return previous
-        }
-        const newItems = uniqueBy([ onCreateGroup, ...listGroups.items ], 'id')
-        return { ...previous, listGroups: { ...listGroups, items: newItems } }
-      }}
-    >
-      {({ data: { listGroups }, loading, error }) => {
-        if (error) return <Error />
-        if (loading || !listGroups) return <Loading />
-        const items = compact ? listGroups.items.slice(0, 3) : listGroups.items
-        return <GroupList groups={items} {...props} />
-      }}
-    </Connect>
-  )
+const dataExtractor = ({ data: { listGroups }, loading, error }) => ({
+  error,
+  loading: loading || !listGroups,
+  items: listGroups ? listGroups.items : []
+})
+
+const mapper = {
+  user: <UserContext.Consumer />,
+  groups: ({ compact, render }) => {
+    const variables = compact ? { limit: 3 } : {}
+    return (
+      <Query query={listGroups} variables={variables} fetchPolicy='cache-and-network'>
+        {({ data, subscribeToMore }) => render({ data, subscribeToMore })}
+      </Query>
+    )
+  }
 }
 
-const GroupListWithContext = props => (
-  <UserContext.Consumer>
-    {user => user.id ? <ConnectedGroupList userId={user.id} {...props} /> : <Loading />}
-  </UserContext.Consumer>
+const mapProps = ({ user, groups }) => {
+  const { error, loading, items } = dataExtractor({ data: groups.data })
+  return {
+    userId: user.id,
+    error,
+    loading,
+    groups: items,
+    subscribe: () => groups.subscribeToMore({
+      document: onCreateGroup,
+      updateQuery: (previous, { subscriptionData }) => {
+        if (!subscriptionData.data) return previous
+        const newItem = subscriptionData.data.onCreateGroup
+        const newItems = uniqueBy([ ...previous.listGroups.items, newItem ], 'id')
+        return { ...previous, listGroups: { ...previous.listGroups, items: newItems } }
+      }
+    })
+  }
+}
+
+const Connect = adopt(mapper, mapProps)
+
+const ConnectedGroupList = props => (
+  <Connect compact={props.compact}>
+    {({ userId, error, loading, groups, subscribe }) => {
+      if (error) return <Error />
+      if (loading) return <Loading />
+      return <GroupList userId={userId} groups={groups} subscribe={subscribe} {...props} />
+    }}
+  </Connect>
 )
 
-export default GroupListWithContext
+export default ConnectedGroupList

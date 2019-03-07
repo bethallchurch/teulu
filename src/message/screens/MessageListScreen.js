@@ -1,20 +1,22 @@
-import React from 'react'
-import { graphqlOperation } from 'aws-amplify'
-import { getGroup as customGetGroup } from '@mygraphql/queries'
-import * as mutations from '@graphql/mutations'
-import { Connect } from 'aws-amplify-react-native'
+import React, { Component } from 'react'
+import { Query, Mutation } from 'react-apollo'
+import { adopt } from 'react-adopt'
 import { GiftedChat } from 'react-native-gifted-chat'
+import { onCreateMessage, listGroupMessages, createMessage } from '@message/MessageService'
+import { uniqueBy } from '@global/helpers'
 import { UserContext } from '@global/context'
 import { ScreenBase, Error, Loading } from '@global/components'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import Bubble from '@message/components/Bubble'
 import MessageText from '@message/components/MessageText'
-import { onCreateMessage } from '@message/MessageService'
 
-class MessagesScreen extends React.Component {
-  constructor (props) {
-    super(props)
-    this.sendMessage = this.sendMessage.bind(this)
+class MessageListScreen extends Component {
+  componentDidMount () {
+    this.unsubscribe = this.props.subscribe()
+  }
+
+  componentWillUnmount () {
+    this.unsubscribe && this.unsubscribe()
   }
 
   messages () {
@@ -31,17 +33,16 @@ class MessagesScreen extends React.Component {
     }))
   }
 
-  async sendMessage (messages = []) {
-    Promise.all(messages.map(async m => {
-      const input = {
-        owner: this.props.userId,
-        messageGroupId: this.props.navigation.getParam('groupId'),
-        authUsers: this.props.authUsers,
-        text: m.text,
-        type: 'TEXT'
-      }
-      await this.props.sendMessage({ input })
-    }))
+  sendMessage = (messages = []) => {
+    const { userId, groupId, authUsers } = this.props
+    const input = {
+      owner: userId,
+      messageGroupId: groupId,
+      authUsers: authUsers,
+      text: messages[0].text,
+      type: 'TEXT'
+    }
+    this.props.sendMessage({ input })
   }
 
   renderMessageImage = props => {
@@ -64,34 +65,71 @@ class MessagesScreen extends React.Component {
   }
 }
 
-const ConnectedMessagesScreen = props => {
+const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+  error,
+  loading: loading || !getGroup,
+  items: getGroup ? getGroup.messages.items : []
+})
+
+const mapper = {
+  user: <UserContext.Consumer />,
+  createMessage: ({ render }) => (
+    <Mutation mutation={createMessage}>
+      {mutation => render({ mutation })}
+    </Mutation>
+  ),
+  messages: ({ groupId, render }) => (
+    <Query query={listGroupMessages} variables={{ groupId }} >
+      {({ data, subscribeToMore }) => render({ data, subscribeToMore, groupId })}
+    </Query>
+  )
+}
+
+const mapProps = ({ user, createMessage, messages }) => {
+  const { error, loading, items } = dataExtractor({ data: messages.data })
+  return {
+    userId: user.id,
+    error,
+    loading,
+    messages: items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    create: ({ input }) => {
+      createMessage.mutation({ variables: { input } })
+    },
+    subscribe: () => messages.subscribeToMore({
+      document: onCreateMessage,
+      variables: { messageGroupId: messages.groupId },
+      updateQuery: (previous, { subscriptionData }) => {
+        if (!subscriptionData.data) return previous
+        const newItem = subscriptionData.data.onCreateMessage
+        const newItems = uniqueBy([ ...previous.getGroup.messages.items, newItem ], 'id')
+        return { ...previous, getGroup: { ...previous.getGroup, messages: { ...previous.getGroup.messages, items: newItems } } }
+      }
+    })
+  }
+}
+
+const Connect = adopt(mapper, mapProps)
+
+const ConnectedMessageListScreen = props => {
   const groupId = props.navigation.getParam('groupId')
   return (
-    <Connect
-      query={graphqlOperation(customGetGroup, { id: groupId })}
-      subscription={onCreateMessage({ messageGroupId: groupId })}
-      mutation={graphqlOperation(mutations.createMessage)}
-      onSubscriptionMsg={(previous, { onCreateMessage }) => {
-        const { getGroup } = previous
-        const newItems = [ onCreateMessage, ...getGroup.messages.items ]
-        return { ...previous, getGroup: { ...getGroup, messages: { ...getGroup.messages, items: newItems } }
-        }
-      }}
-    >
-      {({ mutation, data: { getGroup }, loading, error }) => {
+    <Connect groupId={groupId}>
+      {({ userId, error, loading, messages, create, subscribe }) => {
         if (error) return <Error />
-        if (loading || !getGroup) return <Loading />
-        const sortedMessages = getGroup.messages.items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        return <MessagesScreen authUsers={getGroup.authUsers} messages={sortedMessages} sendMessage={mutation} {...props} />
+        if (loading) return <Loading />
+        return (
+          <MessageListScreen
+            userId={userId}
+            groupId={groupId}
+            sendMessage={create}
+            messages={messages}
+            subscribe={subscribe}
+            {...props}
+          />
+        )
       }}
     </Connect>
   )
 }
 
-const MessagesScreenWithContext = props => (
-  <UserContext.Consumer>
-    {user => <ConnectedMessagesScreen userId={user.id} {...props} />}
-  </UserContext.Consumer>
-)
-
-export default MessagesScreenWithContext
+export default ConnectedMessageListScreen
