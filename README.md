@@ -7,3 +7,23 @@
 - +12044000101
 - +12012673475
 - +12027599156
+
+## Todo
+
+- Try polling for messages as well as subscribing as temporary fix for photos not triggering mutation.
+
+### Refactor
+
+- SelectContactList
+- ContactService
+- GroupSettingsScreen
+- PhotoUpload
+
+### Complete
+
+- AddUsersModal
+- MessageListScreen (optimistic responses)
+
+## Add
+
+- apollo-cache-persist

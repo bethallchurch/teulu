@@ -73,7 +73,7 @@ const mapper = {
 }
 
 const mapProps = ({ user, createGroup }) => ({
-  user,
+  userId: user.id,
   createGroup: ({ input }) => {
     const { navigateToGroup } = createGroup
     const time = new Date().toISOString()
@@ -115,8 +115,8 @@ const Connect = adopt(mapper, mapProps)
 
 const ConnectedCreateGroup = props => (
   <Connect navigate={props.navigation.navigate}>
-    {({ user, ...connectProps }) => (
-      <CreateGroup userId={user.id} {...connectProps} {...props} />
+    {({ userId, ...connectProps }) => (
+      <CreateGroup userId={userId} {...connectProps} {...props} />
     )}
   </Connect>
 )

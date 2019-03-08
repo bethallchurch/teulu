@@ -1,24 +1,14 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import { getGroup } from '@group/GroupService'
-import { onCreateAlbum, listAlbums } from '@album/AlbumService'
+import { listAlbums } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
 import { Error, Loading, SquareGrid } from '@global/components'
 import AlbumListItem from '@album/components/AlbumListItem'
 
 class AlbumList extends Component {
-  componentDidMount () {
-    console.log('subscribing...', this.props.subscribe)
-    this.unsubscribe = this.props.subscribe()
-  }
-
-  componentWillUnmount () {
-    this.unsubscribe && this.unsubscribe()
-  }
-
   navigateToAlbum = (id, name) => {
-    const { navigation: { navigate } } = this.props
-    navigate(ALBUM, {
+    this.props.navigation.navigate(ALBUM, {
       albumId: id,
       albumName: name,
       authUsers: (this.props.albums[0] || {}).authUsers
@@ -58,19 +48,13 @@ class AlbumList extends Component {
   }
 }
 
-const ConnectedAlbumList = ({ query, variables, dataExtractor, subscription, ...props }) => (
-  <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
-    {({ subscribeToMore, ...data }) => {
+const ConnectedAlbumList = ({ query, variables, dataExtractor, ...props }) => (
+  <Query query={query} variables={variables} pollInterval={1000}>
+    {data => {
       const { error, loading, items } = dataExtractor(data)
       if (error) return <Error />
       if (loading) return <Loading />
-      return (
-        <AlbumList
-          subscribe={subscribeToMore(subscription)}
-          albums={items}
-          {...props}
-        />
-      )
+      return <AlbumList albums={items} {...props} />
     }}
   </Query>
 )
@@ -78,15 +62,6 @@ const ConnectedAlbumList = ({ query, variables, dataExtractor, subscription, ...
 export const GroupAlbumList = props => {
   const query = getGroup
   const variables = { id: props.groupId }
-  const subscription = {
-    document: onCreateAlbum,
-    variables: { albumGroupId: props.groupId },
-    updateQuery: (previous, { subscriptionData }) => {
-      if (!subscriptionData.data) return previous
-      const newItems = [ subscriptionData.data.onCreateAlbum, ...listAlbums.items ]
-      return { ...previous, listAlbums: { ...listAlbums, items: newItems } }
-    }
-  }
   const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
     error,
     loading: loading || !getGroup,
@@ -97,7 +72,6 @@ export const GroupAlbumList = props => {
       query={query}
       variables={variables}
       dataExtractor={dataExtractor}
-      subscription={subscription}
       {...props}
     />
   )
@@ -111,21 +85,11 @@ const AlbumListAll = props => {
     loading: loading || !listAlbums,
     items: listAlbums ? listAlbums.items : []
   })
-  const subscription = {
-    document: onCreateAlbum,
-    updateQuery: (previous, { subscriptionData }) => {
-      console.log('DATA:', subscriptionData)
-      if (!subscriptionData.data) return previous
-      const newItems = [ subscriptionData.data.onCreateAlbum, ...previous.listAlbums.items ]
-      return { ...previous, listAlbums: { ...previous.listAlbums, items: newItems } }
-    }
-  }
   return (
     <ConnectedAlbumList
       query={query}
       variables={variables}
       dataExtractor={dataExtractor}
-      subscription={subscription}
       {...props}
     />
   )

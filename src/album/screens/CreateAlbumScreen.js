@@ -1,29 +1,29 @@
 import React from 'react'
+import { StyleSheet } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
+import { adopt } from 'react-adopt'
+import uuid from 'uuid/v4'
 import { getGroup } from '@group/GroupService'
 import { createAlbum } from '@album/AlbumService'
-// import { ALBUM } from '@navigation/routes'
+import { ALBUM } from '@navigation/routes'
+import { UserContext } from '@global/context'
 import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error } from '@global/components'
 import { layout } from '@global/styles'
 
 class CreateAlbumScreen extends WithInputs {
-  state = { albumName: '', groupId: '', authUsers: [] }
-
-  componentDidMount () {
-    console.log(this.props)
-  }
+  state = { albumName: '' }
 
   createAlbum = () => {
     const { albumName } = this.state
-    console.log('CALLING CREATE ALBUM (commented out)', albumName)
-
-    // this.props.createAlbum({ variables: { { name: albumName, albumGroupId: groupId, authUsers } } })
+    const { userId, groupId, authUsers } = this.props
+    const input = { id: uuid(), owner: userId, name: albumName, albumGroupId: groupId, authUsers }
+    this.props.createAlbum({ input })
   }
 
   render () {
     return (
       <ScreenBase avoidKeyboard contentContainer>
-        <Text h5 style={{ width: '100%', marginBottom: layout.s2 }}>Name your album</Text>
+        <Text h5 style={styles.title}>Name your album</Text>
         <TextInput
           placeholder='Album Name'
           value={this.state.albumName}
@@ -37,34 +37,97 @@ class CreateAlbumScreen extends WithInputs {
   }
 }
 
-const ConnectedCreateAlbumScreen = props => {
-  const query = getGroup
-  const queryVariables = { id: props.navigation.getParam('groupId') }
-  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
-    error,
-    loading: loading || !getGroup,
-    item: getGroup
-  })
-  const mutation = createAlbum
-  const onMutationCompleted = params => {
-    console.log('ALBUM CREATED:', params)
+const styles = StyleSheet.create({
+  title: {
+    width: '100%',
+    marginBottom: layout.s2
   }
-  return (
-    <Query query={query} variables={queryVariables} fetchPolicy='cache-and-network'>
-      {({ subscribeToMore, ...data }) => {
-        const { error, loading, item } = dataExtractor(data)
-        if (error) return <Error />
-        if (loading) return <Loading />
-        return (
-          <Mutation mutation={mutation} onCompleted={onMutationCompleted}>
-            {mutate => (
-              <CreateAlbumScreen group={item} createAlbum={mutate} {...props} />
-            )}
-          </Mutation>
-        )
-      }}
-    </Query>
+})
+
+const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+  error,
+  loading: loading || !getGroup,
+  group: getGroup
+})
+
+const mapper = {
+  user: <UserContext.Consumer />,
+  groupData: ({ groupId, render }) => {
+    const variables = { id: groupId }
+    return (
+      <Query query={getGroup} variables={variables}>
+        {({ data }) => render(data)}
+      </Query>
+    )
+  },
+  createAlbum: ({ navigate, render }) => (
+    <Mutation mutation={createAlbum}>
+      {mutation => render({
+        mutation,
+        navigateToAlbum: ({ albumId, albumName }) => navigate(ALBUM, ({ albumId, albumName }))
+      })}
+    </Mutation>
   )
 }
+
+const mapProps = ({ user, groupData, createAlbum }) => {
+  const { error, loading, group } = dataExtractor({ data: groupData })
+  return {
+    userId: user.id,
+    error,
+    loading,
+    group,
+    createAlbum: ({ input }) => {
+      const { navigateToAlbum } = createAlbum
+      const time = new Date().toISOString()
+      const optimisticResponse = {
+        createAlbum: {
+          __typename: 'Album',
+          ...input,
+          group: {
+            __typename: 'ModelGroupConnection',
+            ...group
+          },
+          photos: {
+            __typename: 'ModelPhotoConnection',
+            items: [],
+            nextToken: null
+          },
+          createdAt: time,
+          updatedAt: time
+        }
+      }
+      const update = async (cache, { data: { createAlbum } }) => {
+        const query = getGroup
+        const variables = { id: createAlbum.albumGroupId }
+        const data = cache.readQuery({ query, variables })
+        data.getGroup.albums.items = [ createAlbum, ...data.getGroup.albums.items ]
+        cache.writeQuery({ query, variables, data })
+        navigateToAlbum({ albumId: createAlbum.id, albumName: createAlbum.name })
+      }
+      createAlbum.mutation({ variables: { input }, optimisticResponse, update })
+    }
+  }
+}
+
+const Connect = adopt(mapper, mapProps)
+
+const ConnectedCreateAlbumScreen = props => (
+  <Connect groupId={props.navigation.getParam('groupId')} navigate={props.navigation.navigate}>
+    {({ userId, error, loading, group, createAlbum }) => {
+      if (error) return <Error />
+      if (loading) return <Loading />
+      return (
+        <CreateAlbumScreen
+          userId={userId}
+          groupId={group.id}
+          authUsers={group.authUsers}
+          createAlbum={createAlbum}
+          {...props}
+        />
+      )
+    }}
+  </Connect>
+)
 
 export default ConnectedCreateAlbumScreen

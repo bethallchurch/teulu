@@ -3,6 +3,7 @@ import Amplify, { Hub, Auth } from 'aws-amplify'
 import AWSAppSyncClient from 'aws-appsync'
 import { ApolloProvider } from 'react-apollo'
 import { Rehydrated } from 'aws-appsync-react'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createAppContainer } from 'react-navigation'
 import { Font } from 'expo'
 import config from './aws-exports'
@@ -14,6 +15,8 @@ import { Loading } from '@global/components'
 
 Amplify.configure(config)
 
+const cache = new InMemoryCache()
+
 const client = new AWSAppSyncClient({
   url: config.aws_appsync_graphqlEndpoint,
   region: config.aws_appsync_region,
@@ -23,7 +26,8 @@ const client = new AWSAppSyncClient({
     credentials: () => Auth.currentCredentials(),
     jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken()
   },
-  disableOffline: true
+  disableOffline: true,
+  cache
 })
 
 const AppNavigator = createAppContainer(AuthStack)

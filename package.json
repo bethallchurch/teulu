@@ -17,6 +17,8 @@
     "parser": "babel-eslint"
   },
   "dependencies": {
+    "apollo-cache-inmemory": "^1.5.1",
+    "apollo-cache-persist": "^0.1.1",
     "aws-amplify": "^1.1.19",
     "aws-amplify-react-native": "^2.1.7",
     "aws-appsync": "^1.7.1",

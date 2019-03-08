@@ -16,26 +16,6 @@ const AlbumSettingsScreen = ({ album }) => (
   </ScreenBase>
 )
 
-const ConnectedAlbumSettingsScreen = props => {
-  const query = getAlbum
-  const variables = { id: props.navigation.getParam('albumId') }
-  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
-    error,
-    loading: loading || !getAlbum,
-    item: getAlbum
-  })
-  return (
-    <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
-      {data => {
-        const { error, loading, item } = dataExtractor(data)
-        if (error) return <Error />
-        if (loading) return <Loading />
-        return <AlbumSettingsScreen album={item} {...props} />
-      }}
-    </Query>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start'
@@ -55,5 +35,25 @@ const styles = StyleSheet.create({
     marginBottom: 0
   }
 })
+
+const ConnectedAlbumSettingsScreen = props => {
+  const query = getAlbum
+  const variables = { id: props.navigation.getParam('albumId') }
+  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+    error,
+    loading: loading || !getAlbum,
+    item: getAlbum
+  })
+  return (
+    <Query query={query} variables={variables} pollInterval={1000}>
+      {data => {
+        const { error, loading, item } = dataExtractor(data)
+        if (error) return <Error />
+        if (loading) return <Loading />
+        return <AlbumSettingsScreen album={item} {...props} />
+      }}
+    </Query>
+  )
+}
 
 export default ConnectedAlbumSettingsScreen
