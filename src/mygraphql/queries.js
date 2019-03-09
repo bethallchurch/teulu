@@ -1,3 +1,29 @@
+export const listPhoneContacts = `
+  {
+    phoneContacts @client {
+      name
+      phoneNumber
+    }
+  }
+`
+
+export const listContacts = `query ListContacts(
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      phoneNumber
+      name @client
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}`
+
 export const listGroupMessages = `query GetGroup($groupId: ID!) {
   getGroup(id: $groupId) {
     id

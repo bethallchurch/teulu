@@ -8,6 +8,43 @@ type User
   updatedAt: String
 }
 
+input ModelUserIDFilterInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+}
+
+input ModelStringFilterInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+  in: [String]
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+}
+
+input ModelUserFilterInput {
+	id: ModelUserIDFilterInput
+	phoneNumber: ModelStringFilterInput
+	createdAt: ModelStringFilterInput
+	updatedAt: ModelStringFilterInput
+	and: [ModelUserFilterInput]
+	or: [ModelUserFilterInput]
+	not: ModelUserFilterInput
+}
+
 type GroupLink
 @model {
   id: ID!

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import Amplify, { Hub, Auth } from 'aws-amplify'
-import AWSAppSyncClient from 'aws-appsync'
-import { ApolloProvider } from 'react-apollo'
+import gql from 'graphql-tag'
+import AWSAppSyncClient, { createAppSyncLink } from 'aws-appsync'
+import { ApolloProvider, ApolloConsumer } from 'react-apollo'
+import { withClientState } from 'apollo-link-state'
+import { ApolloLink } from 'apollo-link'
 import { Rehydrated } from 'aws-appsync-react'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createAppContainer } from 'react-navigation'
@@ -12,12 +15,34 @@ import { getOrCreateUser } from '@user/UserService'
 import { fontRegular, fontLight, fontMedium } from '@global/styles/typography'
 import { UserContext } from '@global/context'
 import { Loading } from '@global/components'
+import { LIST_PHONE_CONTACTS, listPhoneContacts } from '@contact/ContactService'
+
+export const typeDefs = gql`
+  extend type User {
+    name: String
+  }
+`
 
 Amplify.configure(config)
 
-const cache = new InMemoryCache()
+export const cache = new InMemoryCache()
 
-const client = new AWSAppSyncClient({
+const stateLink = withClientState({
+  cache,
+  typeDefs,
+  resolvers: {
+    User: {
+      name (...args) {
+        // TODO: works with query component but not client.query
+        console.log('ARGS!', args)
+        // cache.readQuery({ query: LIST_PHONE_CONTACTS })
+        return 'Test Name'
+      }
+    }
+  }
+})
+
+const appSyncLink = createAppSyncLink({
   url: config.aws_appsync_graphqlEndpoint,
   region: config.aws_appsync_region,
   complexObjectsCredentials: () => Auth.currentCredentials(),
@@ -26,9 +51,11 @@ const client = new AWSAppSyncClient({
     credentials: () => Auth.currentCredentials(),
     jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken()
   },
-  disableOffline: true,
-  cache
+  disableOffline: true
 })
+
+const link = ApolloLink.from([ stateLink, appSyncLink ])
+const client = new AWSAppSyncClient({}, { link })
 
 const AppNavigator = createAppContainer(AuthStack)
 
@@ -41,6 +68,12 @@ class App extends Component {
 
   async componentDidMount () {
     this.setUser()
+    // TODO: { status } = await Permissions.askAsync(Permissions.CONTACTS)
+    const phoneContacts = await listPhoneContacts()
+    client.writeQuery({
+      query: LIST_PHONE_CONTACTS,
+      data: { phoneContacts }
+    })
     await Font.loadAsync({
       [fontRegular.fontFamily]: require('@assets/fonts/Lato/Lato-Regular.ttf'),
       [fontMedium.fontFamily]: require('@assets/fonts/Lato/Lato-Bold.ttf'),
@@ -76,7 +109,9 @@ class App extends Component {
 const AppWithProvider = () => (
   <ApolloProvider client={client}>
     <Rehydrated>
-      <App />
+      <ApolloConsumer>
+        {client => <App client={client} />}
+      </ApolloConsumer>
     </Rehydrated>
   </ApolloProvider>
 )

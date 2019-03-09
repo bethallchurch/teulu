@@ -1,32 +1,21 @@
 import React, { Component } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { Permissions } from 'expo'
-import { getContacts } from '@contact/ContactService'
+import { adopt } from 'react-adopt'
+import { ApolloConsumer } from 'react-apollo'
+import { LIST_PHONE_CONTACTS } from '@contact/ContactService'
+import { LIST_USERS } from '@user/UserService'
+import { chunk, flatten } from '@global/helpers'
 import { UserContext } from '@global/context'
-import { Loading, Text } from '@global/components'
+import { Error, Loading, Text } from '@global/components'
 import NoContacts from '@contact/components/NoContacts'
 import { colors, layout } from '@global/styles'
 
 class SelectContactList extends Component {
-  state = { contacts: [], loading: true }
-
-  async componentDidMount () {
-    try {
-      const { status } = await Permissions.askAsync(Permissions.CONTACTS)
-      if (status === 'granted') {
-        const contacts = await getContacts()
-        this.setState({ contacts, loading: false })
-      }
-    } catch (error) {
-      console.log('Error getting contacts:', error)
-      this.setState({ loading: false })
-    }
-  }
-
   renderItem = ({ item: { id, name, phoneNumber } }) => {
     const { selectedContacts, onPressContact } = this.props
     const selected = selectedContacts.includes(id)
+    console.log('name:', name, 'phoneNumber:', phoneNumber)
     return (
       <ListItem
         bottomDivider
@@ -41,12 +30,10 @@ class SelectContactList extends Component {
   }
 
   render () {
-    const { contacts, loading } = this.state
-    const { exclude = [] } = this.props
+    const { contacts, exclude = [] } = this.props
     const message = exclude.length <= 0
       ? 'Contacts from your phone who have downloaded the app will automatically appear here.'
       : 'No results.'
-    if (loading) return <Loading />
     return contacts.length > 0 ? (<FlatList
       extraData={this.props.selectedContacts}
       style={styles.list}
@@ -57,12 +44,6 @@ class SelectContactList extends Component {
   }
 }
 
-const SelectContactListWithContext = props => (
-  <UserContext.Consumer>
-    {user => <SelectContactList userId={user.id} {...props} />}
-  </UserContext.Consumer>
-)
-
 const styles = StyleSheet.create({
   list: {
     backgroundColor: colors.secondaryBackground,
@@ -71,4 +52,66 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SelectContactListWithContext
+class Contacts extends Component {
+  state = { error: false, loading: true, data: {} }
+
+  async componentDidMount () {
+    const { client } = this.props
+    const { phoneContacts } = client.readQuery({ query: LIST_PHONE_CONTACTS })
+    const phoneNumbers = (phoneContacts || []).map(({ phoneNumber }) => phoneNumber)
+    const chunked = chunk(phoneNumbers, 99)
+    const result = await Promise.all(chunked.map(phoneNumbers => {
+      const filter = {
+        phoneNumber: { in: phoneNumbers }
+      }
+      return client.query({ query: LIST_USERS, variables: { filter } })
+    }))
+    // TODO: proper error handling
+    const contacts = flatten(result.map(({ data }) => data.listUsers.items))
+    this.setState({ data: { contacts }, loading: false })
+  }
+
+  render () {
+    return (
+      <>
+        {this.props.render(this.state)}
+      </>
+    )
+  }
+}
+
+const contactDataExtractor = ({ data: { contacts }, loading, error }) => ({
+  error,
+  loading: loading || !contacts,
+  contacts: contacts || []
+})
+
+const mapper = {
+  user: <UserContext.Consumer />,
+  contactData: ({ render }) => {
+    return (
+      <ApolloConsumer>
+        {client => <Contacts client={client} render={render} />}
+      </ApolloConsumer>
+    )
+  }
+}
+
+const mapProps = ({ user, contactData }) => {
+  const { error, loading, contacts } = contactDataExtractor(contactData)
+  return { userId: user.id, error, loading, contacts }
+}
+
+const Connect = adopt(mapper, mapProps)
+
+const ConnectedSelectContactList = props => (
+  <Connect>
+    {({ userId, error, loading, contacts }) => {
+      if (error) return <Error />
+      if (loading) return <Loading />
+      return <SelectContactList userId={userId} contacts={contacts} {...props} />
+    }}
+  </Connect>
+)
+
+export default ConnectedSelectContactList

@@ -27,3 +27,8 @@
 ## Add
 
 - apollo-cache-persist
+- PhotoListScreen (all)
+- AlbumListScreen (all)
+- UpdateGroupScreen
+- UpdateAlbumScreen
+- PhotoLightbox

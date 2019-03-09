@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "build-function": "bash ./tools/build-function.sh",
-    "lint": "standard --fix"
+    "lint": "standard --fix",
+    "temp": "watchman watch-del-all"
   },
   "husky": {
     "hooks": {
@@ -19,6 +20,8 @@
   "dependencies": {
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-cache-persist": "^0.1.1",
+    "apollo-link": "^1.2.9",
+    "apollo-link-state": "^0.4.2",
     "aws-amplify": "^1.1.19",
     "aws-amplify-react-native": "^2.1.7",
     "aws-appsync": "^1.7.1",

@@ -6,6 +6,43 @@ type User {
   updatedAt: String
 }
 
+input ModelUserIDFilterInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+}
+
+input ModelStringFilterInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  in: [String]
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelUserFilterInput {
+  id: ModelUserIDFilterInput
+  phoneNumber: ModelStringFilterInput
+  createdAt: ModelStringFilterInput
+  updatedAt: ModelStringFilterInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
 type GroupLink {
   id: ID!
   user: User
@@ -99,19 +136,6 @@ type ModelUserConnection {
   nextToken: String
 }
 
-input ModelStringFilterInput {
-  ne: String
-  eq: String
-  le: String
-  lt: String
-  ge: String
-  gt: String
-  contains: String
-  notContains: String
-  between: [String]
-  beginsWith: String
-}
-
 input ModelIDFilterInput {
   ne: ID
   eq: ID
@@ -152,16 +176,6 @@ input ModelFloatFilterInput {
 input ModelBooleanFilterInput {
   ne: Boolean
   eq: Boolean
-}
-
-input ModelUserFilterInput {
-  id: ModelIDFilterInput
-  phoneNumber: ModelStringFilterInput
-  createdAt: ModelStringFilterInput
-  updatedAt: ModelStringFilterInput
-  and: [ModelUserFilterInput]
-  or: [ModelUserFilterInput]
-  not: ModelUserFilterInput
 }
 
 type Query {

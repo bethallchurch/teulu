@@ -1,38 +1,28 @@
+import gql from 'graphql-tag'
 import { Contacts } from 'expo'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
-import { unique, compact, flatten, chunk } from '@global/helpers'
-import { listUsers } from '@user/UserService'
+import { uniqueBy } from '@global/helpers'
+import * as myQueries from '@mygraphql/queries'
 
-const contactStore = {}
+// Queries
+export const LIST_CONTACTS = gql(myQueries.listContacts)
+export const LIST_PHONE_CONTACTS = gql(myQueries.listPhoneContacts)
 
-export const getPhoneContacts = () => Contacts.getContactsAsync()
+export const listPhoneContacts = async () => {
+  const contactStore = []
 
-export const getContacts = async () => {
-  const { data: phoneContacts } = await getPhoneContacts()
+  const { data: contacts } = await Contacts.getContactsAsync()
 
-  const filteredPhoneContacts = phoneContacts.map(({ name, phoneNumbers, ...rest }) => {
-    return {
-      name,
-      phoneNumbers: phoneNumbers ? compact(unique(phoneNumbers.map(({ number }) => {
-        const phoneNumber = parsePhoneNumberFromString(number, 'GB')
-        const valid = phoneNumber.isValid()
-        if (valid) {
-          contactStore[phoneNumber.number] = name
-        }
-        return phoneNumber && valid ? phoneNumber.number : null
-      }))) : []
-    }
-  }).filter(({ phoneNumbers }) => phoneNumbers.length > 0)
+  contacts.forEach(({ name, phoneNumbers }) => {
+    phoneNumbers && phoneNumbers.forEach(({ number }) => {
+      // TODO: currently assuming phone numbers GB by default
+      const phoneNumber = parsePhoneNumberFromString(number, 'GB')
+      const valid = phoneNumber.isValid()
+      if (valid) {
+        contactStore.push({ __typename: 'PhoneContact', name, phoneNumber: phoneNumber.number })
+      }
+    })
+  })
 
-  const filters = chunk(flatten(filteredPhoneContacts.map(
-    ({ phoneNumbers }) => phoneNumbers.reduce(
-      (acc, phoneNumber) => ({ phoneNumber: { eq: phoneNumber } }), []
-    )
-  )), 5).map(batch => ({ or: batch }))
-
-  const result = await Promise.all(filters.map(filter => listUsers({ filter })))
-
-  return flatten(result.map(({ data: { listUsers: { items } } }) => {
-    return items.map(item => ({ ...item, name: contactStore[item.phoneNumber] }))
-  }))
+  return uniqueBy(contactStore, 'phoneNumber')
 }
