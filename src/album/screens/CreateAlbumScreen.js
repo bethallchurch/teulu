@@ -3,8 +3,8 @@ import { StyleSheet } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import uuid from 'uuid/v4'
-import { getGroup } from '@group/GroupService'
-import { createAlbum } from '@album/AlbumService'
+import { GET_GROUP } from '@group/GroupService'
+import { CREATE_ALBUM } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
 import { UserContext } from '@global/context'
 import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error } from '@global/components'
@@ -55,13 +55,13 @@ const mapper = {
   groupData: ({ groupId, render }) => {
     const variables = { id: groupId }
     return (
-      <Query query={getGroup} variables={variables}>
+      <Query query={GET_GROUP} variables={variables}>
         {({ data }) => render(data)}
       </Query>
     )
   },
   createAlbum: ({ navigate, render }) => (
-    <Mutation mutation={createAlbum}>
+    <Mutation mutation={CREATE_ALBUM}>
       {mutation => render({
         mutation,
         navigateToAlbum: ({ albumId, albumName }) => navigate(ALBUM, ({ albumId, albumName }))
@@ -98,7 +98,7 @@ const mapProps = ({ user, groupData, createAlbum }) => {
         }
       }
       const update = async (cache, { data: { createAlbum } }) => {
-        const query = getGroup
+        const query = GET_GROUP
         const variables = { id: createAlbum.albumGroupId }
         const data = cache.readQuery({ query, variables })
         data.getGroup.albums.items = [ createAlbum, ...data.getGroup.albums.items ]

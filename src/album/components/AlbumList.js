@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Query } from 'react-apollo'
-import { getGroup } from '@group/GroupService'
-import { listAlbums } from '@album/AlbumService'
+import { GET_GROUP } from '@group/GroupService'
+import { LIST_ALBUMS } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
 import { Error, Loading, SquareGrid } from '@global/components'
 import AlbumListItem from '@album/components/AlbumListItem'
@@ -60,8 +60,7 @@ const ConnectedAlbumList = ({ query, variables, dataExtractor, ...props }) => (
 )
 
 export const GroupAlbumList = props => {
-  const query = getGroup
-  const variables = { id: props.groupId }
+  const { groupId } = props
   const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
     error,
     loading: loading || !getGroup,
@@ -69,8 +68,8 @@ export const GroupAlbumList = props => {
   })
   return (
     <ConnectedAlbumList
-      query={query}
-      variables={variables}
+      query={GET_GROUP}
+      variables={{ id: groupId }}
       dataExtractor={dataExtractor}
       {...props}
     />
@@ -78,7 +77,6 @@ export const GroupAlbumList = props => {
 }
 
 const AlbumListAll = props => {
-  const query = listAlbums
   const variables = props.limit ? { limit: props.limit } : {}
   const dataExtractor = ({ data: { listAlbums }, loading, error }) => ({
     error,
@@ -87,7 +85,7 @@ const AlbumListAll = props => {
   })
   return (
     <ConnectedAlbumList
-      query={query}
+      query={LIST_ALBUMS}
       variables={variables}
       dataExtractor={dataExtractor}
       {...props}

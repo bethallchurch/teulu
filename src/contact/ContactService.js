@@ -1,14 +1,11 @@
 import { Contacts } from 'expo'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 import { unique, compact, flatten, chunk } from '@global/helpers'
-import { API, graphqlOperation } from 'aws-amplify'
-import * as queries from '@graphql/queries'
+import { listUsers } from '@user/UserService'
 
 const contactStore = {}
 
 export const getPhoneContacts = () => Contacts.getContactsAsync()
-
-const listUsers = ({ filter }) => API.graphql(graphqlOperation(queries.listUsers, { filter }))
 
 export const getContacts = async () => {
   const { data: phoneContacts } = await getPhoneContacts()

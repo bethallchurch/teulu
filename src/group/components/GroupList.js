@@ -3,7 +3,7 @@ import { FlatList, StyleSheet } from 'react-native'
 import { Query } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import { GROUP } from '@navigation/routes'
-import { listGroups } from '@group/GroupService'
+import { LIST_GROUPS } from '@group/GroupService'
 import { UserContext } from '@global/context'
 import { Error, Loading } from '@global/components'
 import GroupListItem from '@group/components/GroupListItem'
@@ -55,7 +55,7 @@ const mapper = {
   groupData: ({ compact, render }) => {
     const variables = compact ? { limit: 3 } : {}
     return (
-      <Query query={listGroups} variables={variables} pollInterval={1000}>
+      <Query query={LIST_GROUPS} variables={variables} pollInterval={1000}>
         {({ data }) => render(data)}
       </Query>
     )

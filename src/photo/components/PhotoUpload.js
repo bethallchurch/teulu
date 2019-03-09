@@ -5,7 +5,7 @@ import { ImagePicker, Permissions } from 'expo'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
 import { Text, FullWidthButton, Error, Loading } from '@global/components'
-import { getAlbum } from '@album/AlbumService'
+import { GET_ALBUM } from '@album/AlbumService'
 import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { colors, layout } from '@global/styles'
 
@@ -98,15 +98,14 @@ const AddRightIcon = () => <MaterialIcons name='photo' size={layout.s4} color={c
 const UploadRightIcon = () => <Feather name='upload' size={layout.s4} color={colors.primaryBackground} />
 
 const ConnectedPhotoUpload = props => {
-  const query = getAlbum
-  const variables = { id: props.navigation.getParam('albumId') }
+  const albumId = props.navigation.getParam('albumId')
   const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
     error,
     loading: loading || !getAlbum,
     item: getAlbum
   })
   return (
-    <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
+    <Query query={GET_ALBUM} variables={{ id: albumId }} fetchPolicy='cache-and-network'>
       {data => {
         const { error, loading, item } = dataExtractor(data)
         if (error) return <Error />

@@ -3,16 +3,11 @@ import gql from 'graphql-tag'
 import { Storage } from 'aws-amplify'
 import { v4 as uuid } from 'uuid'
 import * as queries from '@graphql/queries'
-import * as subscriptions from '@graphql/subscriptions'
 import * as myQueries from '@mygraphql/queries'
 
 // Queries
-export const getPhoto = gql(queries.getPhoto)
-export const listPhotos = gql(queries.listPhotos)
-export const listAlbumPhotos = gql(myQueries.listAlbumPhotos)
-
-// Subscriptions
-export const onCreatePhoto = gql(subscriptions.onCreatePhoto)
+export const LIST_PHOTOS = gql(queries.listPhotos)
+export const LIST_ALBUM_PHOTOS = gql(myQueries.listAlbumPhotos)
 
 // Why are we using XMLHttpRequest? See:
 // https://github.com/expo/expo/issues/2402#issuecomment-443726662

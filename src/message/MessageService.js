@@ -1,15 +1,13 @@
 import gql from 'graphql-tag'
 import * as mutations from '@graphql/mutations'
-import * as queries from '@graphql/queries'
 import * as subscriptions from '@graphql/subscriptions'
 import * as myQueries from '@mygraphql/queries'
 
 // Mutations
-export const createMessage = gql(mutations.createMessage)
+export const CREATE_MESSAGE = gql(mutations.createMessage)
 
 // Queries
-export const getMessage = gql(queries.getMessage)
-export const listGroupMessages = gql(myQueries.listGroupMessages)
+export const LIST_GROUP_MESSAGES = gql(myQueries.listGroupMessages)
 
 // Subscriptions
-export const onCreateMessage = gql(subscriptions.onCreateMessage)
+export const ON_CREATE_MESSAGE = gql(subscriptions.onCreateMessage)

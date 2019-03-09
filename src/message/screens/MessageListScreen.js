@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import { GiftedChat } from 'react-native-gifted-chat'
-import { onCreateMessage, listGroupMessages, createMessage } from '@message/MessageService'
+import { ON_CREATE_MESSAGE, LIST_GROUP_MESSAGES, CREATE_MESSAGE } from '@message/MessageService'
 import { uniqueBy } from '@global/helpers'
 import { UserContext } from '@global/context'
 import { ScreenBase, Error, Loading } from '@global/components'
@@ -74,12 +74,12 @@ const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
 const mapper = {
   user: <UserContext.Consumer />,
   createMessage: ({ render }) => (
-    <Mutation mutation={createMessage}>
+    <Mutation mutation={CREATE_MESSAGE}>
       {mutation => render({ mutation })}
     </Mutation>
   ),
   messages: ({ groupId, render }) => (
-    <Query query={listGroupMessages} variables={{ groupId }} >
+    <Query query={LIST_GROUP_MESSAGES} variables={{ groupId }} >
       {({ data, subscribeToMore }) => render({ data, subscribeToMore, groupId })}
     </Query>
   )
@@ -96,7 +96,7 @@ const mapProps = ({ user, createMessage, messages }) => {
       createMessage.mutation({ variables: { input } })
     },
     subscribe: () => messages.subscribeToMore({
-      document: onCreateMessage,
+      document: ON_CREATE_MESSAGE,
       variables: { messageGroupId: messages.groupId },
       updateQuery: (previous, { subscriptionData }) => {
         if (!subscriptionData.data) return previous

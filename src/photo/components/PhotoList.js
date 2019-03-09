@@ -1,6 +1,6 @@
 import React from 'react'
 import { Query } from 'react-apollo'
-import { listPhotos, listAlbumPhotos } from '@photo/PhotoService'
+import { LIST_PHOTOS, LIST_ALBUM_PHOTOS } from '@photo/PhotoService'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import { Error, Loading, SquareGrid } from '@global/components'
 
@@ -30,8 +30,7 @@ const ConnectedPhotoList = ({ query, variables, dataExtractor, ...props }) => (
 )
 
 export const AlbumPhotoList = props => {
-  const query = listAlbumPhotos
-  const variables = { albumId: props.albumId }
+  const { albumId } = props
   const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
     error,
     loading: loading || !getAlbum,
@@ -39,8 +38,8 @@ export const AlbumPhotoList = props => {
   })
   return (
     <ConnectedPhotoList
-      query={query}
-      variables={variables}
+      query={LIST_ALBUM_PHOTOS}
+      variables={{ albumId }}
       dataExtractor={dataExtractor}
       {...props}
     />
@@ -48,7 +47,7 @@ export const AlbumPhotoList = props => {
 }
 
 const PhotoListAll = props => {
-  const query = listPhotos
+  const query = LIST_PHOTOS
   const variables = props.limit ? { limit: props.limit } : {}
   const dataExtractor = ({ data: { listPhotos }, loading, error }) => ({
     error,

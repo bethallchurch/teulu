@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet } from 'react-native'
 import { Query } from 'react-apollo'
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
-import { getGroup } from '@group/GroupService'
+import { GET_GROUP } from '@group/GroupService'
 import { ScreenBase, Text, Button, Badge, Section, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
 import AddUsersModal from '@group/components/AddUsersModal'
@@ -75,26 +75,6 @@ class GroupSettingsScreen extends Component {
   }
 }
 
-const ConnectedGroupSettingsScreen = props => {
-  const query = getGroup
-  const variables = { id: props.navigation.getParam('groupId') }
-  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
-    error,
-    loading: loading || !getGroup,
-    item: getGroup
-  })
-  return (
-    <Query query={query} variables={variables} fetchPolicy='cache-and-network'>
-      {data => {
-        const { error, loading, item } = dataExtractor(data)
-        if (error) return <Error />
-        if (loading) return <Loading />
-        return <GroupSettingsScreen group={item} {...props} />
-      }}
-    </Query>
-  )
-}
-
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start'
@@ -119,5 +99,24 @@ const styles = StyleSheet.create({
     width: 'auto'
   }
 })
+
+const ConnectedGroupSettingsScreen = props => {
+  const groupId = props.navigation.getParam('groupId')
+  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+    error,
+    loading: loading || !getGroup,
+    item: getGroup
+  })
+  return (
+    <Query query={GET_GROUP} variables={{ id: groupId }}>
+      {data => {
+        const { error, loading, item } = dataExtractor(data)
+        if (error) return <Error />
+        if (loading) return <Loading />
+        return <GroupSettingsScreen group={item} {...props} />
+      }}
+    </Query>
+  )
+}
 
 export default ConnectedGroupSettingsScreen

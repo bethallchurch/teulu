@@ -4,7 +4,7 @@ import { Query } from 'react-apollo'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ScreenBase, Error, Loading, Text } from '@global/components'
 import { colors, layout } from '@global/styles'
-import { getAlbum } from '@album/AlbumService'
+import { GET_ALBUM } from '@album/AlbumService'
 
 // TODO: Top same as GroupSettingsScreen
 const AlbumSettingsScreen = ({ album }) => (
@@ -36,16 +36,16 @@ const styles = StyleSheet.create({
   }
 })
 
+const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+  error,
+  loading: loading || !getAlbum,
+  item: getAlbum
+})
+
 const ConnectedAlbumSettingsScreen = props => {
-  const query = getAlbum
-  const variables = { id: props.navigation.getParam('albumId') }
-  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
-    error,
-    loading: loading || !getAlbum,
-    item: getAlbum
-  })
+  const albumId = props.navigation.getParam('albumId')
   return (
-    <Query query={query} variables={variables} pollInterval={1000}>
+    <Query query={GET_ALBUM} variables={{ id: albumId }} pollInterval={1000}>
       {data => {
         const { error, loading, item } = dataExtractor(data)
         if (error) return <Error />

@@ -2,7 +2,7 @@ import React from 'react'
 import { Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import uuid from 'uuid/v4'
-import { createGroup, createGroupLink, listGroups } from '@group/GroupService'
+import { LIST_GROUPS, CREATE_GROUP, createGroupLink } from '@group/GroupService'
 import SelectContactList from '@contact/components/SelectContactList'
 import { UserContext } from '@global/context'
 import { GROUP } from '@navigation/routes'
@@ -55,7 +55,7 @@ const mapper = {
   user: <UserContext.Consumer />,
   createGroup: ({ navigate, render }) => (
     <Mutation
-      mutation={createGroup}
+      mutation={CREATE_GROUP}
       onCompleted={async ({ createGroup }) => {
         const { id, authUsers } = createGroup
         await Promise.all(authUsers.map(username => {
@@ -101,7 +101,7 @@ const mapProps = ({ user, createGroup }) => ({
       }
     }
     const update = (cache, { data: { createGroup } }) => {
-      const query = listGroups
+      const query = LIST_GROUPS
       const groups = cache.readQuery({ query })
       groups.listGroups.items = [ createGroup, ...groups.listGroups.items ]
       cache.writeQuery({ query, data: groups })
