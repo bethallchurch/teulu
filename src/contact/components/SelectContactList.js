@@ -1,26 +1,25 @@
 import React, { Component } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
-import { ListItem } from 'react-native-elements'
 import { adopt } from 'react-adopt'
 import { UserContext } from '@global/context'
-import { Error, Loading, Text } from '@global/components'
+import { Error, Loading } from '@global/components'
 import NoContacts from '@contact/components/NoContacts'
 import QueryContacts from '@contact/components/QueryContacts'
+import ContactListItem from '@contact/components/ContactListItem'
 import { colors, layout } from '@global/styles'
 
 class SelectContactList extends Component {
-  renderItem = ({ item: { id, name3, phoneNumber } }) => {
+  renderItem = ({ item, index }) => {
     const { selectedContacts, onPressContact } = this.props
-    const selected = selectedContacts.includes(id)
+    const selected = selectedContacts.includes(item.id)
     return (
-      <ListItem
-        bottomDivider
-        title={<Text bodyOne>{name3 || phoneNumber}</Text>}
-        rightIcon={{
-          name: selected ? 'check-box' : 'check-box-outline-blank',
-          color: selected ? colors.primary : colors.textDefault
-        }}
-        onPress={() => onPressContact(id)}
+      <ContactListItem
+        {...item}
+        selectable
+        index={index}
+        name={item.name3}
+        selected={selected}
+        onPress={() => onPressContact(item.id)}
       />
     )
   }

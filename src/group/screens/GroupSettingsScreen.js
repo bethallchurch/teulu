@@ -2,24 +2,21 @@ import React, { Component } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
 import { Query } from 'react-apollo'
 import { adopt } from 'react-adopt'
-import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import { GET_GROUP } from '@group/GroupService'
-import { ScreenBase, Text, Badge, Section, Error, Loading } from '@global/components'
-import { colors, layout } from '@global/styles'
 import { LIST_CONTACTS } from '@contact/ContactService'
+import { ScreenBase, Text, Section, Error, Loading } from '@global/components'
+import ContactListItem from '@contact/components/ContactListItem'
+import { colors, layout } from '@global/styles'
 
 // TODO: Top same as AlbumSettingsScreen
 class GroupSettingsScreen extends Component {
-  renderItem = ({ item: { id, name3, phoneNumber, isOwner }, index }) => (
-    <ListItem
-      key={id}
-      title={<Text subtitleOne>{name3 || phoneNumber}</Text>}
-      badge={isOwner ? {
-        value: <Badge>owner</Badge>,
-        badgeStyle: { backgroundColor: colors.secondaryBackground }
-      } : null}
-      topDivider={index !== 0}
+  renderItem = ({ item, index }) => (
+    <ContactListItem
+      {...item}
+      index={index}
+      name={item.name3}
+      owner={this.props.group.owner === item.id}
     />
   )
 
