@@ -2,6 +2,7 @@ type User {
   id: ID!
   phoneNumber: String
   groups(filter: ModelGroupLinkFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelGroupLinkConnection
+  messages(filter: ModelMessageFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelMessageConnection
   createdAt: String
   updatedAt: String
 }
@@ -82,6 +83,7 @@ enum MessageType {
 type Message {
   id: ID!
   owner: String
+  user: User
   authUsers: [String]
   type: MessageType
   text: String

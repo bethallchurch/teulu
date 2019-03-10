@@ -4,6 +4,7 @@ type User
   id: ID!
   phoneNumber: String
   groups: [GroupLink] @connection(name: "UserGroupLinks")
+  messages: [Message] @connection(name: "UserMessages")
   createdAt: String
   updatedAt: String
 }
@@ -101,11 +102,12 @@ type Message
   subscriptions: null
 )
 @auth(rules: [
-  { allow: owner }
+  { allow: owner, ownerField: "owner" }
   { allow: owner, ownerField: "authUsers", mutations: null, queries: [get, list] }
 ]) {
   id: ID!
   owner: String
+  user: User @connection(name: "UserMessages", keyField: "owner")
   authUsers: [String]
   type: MessageType
   text: String

@@ -28,7 +28,7 @@ class MessageListScreen extends Component {
       createdAt: m.createdAt,
       user: {
         _id: m.owner,
-        name: m.owner
+        name: m.user.name3 || m.user.phoneNumber
       }
     }))
   }
@@ -53,6 +53,7 @@ class MessageListScreen extends Component {
     return (
       <ScreenBase avoidKeyboard keyboardAvoidingViewProps={{ keyboardVerticalOffset: 130 }}>
         <GiftedChat
+          renderUsernameOnMessage
           messages={this.messages()}
           onSend={this.sendMessage}
           user={{ _id: this.props.userId }}

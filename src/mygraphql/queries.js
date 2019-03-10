@@ -28,6 +28,11 @@ export const listGroupMessages = `query GetGroup($groupId: ID!) {
         authUsers
         text
         messageGroupId
+        user {
+          id
+          name3 @client
+          phoneNumber
+        }
         photos {
           items {
             id
@@ -77,6 +82,23 @@ export const listAlbumPhotos = `query GetAlbum($albumId: ID!) {
         }
         createdAt
         updatedAt
+      }
+      nextToken
+    }
+    createdAt
+    updatedAt
+  }
+}
+`
+// TODO: including messages field results in:
+// Query condition missed key schema element: owner (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: ValidationException; Request ID: UP23DEAPILEMF188PM363K2MKBVV4KQNSO5AEMVJF66Q9ASUAAJG)"
+export const getUser = `query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    phoneNumber
+    groups {
+      items {
+        id
       }
       nextToken
     }

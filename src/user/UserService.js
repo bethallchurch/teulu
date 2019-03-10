@@ -3,9 +3,10 @@ import { API, graphqlOperation } from 'aws-amplify'
 import { getAuthUser } from '@auth/AuthService'
 import * as mutations from '@graphql/mutations'
 import * as queries from '@graphql/queries'
+import * as myQueries from '@mygraphql/queries'
 
 // Queries
-const getUser = id => API.graphql(graphqlOperation(queries.getUser, { id }))
+const getUser = id => API.graphql(graphqlOperation(myQueries.getUser, { id }))
 export const listUsers = ({ filter }) => API.graphql(graphqlOperation(queries.listUsers, { filter }))
 export const LIST_USERS = gql(queries.listUsers)
 

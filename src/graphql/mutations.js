@@ -11,11 +11,23 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
       }
       nextToken
     }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-`
+`;
 export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
     id
@@ -26,11 +38,23 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
       }
       nextToken
     }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-`
+`;
 export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
   deleteUser(input: $input) {
     id
@@ -41,11 +65,23 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
       }
       nextToken
     }
+    messages {
+      items {
+        id
+        owner
+        authUsers
+        text
+        messageGroupId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
     createdAt
     updatedAt
   }
 }
-`
+`;
 export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLinkInput!) {
   createGroupLink(input: $input) {
     id
@@ -55,6 +91,9 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
       groups {
         nextToken
       }
+      messages {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -77,7 +116,7 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
     }
   }
 }
-`
+`;
 export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLinkInput!) {
   updateGroupLink(input: $input) {
     id
@@ -87,6 +126,9 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
       groups {
         nextToken
       }
+      messages {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -109,7 +151,7 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
     }
   }
 }
-`
+`;
 export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLinkInput!) {
   deleteGroupLink(input: $input) {
     id
@@ -119,6 +161,9 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
       groups {
         nextToken
       }
+      messages {
+        nextToken
+      }
       createdAt
       updatedAt
     }
@@ -141,7 +186,7 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
     }
   }
 }
-`
+`;
 export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
   createGroup(input: $input) {
     id
@@ -182,7 +227,7 @@ export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
     updatedAt
   }
 }
-`
+`;
 export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
   updateGroup(input: $input) {
     id
@@ -223,7 +268,7 @@ export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
     updatedAt
   }
 }
-`
+`;
 export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
   deleteGroup(input: $input) {
     id
@@ -264,7 +309,7 @@ export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
     updatedAt
   }
 }
-`
+`;
 export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
   createAlbum(input: $input) {
     id
@@ -305,11 +350,23 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
     updatedAt
   }
 }
-`
+`;
 export const createMessage = `mutation CreateMessage($input: CreateMessageInput!) {
   createMessage(input: $input) {
     id
     owner
+    user {
+      id
+      phoneNumber
+      groups {
+        nextToken
+      }
+      messages {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
     authUsers
     type
     text
@@ -347,7 +404,7 @@ export const createMessage = `mutation CreateMessage($input: CreateMessageInput!
     updatedAt
   }
 }
-`
+`;
 export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
   createPhoto(input: $input) {
     id
@@ -388,6 +445,12 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
     message {
       id
       owner
+      user {
+        id
+        phoneNumber
+        createdAt
+        updatedAt
+      }
       authUsers
       type
       text
@@ -410,4 +473,4 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
     updatedAt
   }
 }
-`
+`;
