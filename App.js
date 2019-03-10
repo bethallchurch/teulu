@@ -1,15 +1,11 @@
 import React, { Component } from 'react'
-import Amplify, { Hub, Auth } from 'aws-amplify'
-import gql from 'graphql-tag'
-import AWSAppSyncClient, { createAppSyncLink } from 'aws-appsync'
+import Amplify, { Hub } from 'aws-amplify'
 import { ApolloProvider, ApolloConsumer } from 'react-apollo'
-import { withClientState } from 'apollo-link-state'
-import { ApolloLink } from 'apollo-link'
 import { Rehydrated } from 'aws-appsync-react'
-import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createAppContainer } from 'react-navigation'
-import { Font } from 'expo'
+import { Font, Permissions } from 'expo'
 import config from './aws-exports'
+import client from '@client'
 import AuthStack from '@auth/AuthNavigation'
 import { getOrCreateUser } from '@user/UserService'
 import { fontRegular, fontLight, fontMedium } from '@global/styles/typography'
@@ -17,63 +13,38 @@ import { UserContext } from '@global/context'
 import { Loading } from '@global/components'
 import { LIST_PHONE_CONTACTS, listPhoneContacts } from '@contact/ContactService'
 
-export const typeDefs = gql`
-  extend type User {
-    name: String
-  }
-`
-
 Amplify.configure(config)
-
-export const cache = new InMemoryCache()
-
-const stateLink = withClientState({
-  cache,
-  typeDefs,
-  resolvers: {
-    User: {
-      name (...args) {
-        // TODO: works with query component but not client.query
-        console.log('ARGS!', args)
-        // cache.readQuery({ query: LIST_PHONE_CONTACTS })
-        return 'Test Name'
-      }
-    }
-  }
-})
-
-const appSyncLink = createAppSyncLink({
-  url: config.aws_appsync_graphqlEndpoint,
-  region: config.aws_appsync_region,
-  complexObjectsCredentials: () => Auth.currentCredentials(),
-  auth: {
-    type: config.aws_appsync_authenticationType,
-    credentials: () => Auth.currentCredentials(),
-    jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken()
-  },
-  disableOffline: true
-})
-
-const link = ApolloLink.from([ stateLink, appSyncLink ])
-const client = new AWSAppSyncClient({}, { link })
 
 const AppNavigator = createAppContainer(AuthStack)
 
 class App extends Component {
   constructor (props) {
     super(props)
-    this.state = { fontLoaded: false, user: null }
+    this.state = { fontLoaded: false, contactsLoaded: false, user: null }
     Hub.listen('auth', this)
   }
 
-  async componentDidMount () {
-    this.setUser()
-    // TODO: { status } = await Permissions.askAsync(Permissions.CONTACTS)
-    const phoneContacts = await listPhoneContacts()
-    client.writeQuery({
-      query: LIST_PHONE_CONTACTS,
-      data: { phoneContacts }
-    })
+  componentDidMount () {
+    this.loadContacts()
+    this.loadFonts()
+    this.loadUser()
+  }
+
+  async loadContacts () {
+    // TODO: could delay this until logged in
+    const { status } = await Permissions.askAsync(Permissions.CONTACTS)
+    // TODO: check they get another chance to grant permission if they decline
+    if (status === 'granted') {
+      const phoneContacts = await listPhoneContacts()
+      client.writeQuery({
+        query: LIST_PHONE_CONTACTS,
+        data: { phoneContacts }
+      })
+      this.setState({ contactsLoaded: true })
+    }
+  }
+
+  async loadFonts () {
     await Font.loadAsync({
       [fontRegular.fontFamily]: require('@assets/fonts/Lato/Lato-Regular.ttf'),
       [fontMedium.fontFamily]: require('@assets/fonts/Lato/Lato-Bold.ttf'),
@@ -82,20 +53,20 @@ class App extends Component {
     this.setState({ fontLoaded: true })
   }
 
-  async setUser () {
+  async loadUser () {
     const user = await getOrCreateUser()
     this.setState({ user: user || 'not authenticated' })
   }
 
   async onHubCapsule (capsule) {
     if (capsule.payload.event === 'signIn') {
-      this.setUser()
+      this.loadUser()
     }
   }
 
   render () {
-    const { fontLoaded, user } = this.state
-    return fontLoaded && user ? (
+    const { fontLoaded, contactsLoaded, user } = this.state
+    return fontLoaded && contactsLoaded && user ? (
       <UserContext.Provider value={user}>
         <AppNavigator
           // persistenceKey='persistenceKey005'

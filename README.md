@@ -14,8 +14,6 @@
 
 ### Refactor
 
-- SelectContactList
-- ContactService
 - GroupSettingsScreen
 - PhotoUpload
 

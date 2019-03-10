@@ -2,24 +2,20 @@ import React, { Component } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { adopt } from 'react-adopt'
-import { ApolloConsumer } from 'react-apollo'
-import { LIST_PHONE_CONTACTS } from '@contact/ContactService'
-import { LIST_USERS } from '@user/UserService'
-import { chunk, flatten } from '@global/helpers'
 import { UserContext } from '@global/context'
 import { Error, Loading, Text } from '@global/components'
 import NoContacts from '@contact/components/NoContacts'
+import QueryContacts from '@contact/components/QueryContacts'
 import { colors, layout } from '@global/styles'
 
 class SelectContactList extends Component {
-  renderItem = ({ item: { id, name, phoneNumber } }) => {
+  renderItem = ({ item: { id, name2, phoneNumber } }) => {
     const { selectedContacts, onPressContact } = this.props
     const selected = selectedContacts.includes(id)
-    console.log('name:', name, 'phoneNumber:', phoneNumber)
     return (
       <ListItem
         bottomDivider
-        title={<Text bodyOne>{name || phoneNumber}</Text>}
+        title={<Text bodyOne>{name2 || phoneNumber}</Text>}
         rightIcon={{
           name: selected ? 'check-box' : 'check-box-outline-blank',
           color: selected ? colors.primary : colors.textDefault
@@ -52,34 +48,6 @@ const styles = StyleSheet.create({
   }
 })
 
-class Contacts extends Component {
-  state = { error: false, loading: true, data: {} }
-
-  async componentDidMount () {
-    const { client } = this.props
-    const { phoneContacts } = client.readQuery({ query: LIST_PHONE_CONTACTS })
-    const phoneNumbers = (phoneContacts || []).map(({ phoneNumber }) => phoneNumber)
-    const chunked = chunk(phoneNumbers, 99)
-    const result = await Promise.all(chunked.map(phoneNumbers => {
-      const filter = {
-        phoneNumber: { in: phoneNumbers }
-      }
-      return client.query({ query: LIST_USERS, variables: { filter } })
-    }))
-    // TODO: proper error handling
-    const contacts = flatten(result.map(({ data }) => data.listUsers.items))
-    this.setState({ data: { contacts }, loading: false })
-  }
-
-  render () {
-    return (
-      <>
-        {this.props.render(this.state)}
-      </>
-    )
-  }
-}
-
 const contactDataExtractor = ({ data: { contacts }, loading, error }) => ({
   error,
   loading: loading || !contacts,
@@ -88,13 +56,7 @@ const contactDataExtractor = ({ data: { contacts }, loading, error }) => ({
 
 const mapper = {
   user: <UserContext.Consumer />,
-  contactData: ({ render }) => {
-    return (
-      <ApolloConsumer>
-        {client => <Contacts client={client} render={render} />}
-      </ApolloConsumer>
-    )
-  }
+  contactData: ({ render }) => <QueryContacts render={render} />
 }
 
 const mapProps = ({ user, contactData }) => {

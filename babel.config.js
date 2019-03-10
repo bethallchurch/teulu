@@ -13,6 +13,7 @@ module.exports = function (api) {
           '@assets': './assets',
           '@album': './src/album',
           '@auth': './src/auth',
+          '@client': './src/client',
           '@contact': './src/contact',
           '@mygraphql': './src/mygraphql',
           '@global': './src/global',
