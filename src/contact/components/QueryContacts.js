@@ -6,10 +6,22 @@ import { chunk, flatten } from '@global/helpers'
 class QueryContacts extends Component {
   state = { error: false, loading: true, data: {} }
 
-  async componentDidMount () {
+  componentDidMount () {
+    this.listContacts(this.phoneNumbers)
+  }
+
+  get phoneNumbers () {
+    if (this.props.phoneNumbers) {
+      return this.props.phoneNumbers
+    }
     const { client } = this.props
     const { phoneContacts } = client.readQuery({ query: LIST_PHONE_CONTACTS })
-    const phoneNumbers = (phoneContacts || []).map(({ phoneNumber }) => phoneNumber)
+    return phoneContacts.map(({ phoneNumber }) => phoneNumber)
+  }
+
+  async listContacts (phoneNumbers) {
+    const { client } = this.props
+    console.log(phoneNumbers)
     const chunked = chunk(phoneNumbers, 99)
     try {
       const result = await Promise.all(chunked.map(phoneNumbers => {

@@ -56,7 +56,9 @@ const contactDataExtractor = ({ data: { contacts }, loading, error }) => ({
 
 const mapper = {
   user: <UserContext.Consumer />,
-  contactData: ({ render }) => <QueryContacts render={render} />
+  contactData: ({ phoneNumbers, render }) => (
+    <QueryContacts phoneNumbers={phoneNumbers} render={render} />
+  )
 }
 
 const mapProps = ({ user, contactData }) => {
@@ -67,7 +69,7 @@ const mapProps = ({ user, contactData }) => {
 const Connect = adopt(mapper, mapProps)
 
 const ConnectedSelectContactList = props => (
-  <Connect>
+  <Connect phoneNumbers={props.phoneNumbers}>
     {({ userId, error, loading, contacts }) => {
       if (error) return <Error />
       if (loading) return <Loading />
