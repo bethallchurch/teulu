@@ -1,60 +1,29 @@
-import React, { Component } from 'react'
-import { ActivityIndicator, View } from 'react-native'
-import { Image as RNEImage } from 'react-native-elements'
-import { Storage } from 'aws-amplify'
+import React from 'react'
+import { Dimensions } from 'react-native'
+import Lightbox from '@photo/components/Lightbox'
+import Image from '@photo/components/Image'
+
+const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window')
 
 const PhotoThumbnail = ({
   width = null,
   height = null,
   margin = {},
-  thumbnail: { height: photoHeight, width: photoWidth, key }
+  fullsize: { key: fullsizeKey },
+  thumbnail: { width: thumbnailWidth, height: thumbnailHeight, key: thumbnailKey }
 }) => (
-  <Image
-    style={{ width: width || photoWidth, height: height || photoHeight, ...margin }}
-    resizeMode='cover'
-    imgKey={key.replace('public/', '')}
-  />
+  <Lightbox
+    activeProps={{
+      resizeMode: 'contain',
+      imgKey: fullsizeKey.replace('public/', ''),
+      style: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT }
+    }}>
+    <Image
+      resizeMode='contain'
+      imgKey={thumbnailKey.replace('public/', '')}
+      style={{ width: width || thumbnailWidth, height: height || thumbnailHeight, ...margin }}
+    />
+  </Lightbox>
 )
-
-class Image extends Component {
-  state = { src: null }
-
-  mounted = false
-
-  componentDidMount () {
-    this.mounted = true
-    this.load()
-  }
-
-  componentWillUnmount () {
-    this.mounted = false
-  }
-
-  componentDidUpdate (prevProps) {
-    if (prevProps.imgKey !== this.props.imgKey) {
-      this.load()
-    }
-  }
-
-  async load () {
-    const { imgKey: key } = this.props
-    const url = await Storage.get(key, { level: 'public' })
-    if (this.mounted) {
-      this.setState({ src: { uri: url } })
-    }
-  }
-
-  render () {
-    const { src } = this.state
-    const { style, resizeMode } = this.props
-    return src ? (
-      <RNEImage source={src} resizeMode={resizeMode} style={style} />
-    ) : (
-      <View style={[ style, { justifyContent: 'center', alignItems: 'center' } ]}>
-        <ActivityIndicator />
-      </View>
-    )
-  }
-}
 
 export default PhotoThumbnail

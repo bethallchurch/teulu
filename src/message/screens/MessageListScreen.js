@@ -24,7 +24,7 @@ class MessageListScreen extends Component {
       _id: m.id,
       text: m.text,
       image: m.photos.items.length ? m.photos.items[0].thumbnail.key : null,
-      imageProps: m.photos.items.length ? { ...m.photos.items[0].thumbnail } : null,
+      imageProps: m.photos.items.length ? { ...m.photos.items[0] } : null,
       createdAt: m.createdAt,
       user: {
         _id: m.owner,
@@ -46,7 +46,7 @@ class MessageListScreen extends Component {
   }
 
   renderMessageImage = props => {
-    return <PhotoThumbnail thumbnail={props.currentMessage.imageProps} />
+    return <PhotoThumbnail {...props.currentMessage.imageProps} />
   }
 
   render () {
