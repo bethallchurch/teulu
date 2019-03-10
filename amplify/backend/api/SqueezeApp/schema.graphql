@@ -15,6 +15,7 @@ input ModelUserIDFilterInput {
 	lt: ID
 	ge: ID
 	gt: ID
+  in: [ID]
 	contains: ID
 	notContains: ID
 	between: [ID]

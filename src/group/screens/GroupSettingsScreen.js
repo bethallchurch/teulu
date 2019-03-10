@@ -1,46 +1,20 @@
 import React, { Component } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
 import { Query } from 'react-apollo'
+import { adopt } from 'react-adopt'
 import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import { GET_GROUP } from '@group/GroupService'
-import { ScreenBase, Text, Button, Badge, Section, Error, Loading } from '@global/components'
+import { ScreenBase, Text, Badge, Section, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
-import AddUsersModal from '@group/components/AddUsersModal'
+import { LIST_CONTACTS } from '@contact/ContactService'
 
 // TODO: Top same as AlbumSettingsScreen
 class GroupSettingsScreen extends Component {
-  state = { modalVisible: false, authUsers: [], newAuthUsers: [] }
-
-  // TODO: move to service
-  async componentDidMount () {
-    console.log('TODO: Group Settings Auth Users')
-    // const { group } = this.props
-    // const filter = { or: group.authUsers.map(id => ({ id: { eq: id } })) }
-    // const { data: { listUsers: { items: authUsers } } } = await listUsers({ filter }, true)
-    // this.setState({ authUsers: authUsers.map(user => ({ ...user, isOwner: user.id === group.owner })) })
-  }
-
-  showModal = () => {
-    this.setState({ modalVisible: true })
-  }
-
-  hideModal = () => {
-    this.setState({ modalVisible: false })
-  }
-
-  toggleAuthUser = id => {
-    const { newAuthUsers } = this.state
-    const updatedAuthUsers = newAuthUsers.includes(id)
-      ? newAuthUsers.filter(authUserId => authUserId !== id)
-      : [ id, ...newAuthUsers ]
-    this.setState({ newAuthUsers: updatedAuthUsers })
-  }
-
-  renderItem = ({ item: { id, phoneNumber, isOwner }, index }) => (
+  renderItem = ({ item: { id, name3, phoneNumber, isOwner }, index }) => (
     <ListItem
       key={id}
-      title={<Text subtitleOne>{phoneNumber}</Text>}
+      title={<Text subtitleOne>{name3 || phoneNumber}</Text>}
       badge={isOwner ? {
         value: <Badge>owner</Badge>,
         badgeStyle: { backgroundColor: colors.secondaryBackground }
@@ -50,8 +24,7 @@ class GroupSettingsScreen extends Component {
   )
 
   render () {
-    const { group } = this.props
-    const { authUsers, newAuthUsers, modalVisible } = this.state
+    const { group, authContacts } = this.props
     return (
       <ScreenBase style={styles.container}>
         <View style={styles.imageContainer}>
@@ -59,17 +32,27 @@ class GroupSettingsScreen extends Component {
           <Text h4 color={colors.primaryBackground} style={styles.imageCaption}>{group.name}</Text>
         </View>
         <Section
+          containerStyle={styles.sectionContainer}
           title='Members'
-          listComponent={<FlatList keyExtractor={({ id }) => id} data={authUsers} renderItem={this.renderItem} />}
+          listComponent={(
+            <FlatList
+              style={styles.list}
+              keyExtractor={({ id }) => id}
+              data={authContacts}
+              renderItem={this.renderItem}
+            />
+          )}
         />
-        <Button containerStyle={styles.buttonContainer} onPress={this.showModal}>Add Members</Button>
-        <AddUsersModal
-          visible={modalVisible}
-          hide={this.hideModal}
-          toggleUser={this.toggleAuthUser}
-          users={authUsers}
-          newUsers={newAuthUsers}
-        />
+        {/* TODO
+          <Button containerStyle={styles.buttonContainer} onPress={this.showModal}>Add Members</Button>
+          <AddUsersModal
+            visible={modalVisible}
+            hide={this.hideModal}
+            toggleUser={this.toggleAuthUser}
+            users={authUsers}
+            newUsers={newAuthUsers}
+          />
+        */}
       </ScreenBase>
     )
   }
@@ -78,6 +61,13 @@ class GroupSettingsScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start'
+  },
+  sectionContainer: {
+    marginBottom: layout.s3
+  },
+  list: {
+    backgroundColor: colors.secondaryBackground,
+    width: '100%'
   },
   imageContainer: {
     width: '100%',
@@ -94,28 +84,64 @@ const styles = StyleSheet.create({
     marginBottom: 0
   },
   buttonContainer: {
-    marginTop: layout.s3,
     marginHorizontal: layout.s3,
     width: 'auto'
   }
 })
 
+const groupDataExtractor = ({ data: { getGroup }, loading, error }) => ({
+  error,
+  loading: loading || !getGroup,
+  group: getGroup
+})
+
+const contactDataExtractor = ({ data: { listUsers }, loading, error }) => ({
+  error,
+  loading: loading || !listUsers,
+  contacts: listUsers
+})
+
+const mapper = {
+  groupData: ({ groupId, render }) => {
+    return (
+      <Query query={GET_GROUP} variables={{ id: groupId }}>
+        {groupData => render(groupData)}
+      </Query>
+    )
+  },
+  contactData: ({ render, groupData }) => {
+    const { authUsers } = groupData.data.getGroup
+    const variables = { filter: { id: { in: authUsers } } }
+    return (
+      <Query query={LIST_CONTACTS} variables={variables}>
+        {contactData => render(contactData)}
+      </Query>
+    )
+  }
+}
+
+const mapProps = ({ user, groupData, contactData }) => {
+  const { error: groupError, loading: groupLoading, group } = groupDataExtractor(groupData)
+  const { error: contactsError, loading: contactsLoading, contacts } = contactDataExtractor(contactData)
+  return {
+    error: groupError || contactsError,
+    loading: groupLoading && contactsLoading,
+    group,
+    contacts
+  }
+}
+
+const Connect = adopt(mapper, mapProps)
+
 const ConnectedGroupSettingsScreen = props => {
-  const groupId = props.navigation.getParam('groupId')
-  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
-    error,
-    loading: loading || !getGroup,
-    item: getGroup
-  })
   return (
-    <Query query={GET_GROUP} variables={{ id: groupId }}>
-      {data => {
-        const { error, loading, item } = dataExtractor(data)
+    <Connect groupId={props.navigation.getParam('groupId')}>
+      {({ error, loading, group, contacts }) => {
         if (error) return <Error />
         if (loading) return <Loading />
-        return <GroupSettingsScreen group={item} {...props} />
+        return <GroupSettingsScreen group={group} authContacts={contacts ? contacts.items : []} {...props} />
       }}
-    </Query>
+    </Connect>
   )
 }
 

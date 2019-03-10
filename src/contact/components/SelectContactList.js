@@ -9,13 +9,13 @@ import QueryContacts from '@contact/components/QueryContacts'
 import { colors, layout } from '@global/styles'
 
 class SelectContactList extends Component {
-  renderItem = ({ item: { id, name2, phoneNumber } }) => {
+  renderItem = ({ item: { id, name3, phoneNumber } }) => {
     const { selectedContacts, onPressContact } = this.props
     const selected = selectedContacts.includes(id)
     return (
       <ListItem
         bottomDivider
-        title={<Text bodyOne>{name2 || phoneNumber}</Text>}
+        title={<Text bodyOne>{name3 || phoneNumber}</Text>}
         rightIcon={{
           name: selected ? 'check-box' : 'check-box-outline-blank',
           color: selected ? colors.primary : colors.textDefault

@@ -11,10 +11,10 @@
 ## Todo
 
 - Try polling for messages as well as subscribing as temporary fix for photos not triggering mutation.
+- Improve many-to-many authentication once this issue resolved https://github.com/aws-amplify/amplify-cli/issues/372
 
 ### Refactor
 
-- GroupSettingsScreen
 - PhotoUpload
 
 ### Complete

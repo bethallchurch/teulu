@@ -1,12 +1,3 @@
-export const listPhoneContacts = `
-  {
-    phoneContacts @client {
-      name
-      phoneNumber
-    }
-  }
-`
-
 export const listContacts = `query ListContacts(
   $filter: ModelUserFilterInput
   $limit: Int
@@ -16,7 +7,7 @@ export const listContacts = `query ListContacts(
     items {
       id
       phoneNumber
-      name2 @client
+      name3 @client
       createdAt
       updatedAt
     }

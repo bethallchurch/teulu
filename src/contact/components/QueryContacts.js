@@ -1,27 +1,26 @@
 import React, { Component } from 'react'
 import { ApolloConsumer } from 'react-apollo'
-import { LIST_PHONE_CONTACTS, LIST_CONTACTS } from '@contact/ContactService'
+import { listPhoneContacts, LIST_CONTACTS } from '@contact/ContactService'
 import { chunk, flatten } from '@global/helpers'
 
 class QueryContacts extends Component {
   state = { error: false, loading: true, data: {} }
 
-  componentDidMount () {
-    this.listContacts(this.phoneNumbers)
+  async componentDidMount () {
+    const phoneNumbers = await this.getPhoneNumbers()
+    this.listContacts(phoneNumbers)
   }
 
-  get phoneNumbers () {
+  async getPhoneNumbers () {
     if (this.props.phoneNumbers) {
       return this.props.phoneNumbers
     }
-    const { client } = this.props
-    const { phoneContacts } = client.readQuery({ query: LIST_PHONE_CONTACTS })
+    const phoneContacts = await listPhoneContacts()
     return phoneContacts.map(({ phoneNumber }) => phoneNumber)
   }
 
   async listContacts (phoneNumbers) {
     const { client } = this.props
-    console.log(phoneNumbers)
     const chunked = chunk(phoneNumbers, 99)
     try {
       const result = await Promise.all(chunked.map(phoneNumbers => {
