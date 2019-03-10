@@ -20,8 +20,6 @@
 
 ## Add
 
-- apollo-cache-persist
-- PhotoListScreen (all)
-- AlbumListScreen (all)
+- apollo-cache-persist -> do I need this? Check what <Rehydrated /> does
 - UpdateGroupScreen
 - UpdateAlbumScreen
