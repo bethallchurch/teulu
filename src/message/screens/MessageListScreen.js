@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import { GiftedChat } from 'react-native-gifted-chat'
+import uuid from 'uuid/v4'
 import { ON_CREATE_MESSAGE, LIST_GROUP_MESSAGES, CREATE_MESSAGE } from '@message/MessageService'
+import { LIST_CONTACTS } from '@contact/ContactService'
 import { uniqueBy } from '@global/helpers'
 import { UserContext } from '@global/context'
 import { ScreenBase, Error, Loading } from '@global/components'
@@ -20,22 +22,35 @@ class MessageListScreen extends Component {
   }
 
   messages () {
-    return this.props.messages.map(m => ({
-      _id: m.id,
-      text: m.text,
-      image: m.photos.items.length ? m.photos.items[0].thumbnail.key : null,
-      imageProps: m.photos.items.length ? { ...m.photos.items[0] } : null,
-      createdAt: m.createdAt,
-      user: {
-        _id: m.owner,
-        name: m.user.name3 || m.user.phoneNumber
+    const { contacts, messages } = this.props
+    return messages.map(m => {
+      const user = contacts.find(({ id }) => id === m.owner) || {}
+      const username = user.name3 || user.phoneNumber
+      const hasPhotos = m.photos.items.length > 0
+      const albumName = hasPhotos ? m.photos.items[0].album.name : null
+      const text = hasPhotos ? `${username} added a photo to ${albumName}` : m.text
+      const image = hasPhotos ? m.photos.items[0].thumbnail.key : null
+      const imageProps = hasPhotos ? { ...m.photos.items[0] } : null
+      return {
+        _id: m.id,
+        captionText: hasPhotos,
+        text,
+        image,
+        imageProps,
+        createdAt: m.createdAt,
+        user: {
+          _id: m.owner,
+          name: username
+        }
       }
-    }))
+    })
   }
 
   sendMessage = (messages = []) => {
-    const { userId, groupId, authUsers } = this.props
+    const { userId, groupId, contacts } = this.props
+    const authUsers = contacts.map(({ id }) => id)
     const input = {
+      id: uuid(),
       owner: userId,
       messageGroupId: groupId,
       authUsers: authUsers,
@@ -46,7 +61,7 @@ class MessageListScreen extends Component {
   }
 
   renderMessageImage = props => {
-    return <PhotoThumbnail {...props.currentMessage.imageProps} />
+    return <PhotoThumbnail width={250} height={250} {...props.currentMessage.imageProps} />
   }
 
   render () {
@@ -66,10 +81,16 @@ class MessageListScreen extends Component {
   }
 }
 
-const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+const messageDataExtractor = ({ data: { getGroup }, loading, error }) => ({
   error,
   loading: loading || !getGroup,
-  items: getGroup ? getGroup.messages.items : []
+  messages: getGroup ? getGroup.messages.items : []
+})
+
+const contactDataExtractor = ({ data: { listUsers }, loading, error }) => ({
+  error,
+  loading: loading || !listUsers,
+  contacts: listUsers ? listUsers.items : []
 })
 
 const mapper = {
@@ -79,26 +100,41 @@ const mapper = {
       {mutation => render({ mutation })}
     </Mutation>
   ),
-  messages: ({ groupId, render }) => (
+  messageData: ({ groupId, render }) => (
     <Query query={LIST_GROUP_MESSAGES} variables={{ groupId }} >
       {({ data, subscribeToMore }) => render({ data, subscribeToMore, groupId })}
     </Query>
-  )
+  ),
+  contactData: ({ render, messageData }) => {
+    const authUsers = messageData.data.getGroup ? messageData.data.getGroup.authUsers : null
+    if (authUsers) {
+      const variables = { filter: { id: { in: authUsers } } }
+      return (
+        <Query query={LIST_CONTACTS} variables={variables}>
+          {contactData => render(contactData)}
+        </Query>
+      )
+    }
+    return render({ data: {}, loading: true, error: false })
+  }
 }
 
-const mapProps = ({ user, createMessage, messages }) => {
-  const { error, loading, items } = dataExtractor({ data: messages.data })
+const mapProps = ({ user, createMessage, messageData, contactData }) => {
+  const { error: messageError, loading: messageLoading, messages } = messageDataExtractor(messageData)
+  const { error: contactsError, loading: contactsLoading, contacts } = contactDataExtractor(contactData)
   return {
     userId: user.id,
-    error,
-    loading,
-    messages: items.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    error: messageError || contactsError,
+    loading: messageLoading && contactsLoading,
+    messages: messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+    contacts,
     create: ({ input }) => {
+      console.log('INPUT:', input)
       createMessage.mutation({ variables: { input } })
     },
-    subscribe: () => messages.subscribeToMore({
+    subscribe: () => messageData.subscribeToMore({
       document: ON_CREATE_MESSAGE,
-      variables: { messageGroupId: messages.groupId },
+      variables: { messageGroupId: messageData.groupId },
       updateQuery: (previous, { subscriptionData }) => {
         if (!subscriptionData.data) return previous
         const newItem = subscriptionData.data.onCreateMessage
@@ -115,7 +151,7 @@ const ConnectedMessageListScreen = props => {
   const groupId = props.navigation.getParam('groupId')
   return (
     <Connect groupId={groupId}>
-      {({ userId, error, loading, messages, create, subscribe }) => {
+      {({ userId, error, loading, messages, contacts, create, subscribe, authUsers }) => {
         if (error) return <Error />
         if (loading) return <Loading />
         return (
@@ -124,6 +160,7 @@ const ConnectedMessageListScreen = props => {
             groupId={groupId}
             sendMessage={create}
             messages={messages}
+            contacts={contacts}
             subscribe={subscribe}
             {...props}
           />

@@ -4,7 +4,13 @@ import { LIST_PHOTOS, LIST_ALBUM_PHOTOS } from '@photo/PhotoService'
 import PhotoThumbnail from '@photo/components/PhotoThumbnail'
 import { Error, Loading, SquareGrid } from '@global/components'
 
-const PhotoList = ({ photos, containerPadding, containerWidth, gutterWidth, numColumns }) => (
+const PhotoList = ({
+  photos,
+  numColumns,
+  gutterWidth,
+  containerWidth,
+  containerPadding
+}) => (
   <SquareGrid
     containerPadding={containerPadding}
     containerWidth={containerWidth}

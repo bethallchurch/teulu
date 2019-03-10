@@ -55,8 +55,8 @@
 						"ENV": {
 							"Ref": "env"
 						},
-						"THUMBNAIL_WIDTH": "200",
-						"THUMBNAIL_HEIGHT": "200",
+						"THUMBNAIL_WIDTH": "250",
+						"THUMBNAIL_HEIGHT": "250",
 						"DYNAMODB_PHOTO_TABLE_ARN": {
 							"Ref": "DynamoDBPhotosTableArn"
 						},
@@ -67,7 +67,7 @@
 				},
 				"Code": {
 					"S3Bucket": "squeeze-20190207173156-deployment",
-					"S3Key": "amplify-builds/squeezephotoprocessor-1551897904-latest-build.zip"
+					"S3Key": "amplify-builds/squeezephotoprocessor-1552251239-latest-build.zip"
 				}
 			}
 		},

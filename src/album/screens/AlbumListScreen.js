@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ScreenBase, ActionButton } from '@global/components'
-import { GroupAlbumList as AlbumList } from '@album/components/AlbumList'
+import AlbumList, { GroupAlbumList } from '@album/components/AlbumList'
 import { CREATE_ALBUM } from '@navigation/routes'
 import { colors, layout } from '@global/styles'
 
@@ -19,16 +19,28 @@ class GroupScreen extends Component {
   render () {
     return (
       <ScreenBase>
-        <AlbumList
-          groupId={this.groupId}
-          navigation={this.props.navigation}
-          containerPadding={layout.s3}
-          gutterWidth={layout.s3}
-          numColumns={2}
-        />
-        <ActionButton onPress={this.navigateToCreateAlbum}>
-          <MaterialIcons name='add-to-photos' color={colors.primaryBackground} size={layout.s5} />
-        </ActionButton>
+        {this.groupId && (
+          <>
+            <GroupAlbumList
+              groupId={this.groupId}
+              navigation={this.props.navigation}
+              containerPadding={layout.s3}
+              gutterWidth={layout.s3}
+              numColumns={2}
+            />
+            <ActionButton onPress={this.navigateToCreateAlbum}>
+              <MaterialIcons name='add-to-photos' color={colors.primaryBackground} size={layout.s5} />
+            </ActionButton>
+          </>
+        )}
+        {!this.groupId && (
+          <AlbumList
+            navigation={this.props.navigation}
+            containerPadding={layout.s3}
+            gutterWidth={layout.s3}
+            numColumns={2}
+          />
+        )}
       </ScreenBase>
     )
   }

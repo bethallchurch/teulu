@@ -6,6 +6,7 @@ import GroupStack, { CreateGroupStack, GroupSettingsStack } from '@group/GroupNa
 import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 import GroupListScreen from '@group/screens/GroupListScreen'
+import AlbumListScreen from '@album/screens/AlbumListScreen'
 import PhotoListScreen from '@photo/screens/PhotoListScreen'
 import HomeScreen from '@home/screens/HomeScreen'
 import * as routes from '@navigation/routes'
@@ -29,6 +30,18 @@ const MainAppStack = createStackNavigator({
     screen: GroupListScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Groups'
+    })
+  },
+  [routes.PHOTO_LIST]: {
+    screen: PhotoListScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'All Photos'
+    })
+  },
+  [routes.ALBUM_LIST]: {
+    screen: AlbumListScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'All Albums'
     })
   },
   [routes.GROUP]: {

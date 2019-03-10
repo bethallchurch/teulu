@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Dimensions, ScrollView } from 'react-native'
-import { GROUP_LIST } from '@navigation/routes'
+import { GROUP_LIST, ALBUM_LIST, PHOTO_LIST } from '@navigation/routes'
 import GroupList from '@group/components/GroupList'
 import AlbumList from '@album/components/AlbumList'
 import PhotoList from '@photo/components/PhotoList'
@@ -24,7 +24,7 @@ export default class HomeScreen extends Component {
           />
           <Section
             title='Albums'
-            onPressTitle={() => null}
+            onPressTitle={() => navigation.navigate(ALBUM_LIST)}
             listComponent={(
               <AlbumList
                 gutterWidth={StyleSheet.hairlineWidth}
@@ -38,13 +38,12 @@ export default class HomeScreen extends Component {
           />
           <Section
             title='Photos'
-            onPressTitle={() => null}
+            onPressTitle={() => navigation.navigate(PHOTO_LIST)}
             containerStyle={{ paddingBottom: layout.s3 }}
             listComponent={(
               <PhotoList
                 gutterWidth={0}
                 containerPadding={0}
-                navigation={navigation}
                 containerWidth={this.sectionWidth}
                 limit={6}
                 numColumns={3}
