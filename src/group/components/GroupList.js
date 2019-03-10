@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 const dataExtractor = ({ data: { listGroups }, loading, error }) => ({
   error,
   loading: loading || !listGroups,
-  items: listGroups ? listGroups.items : []
+  groups: listGroups ? listGroups.items : []
 })
 
 const mapper = {
@@ -63,7 +63,7 @@ const mapper = {
 }
 
 const mapProps = ({ user, groupData }) => {
-  const { error, loading, items: groups } = dataExtractor({ data: groupData })
+  const { error, loading, groups } = dataExtractor({ data: groupData })
   return { userId: user.id, error, loading, groups }
 }
 

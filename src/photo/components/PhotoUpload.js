@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { SafeAreaView, Image, Modal, TouchableOpacity, Dimensions } from 'react-native'
 import { Query } from 'react-apollo'
+import { adopt } from 'react-adopt'
 import { ImagePicker, Permissions } from 'expo'
 import { uploadImage } from '@photo/PhotoService'
 import { UserContext } from '@global/context'
@@ -97,29 +98,46 @@ class PhotoUpload extends Component {
 const AddRightIcon = () => <MaterialIcons name='photo' size={layout.s4} color={colors.primaryBackground} />
 const UploadRightIcon = () => <Feather name='upload' size={layout.s4} color={colors.primaryBackground} />
 
-const ConnectedPhotoUpload = props => {
-  const albumId = props.navigation.getParam('albumId')
-  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
-    error,
-    loading: loading || !getAlbum,
-    item: getAlbum
-  })
-  return (
-    <Query query={GET_ALBUM} variables={{ id: albumId }} fetchPolicy='cache-and-network'>
-      {data => {
-        const { error, loading, item } = dataExtractor(data)
-        if (error) return <Error />
-        if (loading) return <Loading />
-        return <PhotoUpload albumId={item.id} groupId={item.group.id} authUsers={item.group.authUsers} {...props} />
-      }}
-    </Query>
-  )
+const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+  error,
+  loading: loading || !getAlbum,
+  album: getAlbum
+})
+
+const mapper = {
+  user: <UserContext.Consumer />,
+  photoData: ({ albumId, render }) => {
+    return (
+      <Query query={GET_ALBUM} variables={{ id: albumId }}>
+        {photoData => render(photoData)}
+      </Query>
+    )
+  }
 }
 
-const PhotoUploadWithContext = props => (
-  <UserContext.Consumer>
-    {user => <ConnectedPhotoUpload userId={user.id} {...props} />}
-  </UserContext.Consumer>
+const mapProps = ({ user, photoData }) => {
+  const { error, loading, album } = dataExtractor(photoData)
+  return { userId: user.id, error, loading, album }
+}
+
+const Connect = adopt(mapper, mapProps)
+
+const ConnectedPhotoUpload = props => (
+  <Connect albumId={props.navigation.getParam('albumId')}>
+    {({ userId, error, loading, album }) => {
+      if (error) return <Error />
+      if (loading) return <Loading />
+      return (
+        <PhotoUpload
+          userId={userId}
+          albumId={album.id}
+          groupId={album.group.id}
+          authUsers={album.group.authUsers}
+          {...props}
+        />
+      )
+    }}
+  </Connect>
 )
 
-export default PhotoUploadWithContext
+export default ConnectedPhotoUpload

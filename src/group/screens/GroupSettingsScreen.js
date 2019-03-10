@@ -95,7 +95,7 @@ const groupDataExtractor = ({ data: { getGroup }, loading, error }) => ({
 const contactDataExtractor = ({ data: { listUsers }, loading, error }) => ({
   error,
   loading: loading || !listUsers,
-  contacts: listUsers
+  contacts: listUsers ? listUsers.items : []
 })
 
 const mapper = {
@@ -136,7 +136,7 @@ const ConnectedGroupSettingsScreen = props => {
       {({ error, loading, group, contacts }) => {
         if (error) return <Error />
         if (loading) return <Loading />
-        return <GroupSettingsScreen group={group} authContacts={contacts ? contacts.items : []} {...props} />
+        return <GroupSettingsScreen group={group} authContacts={contacts} {...props} />
       }}
     </Connect>
   )
