@@ -10,7 +10,7 @@ export const listUsers = ({ filter }) => API.graphql(graphqlOperation(queries.li
 export const LIST_USERS = gql(queries.listUsers)
 
 // Mutations
-const createUser = input => API.graphql(graphqlOperation(mutations.createUser, input))
+const createUser = input => API.graphql(graphqlOperation(mutations.createUser, { input }))
 
 export const getOrCreateUser = async () => {
   try {

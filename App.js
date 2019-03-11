@@ -51,6 +51,7 @@ class App extends Component {
 
   render () {
     const { fontLoaded, user } = this.state
+    console.log('USER:', user)
     return fontLoaded && user ? (
       <UserContext.Provider value={user}>
         <AppNavigator

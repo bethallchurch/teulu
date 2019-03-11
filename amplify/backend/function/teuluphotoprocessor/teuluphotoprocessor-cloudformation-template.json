@@ -15,6 +15,16 @@
 			"Type": "String"
 		}
 	},
+	"Conditions": {
+		"ShouldNotCreateEnvResources": {
+			"Fn::Equals": [
+				{
+					"Ref": "env"
+				},
+				"NONE"
+			]
+		}
+	},
 	"Resources": {
 		"LambdaFunction": {
 			"Type": "AWS::Lambda::Function",
@@ -27,12 +37,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"squeezephotoprocessor",
+						"teuluphotoprocessor",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"squeezephotoprocessor",
+									"teuluphotoprocessor",
 									"-",
 									{
 										"Ref": "env"
@@ -42,6 +52,13 @@
 						}
 					]
 				},
+				"Environment": {
+					"Variables": {
+						"ENV": {
+							"Ref": "env"
+						}
+					}
+				},
 				"Role": {
 					"Fn::GetAtt": [
 						"LambdaExecutionRole",
@@ -50,24 +67,9 @@
 				},
 				"Runtime": "nodejs8.10",
 				"Timeout": "25",
-				"Environment": {
-					"Variables": {
-						"ENV": {
-							"Ref": "env"
-						},
-						"THUMBNAIL_WIDTH": "250",
-						"THUMBNAIL_HEIGHT": "250",
-						"DYNAMODB_PHOTO_TABLE_ARN": {
-							"Ref": "DynamoDBPhotosTableArn"
-						},
-						"DYNAMODB_MESSAGE_TABLE_ARN": {
-							"Ref": "DynamoDBMessagesTableArn"
-						}
-					}
-				},
 				"Code": {
-					"S3Bucket": "squeeze-20190207173156-deployment",
-					"S3Key": "amplify-builds/squeezephotoprocessor-1552251239-latest-build.zip"
+					"S3Bucket": "teulu-20190311215436-deployment",
+					"S3Key": "amplify-builds/teuluphotoprocessor-1552343938-latest-build.zip"
 				}
 			}
 		},
@@ -77,12 +79,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"squeezeLambdaRolea67c68c5",
+						"teuluLambdaRole1fd1c75a",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"squeezeLambdaRolea67c68c5",
+									"teuluLambdaRole1fd1c75a",
 									"-",
 									{
 										"Ref": "env"
@@ -270,16 +272,6 @@
 			"Value": {
 				"Ref": "AWS::Region"
 			}
-		}
-	},
-	"Conditions": {
-		"ShouldNotCreateEnvResources": {
-			"Fn::Equals": [
-				{
-					"Ref": "env"
-				},
-				"NONE"
-			]
 		}
 	}
 }

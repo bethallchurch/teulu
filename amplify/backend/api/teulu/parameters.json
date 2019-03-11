@@ -1,0 +1,10 @@
+{
+    "AppSyncApiName": "teulu",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito12851efa",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

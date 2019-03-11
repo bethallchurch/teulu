@@ -1,18 +1,18 @@
 {
-    "NONE": {
+    "master": {
         "awscloudformation": {
-            "AuthRoleName": "squeeze-20190207173156-authRole",
-            "UnauthRoleArn": "arn:aws:iam::798760150336:role/squeeze-20190207173156-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::798760150336:role/squeeze-20190207173156-authRole",
+            "AuthRoleName": "teulu-20190311215436-authRole",
+            "UnauthRoleArn": "arn:aws:iam::798760150336:role/teulu-20190311215436-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::798760150336:role/teulu-20190311215436-authRole",
             "Region": "eu-west-1",
-            "DeploymentBucketName": "squeeze-20190207173156-deployment",
-            "UnauthRoleName": "squeeze-20190207173156-unauthRole",
-            "StackName": "squeeze-20190207173156",
-            "StackId": "arn:aws:cloudformation:eu-west-1:798760150336:stack/squeeze-20190207173156/44083880-2afe-11e9-bf98-0a8d8e29a944"
+            "DeploymentBucketName": "teulu-20190311215436-deployment",
+            "UnauthRoleName": "teulu-20190311215436-unauthRole",
+            "StackName": "teulu-20190311215436",
+            "StackId": "arn:aws:cloudformation:eu-west-1:798760150336:stack/teulu-20190311215436/4360eb30-4448-11e9-a650-0ade9df0c35e"
         },
         "categories": {
             "auth": {
-                "squeezecognitob38dc439": {}
+                "cognito12851efa": {}
             }
         }
     }

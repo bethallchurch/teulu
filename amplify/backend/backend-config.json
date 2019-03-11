@@ -1,12 +1,12 @@
 {
 	"auth": {
-		"squeezecognitob38dc439": {
+		"cognito12851efa": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation"
 		}
 	},
 	"api": {
-		"SqueezeApp": {
+		"teulu": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {
@@ -15,17 +15,17 @@
 		}
 	},
 	"storage": {
-		"amplifysqueezes3storage": {
+		"teulu": {
 			"service": "S3",
 			"providerPlugin": "awscloudformation"
 		}
 	},
 	"function": {
-		"squeezephotoprocessor": {
+		"teuluphotoprocessor": {
 			"service": "Lambda",
 			"providerPlugin": "awscloudformation",
-			"dependsOn": [],
-			"build": true
+			"build": true,
+			"dependsOn": []
 		}
 	}
 }

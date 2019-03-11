@@ -5,9 +5,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "build-function": "bash ./tools/build-function.sh",
-    "lint": "standard --fix",
-    "temp": "watchman watch-del-all"
+    "build-photo-processor": "bash ./tools/build-photo-processor.sh",
+    "lint": "standard --fix"
   },
   "husky": {
     "hooks": {

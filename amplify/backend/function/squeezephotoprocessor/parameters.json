@@ -1,5 +1,0 @@
-{
-	"S3UserfilesBucketName": "amplifysqueezes3storage0",
-	"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Photo-pm7skb4lkfao3ixpypmciic3ea",
-	"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message-pm7skb4lkfao3ixpypmciic3ea"
-}

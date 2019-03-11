@@ -1,0 +1,5 @@
+{
+	"S3UserfilesBucketName": "teuluf0283ac681ea4a2ba190e7c6b48948c2-master",
+	"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Photo-maiowbtj45fljfcrxshrnwwavy-master",
+	"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message-maiowbtj45fljfcrxshrnwwavy-master"
+}

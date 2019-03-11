@@ -6,8 +6,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 
-amplify/backend/function/squeezephotoprocessor/src/node_modules
-
 #amplify
 amplify/\#current-cloud-backend
 amplify/.config/local-*

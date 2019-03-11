@@ -1,16 +1,16 @@
 projects:
-  SqueezeApp:
+  teulu:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
     excludes:
-      - amplify/**
+      - ./amplify/**
     extensions:
       amplify:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-        graphQLApiId: pm7skb4lkfao3ixpypmciic3ea
+        graphQLApiId: maiowbtj45fljfcrxshrnwwavy
       endpoints:
         prod: >-
-          https://b4qommjm6jer3dx6zggviaeizm.appsync-api.eu-west-1.amazonaws.com/graphql
+          https://hp5bwxviq5cq3l7alz6kgkbg2a.appsync-api.eu-west-1.amazonaws.com/graphql
