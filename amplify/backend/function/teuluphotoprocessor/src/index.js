@@ -13,13 +13,14 @@ docker run -v "$PWD":/var/task lambci/lambda:build-nodejs8.10 npm install
 */
 const Sharp = require('sharp')
 
-const DB = process.env.ENV === 'master' ? 'maiowbtj45fljfcrxshrnwwavy' : '3ulseciplrczfflaipco2c2rlu'
-
 // We'll expect these environment variables to be defined when the Lambda function is deployed
 const THUMBNAIL_WIDTH = parseInt(process.env.THUMBNAIL_WIDTH || 50)
 const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT || 50)
-const DYNAMODB_PHOTO_TABLE_NAME = [process.env.DYNAMODB_PHOTO_TABLE_ARN.split('/')[1], DB, process.env.ENV].join('-')
-const DYNAMODB_MESSAGE_TABLE_NAME = [process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1], DB, process.env.ENV].join('-')
+const DYNAMODB_PHOTO_TABLE_NAME = process.env.DYNAMODB_PHOTO_TABLE_ARN.split('/')[1]
+const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
+
+console.log('PHOTO TABLE:', DYNAMODB_PHOTO_TABLE_NAME)
+console.log('MESSAGE TABLE:', DYNAMODB_MESSAGE_TABLE_NAME)
 
 const storePhotoInfo = ({ photo, message }) => {
   const photoParams = {
@@ -140,7 +141,11 @@ const processRecord = async record => {
     photos: [ photoId ]
   }
 
-  await storePhotoInfo({ photo, message })
+  try {
+    await storePhotoInfo({ photo, message })
+  } catch (error) {
+    console.log('Error storing photo information to database:', error)
+  }
 }
 
 exports.handler = async (event, context, callback) => {

@@ -8,6 +8,12 @@
 		"S3UserfilesBucketName": {
 			"Type": "String"
 		},
+		"DynamoDBMaster": {
+			"Type": "String"
+		},
+		"DynamoDBDev": {
+			"Type": "String"
+		},
 		"DynamoDBPhotosTableArn": {
 			"Type": "String"
 		},
@@ -22,6 +28,14 @@
 					"Ref": "env"
 				},
 				"NONE"
+			]
+		},
+		"MasterEnv": {
+			"Fn::Equals": [
+				{
+					"Ref": "env"
+				},
+				"master"
 			]
 		}
 	},
@@ -60,10 +74,52 @@
 						"THUMBNAIL_WIDTH": "250",
 						"THUMBNAIL_HEIGHT": "250",
 						"DYNAMODB_PHOTO_TABLE_ARN": {
-							"Ref": "DynamoDBPhotosTableArn"
+							"Fn::Join": [
+								"-",
+								[
+									{
+										"Ref": "DynamoDBPhotosTableArn"
+									},
+									{
+										"Fn::If": [
+											"MasterEnv",
+											{
+												"Ref": "DynamoDBMaster"
+											},
+											{
+												"Ref": "DynamoDBDev"
+											}
+										]
+									},
+									{
+										"Ref": "env"
+									}
+								]
+							]
 						},
 						"DYNAMODB_MESSAGE_TABLE_ARN": {
-							"Ref": "DynamoDBMessagesTableArn"
+							"Fn::Join": [
+								"-",
+								[
+									{
+										"Ref": "DynamoDBMessagesTableArn"
+									},
+									{
+										"Fn::If": [
+											"MasterEnv",
+											{
+												"Ref": "DynamoDBMaster"
+											},
+											{
+												"Ref": "DynamoDBDev"
+											}
+										]
+									},
+									{
+										"Ref": "env"
+									}
+								]
+							]
 						}
 					}
 				},
@@ -76,8 +132,8 @@
 				"Runtime": "nodejs8.10",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "teulu-20190312211949-deployment",
-					"S3Key": "amplify-builds/teuluphotoprocessor-1552428438-latest-build.zip"
+					"S3Bucket": "teulu-20190311215436-deployment",
+					"S3Key": "amplify-builds/teuluphotoprocessor-1552431245-latest-build.zip"
 				}
 			}
 		},
@@ -189,7 +245,7 @@
 									{
 										"S3UserfilesBucketName": {
 											"Fn::Join": [
-												"delimiter",
+												"-",
 												[
 													{
 														"Ref": "S3UserfilesBucketName"
@@ -229,7 +285,28 @@
 								"dynamodb:*"
 							],
 							"Resource": {
-								"Ref": "DynamoDBPhotosTableArn"
+								"Fn::Join": [
+									"-",
+									[
+										{
+											"Ref": "DynamoDBPhotosTableArn"
+										},
+										{
+											"Fn::If": [
+												"MasterEnv",
+												{
+													"Ref": "DynamoDBMaster"
+												},
+												{
+													"Ref": "DynamoDBDev"
+												}
+											]
+										},
+										{
+											"Ref": "env"
+										}
+									]
+								]
 							}
 						},
 						{
@@ -238,7 +315,28 @@
 								"dynamodb:*"
 							],
 							"Resource": {
-								"Ref": "DynamoDBMessagesTableArn"
+								"Fn::Join": [
+									"-",
+									[
+										{
+											"Ref": "DynamoDBMessagesTableArn"
+										},
+										{
+											"Fn::If": [
+												"MasterEnv",
+												{
+													"Ref": "DynamoDBMaster"
+												},
+												{
+													"Ref": "DynamoDBDev"
+												}
+											]
+										},
+										{
+											"Ref": "env"
+										}
+									]
+								]
 							}
 						}
 					]

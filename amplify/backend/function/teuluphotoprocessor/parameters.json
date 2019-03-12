@@ -1,5 +1,7 @@
 {
 	"S3UserfilesBucketName": "teuluphotostorage",
 	"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Photo",
-	"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message"
+	"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message",
+	"DynamoDBMaster": "maiowbtj45fljfcrxshrnwwavy",
+	"DynamoDBDev": "3ulseciplrczfflaipco2c2rlu"
 }
