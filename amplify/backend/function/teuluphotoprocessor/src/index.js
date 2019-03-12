@@ -29,6 +29,7 @@ const storePhotoInfo = ({ photo, message }) => {
     Item: message,
     TableName: DYNAMODB_MESSAGE_TABLE_NAME
   }
+
   return Promise.all([
     DynamoDBDocClient.put(photoParams).promise(),
     DynamoDBDocClient.put(messageParams).promise()
@@ -59,21 +60,29 @@ const resize = async (bucketName, key) => {
 
   const thumbnail = await makeThumbnail(originalPhoto)
 
-  await Promise.all([
-    S3.putObject({
-      Body: thumbnail,
-      Bucket: bucketName,
-      Key: thumbnailKey(originalPhotoName)
-    }).promise(),
+  try {
+    await Promise.all([
+      S3.putObject({
+        Body: thumbnail,
+        Bucket: bucketName,
+        Key: thumbnailKey(originalPhotoName)
+      }).promise(),
 
-    S3.copyObject({
-      Bucket: bucketName,
-      CopySource: bucketName + '/' + key,
-      Key: fullsizeKey(originalPhotoName)
-    }).promise()
-  ])
+      S3.copyObject({
+        Bucket: bucketName,
+        CopySource: bucketName + '/' + key,
+        Key: fullsizeKey(originalPhotoName)
+      }).promise()
+    ])
+  } catch (error) {
+    console.log('Error saving photos to S3:', error)
+  }
 
-  await S3.deleteObject({ Bucket: bucketName, Key: key }).promise()
+  try {
+    await S3.deleteObject({ Bucket: bucketName, Key: key }).promise()
+  } catch (error) {
+    console.log('Error deleting photo from S3:', error)
+  }
 
   return {
     photoId: originalPhotoName,
@@ -133,6 +142,7 @@ const processRecord = async record => {
 }
 
 exports.handler = async (event, context, callback) => {
+  console.log('EVENT:', JSON.stringify(event))
   try {
     event.Records.forEach(processRecord)
     callback(null, { status: 'Photo Processed' })

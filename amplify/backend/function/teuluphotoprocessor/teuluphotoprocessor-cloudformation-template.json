@@ -2,6 +2,9 @@
 	"AWSTemplateFormatVersion": "2010-09-09",
 	"Description": "Lambda resource stack creation using Amplify CLI",
 	"Parameters": {
+		"env": {
+			"Type": "String"
+		},
 		"S3UserfilesBucketName": {
 			"Type": "String"
 		},
@@ -9,9 +12,6 @@
 			"Type": "String"
 		},
 		"DynamoDBMessagesTableArn": {
-			"Type": "String"
-		},
-		"env": {
 			"Type": "String"
 		}
 	},
@@ -56,6 +56,14 @@
 					"Variables": {
 						"ENV": {
 							"Ref": "env"
+						},
+						"THUMBNAIL_WIDTH": "250",
+						"THUMBNAIL_HEIGHT": "250",
+						"DYNAMODB_PHOTO_TABLE_ARN": {
+							"Ref": "DynamoDBPhotosTableArn"
+						},
+						"DYNAMODB_MESSAGE_TABLE_ARN": {
+							"Ref": "DynamoDBMessagesTableArn"
 						}
 					}
 				},
@@ -69,7 +77,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "teulu-20190311215436-deployment",
-					"S3Key": "amplify-builds/teuluphotoprocessor-1552343938-latest-build.zip"
+					"S3Key": "amplify-builds/teuluphotoprocessor-1552420942-latest-build.zip"
 				}
 			}
 		},
@@ -79,12 +87,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"teuluLambdaRole1fd1c75a",
+						"teuluLambdaRolec9af3746",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"teuluLambdaRole1fd1c75a",
+									"teuluLambdaRolec9af3746",
 									"-",
 									{
 										"Ref": "env"

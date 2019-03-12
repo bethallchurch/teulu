@@ -1,0 +1,14 @@
+{
+    "bucketName": "teuluphotostorage",
+    "authPolicyName": "s3_amplify_d153e857",
+    "unauthPolicyName": "s3_amplify_d153e857",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authPermissions": "rw",
+    "unauthPermissions": "",
+    "lambdaFunctionName": "teuluphotoprocessor"
+}

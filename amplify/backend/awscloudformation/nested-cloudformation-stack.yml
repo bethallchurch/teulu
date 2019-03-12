@@ -163,14 +163,14 @@
 				}
 			}
 		},
-		"storageteulu": {
+		"storageteuluphotostorage": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
 				"TemplateURL": "https://s3.amazonaws.com/teulu-20190311215436-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
 				"Parameters": {
-					"bucketName": "teuluf0283ac681ea4a2ba190e7c6b48948c2",
-					"authPolicyName": "s3_amplify_a3f6819a",
-					"unauthPolicyName": "s3_amplify_a3f6819a",
+					"bucketName": "teuluphotostorage",
+					"authPolicyName": "s3_amplify_d153e857",
+					"unauthPolicyName": "s3_amplify_d153e857",
 					"authRoleName": {
 						"Ref": "AuthRoleName"
 					},
@@ -179,6 +179,7 @@
 					},
 					"authPermissions": "rw",
 					"unauthPermissions": "",
+					"lambdaFunctionName": "teuluphotoprocessor",
 					"env": "master"
 				}
 			}
@@ -188,7 +189,7 @@
 			"Properties": {
 				"TemplateURL": "https://s3.amazonaws.com/teulu-20190311215436-deployment/amplify-cfn-templates/function/teuluphotoprocessor-cloudformation-template.json",
 				"Parameters": {
-					"S3UserfilesBucketName": "teuluf0283ac681ea4a2ba190e7c6b48948c2-master",
+					"S3UserfilesBucketName": "teuluphotostorage-master",
 					"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Photo-maiowbtj45fljfcrxshrnwwavy-master",
 					"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message-maiowbtj45fljfcrxshrnwwavy-master",
 					"env": "master"
