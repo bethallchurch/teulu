@@ -6,7 +6,9 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "build-photo-processor": "bash ./tools/build-photo-processor.sh",
-    "lint": "standard --fix"
+    "lint": "standard --fix",
+    "checkout-master": "git checkout master && amplify env checkout master",
+    "checkout-dev": "git checkout dev && amplify env checkout dev"
   },
   "husky": {
     "hooks": {
