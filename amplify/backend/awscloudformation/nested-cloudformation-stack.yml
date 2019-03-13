@@ -81,7 +81,7 @@
 		"authcognito12851efa": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/teulu-20190311215436-deployment/amplify-cfn-templates/auth/cognito12851efa-cloudformation-template.yml",
+				"TemplateURL": "https://s3.amazonaws.com/teulu-20190312211949-deployment/amplify-cfn-templates/auth/cognito12851efa-cloudformation-template.yml",
 				"Parameters": {
 					"identityPoolName": "cognito12851efa_identitypool_12851efa",
 					"allowUnauthenticatedIdentities": false,
@@ -140,14 +140,14 @@
 							"Arn"
 						]
 					},
-					"env": "master"
+					"env": "dev"
 				}
 			}
 		},
 		"apiteulu": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/teulu-20190311215436-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"TemplateURL": "https://s3.amazonaws.com/teulu-20190312211949-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"Parameters": {
 					"AppSyncApiName": "teulu",
 					"DynamoDBBillingMode": "PAY_PER_REQUEST",
@@ -158,15 +158,15 @@
 						]
 					},
 					"S3DeploymentBucket": "teulu-20190312211949-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/fb2cd4b3c56710c040f3703984ff89de2ff7c313",
-					"env": "master"
+					"S3DeploymentRootKey": "amplify-appsync-files/351dd5721ddf2adb49509e81f9c278bf496a0cab",
+					"env": "dev"
 				}
 			}
 		},
 		"storageteuluphotostorage": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/teulu-20190311215436-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
+				"TemplateURL": "https://s3.amazonaws.com/teulu-20190312211949-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
 				"Parameters": {
 					"bucketName": "teuluphotostorage",
 					"authPolicyName": "s3_amplify_d153e857",
@@ -180,21 +180,21 @@
 					"authPermissions": "rw",
 					"unauthPermissions": "",
 					"lambdaFunctionName": "teuluphotoprocessor",
-					"env": "master"
+					"env": "dev"
 				}
 			}
 		},
 		"functionteuluphotoprocessor": {
 			"Type": "AWS::CloudFormation::Stack",
 			"Properties": {
-				"TemplateURL": "https://s3.amazonaws.com/teulu-20190311215436-deployment/amplify-cfn-templates/function/teuluphotoprocessor-cloudformation-template.json",
+				"TemplateURL": "https://s3.amazonaws.com/teulu-20190312211949-deployment/amplify-cfn-templates/function/teuluphotoprocessor-cloudformation-template.json",
 				"Parameters": {
 					"S3UserfilesBucketName": "teuluphotostorage",
 					"DynamoDBPhotosTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Photo",
 					"DynamoDBMessagesTableArn": "arn:aws:dynamodb:eu-west-1:798760150336:table/Message",
 					"DynamoDBMaster": "maiowbtj45fljfcrxshrnwwavy",
 					"DynamoDBDev": "3ulseciplrczfflaipco2c2rlu",
-					"env": "master"
+					"env": "dev"
 				}
 			}
 		}

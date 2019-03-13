@@ -129,7 +129,6 @@ const mapProps = ({ user, createMessage, messageData, contactData }) => {
     messages: messages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
     contacts,
     create: ({ input }) => {
-      console.log('INPUT:', input)
       createMessage.mutation({ variables: { input } })
     },
     subscribe: () => messageData.subscribeToMore({

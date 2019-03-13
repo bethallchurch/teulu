@@ -1,29 +1,42 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Query } from 'react-apollo'
-import { MaterialIcons } from '@expo/vector-icons'
-import { ScreenBase, Error, Loading, Text } from '@global/components'
-import { colors, layout } from '@global/styles'
+import { LinearGradient } from 'expo'
 import { GET_ALBUM } from '@album/AlbumService'
+import { ScreenBase, Error, Loading, Text } from '@global/components'
+import { BackgroundImage } from '@photo/components/Image'
+import { fade } from '@global/styles/helpers'
+import { colors, layout } from '@global/styles'
 
 // TODO: Top same as GroupSettingsScreen
-const AlbumSettingsScreen = ({ album }) => (
-  <ScreenBase style={styles.container}>
-    <View style={styles.imageContainer}>
-      <MaterialIcons name='image' color={colors.primaryBackground} size={layout.s6} />
-      <Text h4 color={colors.primaryBackground} style={styles.imageCaption}>{album.name}</Text>
-    </View>
-  </ScreenBase>
-)
+const AlbumSettingsScreen = ({ album }) => {
+  const photo = album.photos.items[0]
+  const imgKey = photo ? photo.fullsize.key.replace('public/', '') : ''
+  return (
+    <ScreenBase style={styles.container}>
+      <BackgroundImage imgKey={imgKey} resizeMode='cover' style={styles.imageContainer}>
+        <LinearGradient
+          colors={['transparent', fade('#000000', 0.4)]}
+          style={styles.overlay}
+        >
+          <Text h4 color={colors.primaryBackground} style={styles.imageCaption}>{album.name}</Text>
+        </LinearGradient>
+      </BackgroundImage>
+    </ScreenBase>
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start'
   },
+  overlay: {
+    width: '100%',
+    height: 200
+  },
   imageContainer: {
     width: '100%',
     height: 200,
-    backgroundColor: colors.textDefault,
     justifyContent: 'center',
     alignItems: 'center',
     position: 'relative'

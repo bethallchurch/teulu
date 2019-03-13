@@ -6,6 +6,7 @@ import * as queries from '@graphql/queries'
 import * as myQueries from '@mygraphql/queries'
 
 // Queries
+export const GET_PHOTO = gql(queries.getPhoto)
 export const LIST_PHOTOS = gql(queries.listPhotos)
 export const LIST_ALBUM_PHOTOS = gql(myQueries.listAlbumPhotos)
 
