@@ -15,12 +15,18 @@ class AlbumList extends Component {
     })
   }
 
-  renderItem = ({ item: { id, name }, width, margin, index }) => (
+  renderItem = ({
+    index,
+    width,
+    margin,
+    item: { id, name, photos: { items = [] } }
+  }) => (
     <AlbumListItem
-      onPress={() => this.navigateToAlbum(id, name)}
+      name={name}
       width={width}
       margin={margin}
-      name={name}
+      photoId={items.length ? items[0].id : null}
+      onPress={() => this.navigateToAlbum(id, name)}
     />
   )
 

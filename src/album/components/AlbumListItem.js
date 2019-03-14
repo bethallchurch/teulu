@@ -1,20 +1,19 @@
 import React from 'react'
 import { TouchableOpacity, View, Image, StyleSheet, ActivityIndicator } from 'react-native'
+import { Query } from 'react-apollo'
 import { LinearGradient } from 'expo'
-import { Text } from '@global/components'
+import { GET_PHOTO } from '@photo/PhotoService'
+import { Text, Loading, Error } from '@global/components'
+import AWSImage from '@photo/components/Image'
+import { fade } from '@global/styles/helpers'
 import { layout, colors } from '@global/styles'
 
-const AlbumListItem = ({ onPress, width, margin, name }) => (
+const AlbumListItem = ({ onPress, imgKey, width, margin, name }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={[ styles.container, { width, height: width, ...margin } ]}>
-      <Image
-        resizeMode='cover'
-        source={require('@assets/img/placeholder.jpg')}
-        style={{ width, height: width }}
-        PlaceholderContent={<ActivityIndicator color={colors.primary} />}
-      />
+      <CoverImage imgKey={imgKey} width={width} />
       <LinearGradient
-        colors={['transparent', colors.overlayBackground]}
+        colors={['transparent', fade('#000000', 0.4)]}
         style={[ styles.overlay, { width, height: width } ]}
       >
         <Text subtitleTwo color={colors.primaryBackground} style={styles.title}>{name}</Text>
@@ -22,6 +21,23 @@ const AlbumListItem = ({ onPress, width, margin, name }) => (
     </View>
   </TouchableOpacity>
 )
+
+const CoverImage = ({ imgKey, width }) => {
+  return imgKey ? (
+    <AWSImage
+      resizeMode='cover'
+      imgKey={imgKey.replace('public/', '')}
+      style={{ width, height: width }}
+    />
+  ) : (
+    <Image
+      resizeMode='cover'
+      source={require('@assets/img/placeholder.jpg')}
+      style={{ width, height: width }}
+      PlaceholderContent={<ActivityIndicator color={colors.primary} />}
+    />
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -42,4 +58,26 @@ const styles = StyleSheet.create({
   }
 })
 
-export default AlbumListItem
+const dataExtractor = ({ data: { getPhoto }, loading, error }) => ({
+  error,
+  loading: loading || !getPhoto,
+  photo: getPhoto
+})
+
+const ConnectedAlbumListItem = props => {
+  if (props.photoId) {
+    return (
+      <Query query={GET_PHOTO} variables={{ id: props.photoId }}>
+        {data => {
+          const { error, loading, photo } = dataExtractor(data)
+          if (error) return <Error />
+          if (loading) return <Loading />
+          return <AlbumListItem imgKey={photo.thumbnail.key} {...props} />
+        }}
+      </Query>
+    )
+  }
+  return <AlbumListItem imgKey={null} {...props} />
+}
+
+export default ConnectedAlbumListItem

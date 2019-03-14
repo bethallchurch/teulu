@@ -14,12 +14,70 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
       owner
       authUsers
       userLinks {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       messages {
+        items {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       albums {
+        items {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -31,7 +89,58 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
         owner
         authUsers
         bucket
+        fullsize {
+          key
+          width
+          height
+        }
+        thumbnail {
+          key
+          width
+          height
+        }
         photoAlbumId
+        album {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        message {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -56,12 +165,70 @@ export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID
       owner
       authUsers
       userLinks {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       messages {
+        items {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       albums {
+        items {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -73,7 +240,58 @@ export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID
         owner
         authUsers
         bucket
+        fullsize {
+          key
+          width
+          height
+        }
+        thumbnail {
+          key
+          width
+          height
+        }
         photoAlbumId
+        album {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        message {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -112,10 +330,77 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
         name
         owner
         authUsers
+        userLinks {
+          items {
+            id
+          }
+          nextToken
+        }
+        messages {
+          items {
+            id
+            owner
+            authUsers
+            text
+            messageGroupId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        albums {
+          items {
+            id
+            name
+            owner
+            authUsers
+            albumGroupId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       photos {
+        items {
+          id
+          owner
+          authUsers
+          bucket
+          fullsize {
+            key
+            width
+            height
+          }
+          thumbnail {
+            key
+            width
+            height
+          }
+          photoAlbumId
+          album {
+            id
+            name
+            owner
+            authUsers
+            albumGroupId
+            createdAt
+            updatedAt
+          }
+          message {
+            id
+            owner
+            authUsers
+            text
+            messageGroupId
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -133,10 +418,77 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
         name
         owner
         authUsers
+        userLinks {
+          items {
+            id
+          }
+          nextToken
+        }
+        messages {
+          items {
+            id
+            owner
+            authUsers
+            text
+            messageGroupId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
+        albums {
+          items {
+            id
+            name
+            owner
+            authUsers
+            albumGroupId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
       photos {
+        items {
+          id
+          owner
+          authUsers
+          bucket
+          fullsize {
+            key
+            width
+            height
+          }
+          thumbnail {
+            key
+            width
+            height
+          }
+          photoAlbumId
+          album {
+            id
+            name
+            owner
+            authUsers
+            albumGroupId
+            createdAt
+            updatedAt
+          }
+          message {
+            id
+            owner
+            authUsers
+            text
+            messageGroupId
+            createdAt
+            updatedAt
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -154,6 +506,32 @@ export const onCreateUser = `subscription OnCreateUser {
     groups {
       items {
         id
+        user {
+          id
+          phoneNumber
+          groups {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -169,6 +547,32 @@ export const onUpdateUser = `subscription OnUpdateUser {
     groups {
       items {
         id
+        user {
+          id
+          phoneNumber
+          groups {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -184,6 +588,32 @@ export const onDeleteUser = `subscription OnDeleteUser {
     groups {
       items {
         id
+        user {
+          id
+          phoneNumber
+          groups {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -199,6 +629,23 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
       id
       phoneNumber
       groups {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       createdAt
@@ -210,12 +657,70 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
       owner
       authUsers
       userLinks {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       messages {
+        items {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       albums {
+        items {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -231,6 +736,23 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
       id
       phoneNumber
       groups {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       createdAt
@@ -242,12 +764,70 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
       owner
       authUsers
       userLinks {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       messages {
+        items {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       albums {
+        items {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -263,6 +843,23 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
       id
       phoneNumber
       groups {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       createdAt
@@ -274,12 +871,70 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
       owner
       authUsers
       userLinks {
+        items {
+          id
+          user {
+            id
+            phoneNumber
+            createdAt
+            updatedAt
+          }
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+        }
         nextToken
       }
       messages {
+        items {
+          id
+          owner
+          authUsers
+          type
+          text
+          messageGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       albums {
+        items {
+          id
+          name
+          owner
+          authUsers
+          albumGroupId
+          group {
+            id
+            name
+            owner
+            authUsers
+            createdAt
+            updatedAt
+          }
+          photos {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
         nextToken
       }
       createdAt
@@ -297,6 +952,32 @@ export const onCreateGroup = `subscription OnCreateGroup {
     userLinks {
       items {
         id
+        user {
+          id
+          phoneNumber
+          groups {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -305,8 +986,38 @@ export const onCreateGroup = `subscription OnCreateGroup {
         id
         owner
         authUsers
+        type
         text
         messageGroupId
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        photos {
+          items {
+            id
+            owner
+            authUsers
+            bucket
+            photoAlbumId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -319,6 +1030,35 @@ export const onCreateGroup = `subscription OnCreateGroup {
         owner
         authUsers
         albumGroupId
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        photos {
+          items {
+            id
+            owner
+            authUsers
+            bucket
+            photoAlbumId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -338,6 +1078,32 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
     userLinks {
       items {
         id
+        user {
+          id
+          phoneNumber
+          groups {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -346,8 +1112,38 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
         id
         owner
         authUsers
+        type
         text
         messageGroupId
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        photos {
+          items {
+            id
+            owner
+            authUsers
+            bucket
+            photoAlbumId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -360,6 +1156,35 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
         owner
         authUsers
         albumGroupId
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        photos {
+          items {
+            id
+            owner
+            authUsers
+            bucket
+            photoAlbumId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -379,6 +1204,32 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
     userLinks {
       items {
         id
+        user {
+          id
+          phoneNumber
+          groups {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
       }
       nextToken
     }
@@ -387,8 +1238,38 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
         id
         owner
         authUsers
+        type
         text
         messageGroupId
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        photos {
+          items {
+            id
+            owner
+            authUsers
+            bucket
+            photoAlbumId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
@@ -401,6 +1282,35 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
         owner
         authUsers
         albumGroupId
+        group {
+          id
+          name
+          owner
+          authUsers
+          userLinks {
+            nextToken
+          }
+          messages {
+            nextToken
+          }
+          albums {
+            nextToken
+          }
+          createdAt
+          updatedAt
+        }
+        photos {
+          items {
+            id
+            owner
+            authUsers
+            bucket
+            photoAlbumId
+            createdAt
+            updatedAt
+          }
+          nextToken
+        }
         createdAt
         updatedAt
       }
