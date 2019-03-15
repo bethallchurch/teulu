@@ -6,6 +6,7 @@ import * as queries from '@graphql/queries'
 // Mutations
 export const CREATE_GROUP = gql(mutations.createGroup)
 export const createGroupLink = input => API.graphql(graphqlOperation(mutations.createGroupLink, { input }))
+export const UPDATE_GROUP = gql(mutations.updateGroup)
 
 // Queries
 export const GET_GROUP = gql(queries.getGroup)

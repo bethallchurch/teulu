@@ -6,7 +6,7 @@ import { Error, Loading } from '@global/components'
 import NoContacts from '@contact/components/NoContacts'
 import QueryContacts from '@contact/components/QueryContacts'
 import ContactListItem from '@contact/components/ContactListItem'
-import { colors, layout } from '@global/styles'
+import { layout } from '@global/styles'
 
 class SelectContactList extends Component {
   renderItem = ({ item, index }) => {
@@ -41,7 +41,6 @@ class SelectContactList extends Component {
 
 const styles = StyleSheet.create({
   list: {
-    backgroundColor: colors.secondaryBackground,
     marginBottom: layout.s3,
     width: '100%'
   }

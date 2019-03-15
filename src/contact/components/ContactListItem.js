@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import { ListItem, Divider } from 'react-native-elements'
 import { Text, Badge } from '@global/components'
 import { colors, layout } from '@global/styles'
 
@@ -15,14 +15,17 @@ const ContactListItem = ({
   onPress = () => null
 }) => {
   return (
-    <ListItem
-      key={id}
-      badge={badge(owner)}
-      topDivider={index !== 0}
-      onPress={onPress}
-      rightIcon={rightIcon(selectable, selected)}
-      title={<Title title={name} subtitle={phoneNumber} />}
-    />
+    <>
+      {index !== 0 && <Divider style={{ backgroundColor: colors.textLight }} />}
+      <ListItem
+        key={id}
+        badge={badge(owner)}
+        onPress={onPress}
+        rightIcon={rightIcon(selectable, selected)}
+        title={<Title title={name} subtitle={phoneNumber} />}
+        containerStyle={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+      />
+    </>
   )
 }
 
@@ -40,7 +43,7 @@ const rightIcon = (selectable, selected) => selectable ? {
 
 const badge = owner => owner ? {
   value: <Badge>owner</Badge>,
-  badgeStyle: { backgroundColor: colors.secondaryBackground }
+  badgeStyle: { backgroundColor: colors.primaryBackground }
 } : null
 
 const styles = {

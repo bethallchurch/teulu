@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { ApolloConsumer } from 'react-apollo'
 import { listPhoneContacts, LIST_CONTACTS } from '@contact/ContactService'
 import { chunk, flatten } from '@global/helpers'
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/combineLatest'
 
 class QueryContacts extends Component {
   state = { error: false, loading: true, data: {} }
@@ -9,6 +11,10 @@ class QueryContacts extends Component {
   async componentDidMount () {
     const phoneNumbers = await this.getPhoneNumbers()
     this.listContacts(phoneNumbers)
+  }
+
+  componentWillUnmount () {
+    this.subscription && this.subscription.unsubscribe()
   }
 
   async getPhoneNumbers () {
@@ -23,12 +29,17 @@ class QueryContacts extends Component {
     const { client } = this.props
     const chunked = chunk(phoneNumbers, 99)
     try {
-      const result = await Promise.all(chunked.map(phoneNumbers => {
+      this.subscription = Observable.combineLatest(chunked.map(phoneNumbers => {
         const filter = { phoneNumber: { in: phoneNumbers } }
-        return client.query({ query: LIST_CONTACTS, variables: { filter } })
-      }))
-      const contacts = flatten(result.map(({ data }) => data.listUsers.items))
-      this.setState({ data: { contacts }, loading: false })
+        return client.watchQuery({
+          query: LIST_CONTACTS,
+          variables: { filter },
+          fetchPolicy: 'cache-and-network'
+        })
+      })).subscribe(result => {
+        const contacts = flatten(result.map(({ data }) => data.listUsers.items))
+        this.setState({ data: { contacts }, loading: false })
+      })
     } catch (error) {
       console.log('Error querying contacts:', error)
       this.setState({ error, loading: false })

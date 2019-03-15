@@ -1,27 +1,68 @@
 import React, { Component } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
+import { ListItem } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
-import { GET_GROUP } from '@group/GroupService'
+import { GET_GROUP, UPDATE_GROUP, createGroupLink } from '@group/GroupService'
 import { LIST_CONTACTS } from '@contact/ContactService'
 import { ScreenBase, Text, Section, Error, Loading } from '@global/components'
 import ContactListItem from '@contact/components/ContactListItem'
+import AddUsersModal from '@group/components/AddUsersModal'
 import { colors, layout } from '@global/styles'
 
 // TODO: Top same as AlbumSettingsScreen
 class GroupSettingsScreen extends Component {
-  renderItem = ({ item, index }) => (
-    <ContactListItem
-      {...item}
-      index={index}
-      name={item.name3}
-      owner={this.props.group.owner === item.id}
-    />
-  )
+  state = { modalVisible: false, newMembers: [] }
+
+  toggleNewMember = id => {
+    const { newMembers } = this.state
+    const updatedNewMembers = newMembers.includes(id)
+      ? newMembers.filter(authUserId => authUserId !== id)
+      : [ id, ...newMembers ]
+    this.setState({ newMembers: updatedNewMembers })
+  }
+
+  updateMembers = async () => {
+    const { currentMembers, updateGroupUsers } = this.props
+    const { newMembers } = this.state
+    // TODO: update screen with success/fail message
+    try {
+      await updateGroupUsers({
+        allGroupUsers: [ ...currentMembers, ...newMembers ],
+        newUsers: newMembers
+      })
+    } catch (error) {
+      console.log('Error updating group members:', error)
+    }
+  }
+
+  showModal = () => this.setState({ modalVisible: true })
+  hideModal = () => this.setState({ modalVisible: false })
+
+  renderItem = ({ item, index }) => {
+    if (item.id === 'add-participants-button') {
+      return (
+        <ListItem
+          title={<Text bodyOne>Add members</Text>}
+          leftIcon={<LeftIcon />}
+          onPress={this.showModal}
+        />
+      )
+    }
+    return (
+      <ContactListItem
+        {...item}
+        index={index}
+        name={item.name3}
+        owner={this.props.group.owner === item.id}
+      />
+    )
+  }
 
   render () {
-    const { group, authContacts } = this.props
+    const { group, currentMembers } = this.props
+    const { modalVisible, newMembers } = this.state
     return (
       <ScreenBase style={styles.container}>
         <View style={styles.imageContainer}>
@@ -35,25 +76,29 @@ class GroupSettingsScreen extends Component {
             <FlatList
               style={styles.list}
               keyExtractor={({ id }) => id}
-              data={authContacts}
+              data={[ { id: 'add-participants-button' }, ...currentMembers ]}
               renderItem={this.renderItem}
             />
           )}
         />
-        {/* TODO
-          <Button containerStyle={styles.buttonContainer} onPress={this.showModal}>Add Members</Button>
-          <AddUsersModal
-            visible={modalVisible}
-            hide={this.hideModal}
-            toggleUser={this.toggleAuthUser}
-            users={authUsers}
-            newUsers={newAuthUsers}
-          />
-        */}
+        <AddUsersModal
+          visible={modalVisible}
+          hide={this.hideModal}
+          toggleUser={this.toggleNewMember}
+          users={currentMembers}
+          newUsers={newMembers}
+          addUsers={() => null}
+        />
       </ScreenBase>
     )
   }
 }
+
+const LeftIcon = () => (
+  <View style={{ backgroundColor: colors.primary, padding: layout.s2, borderRadius: 100 }}>
+    <MaterialIcons name='person-add' size={layout.sg5} color={colors.secondaryBackground} />
+  </View>
+)
 
 const styles = StyleSheet.create({
   container: {
@@ -79,10 +124,6 @@ const styles = StyleSheet.create({
     bottom: layout.s3,
     left: layout.s3,
     marginBottom: 0
-  },
-  buttonContainer: {
-    marginHorizontal: layout.s3,
-    width: 'auto'
   }
 })
 
@@ -114,17 +155,33 @@ const mapper = {
         {contactData => render(contactData)}
       </Query>
     )
-  }
+  },
+  updateGroup: ({ render }) => (
+    <Mutation mutation={UPDATE_GROUP}>
+      {mutation => render(mutation)}
+    </Mutation>
+  )
 }
 
-const mapProps = ({ user, groupData, contactData }) => {
+const mapProps = ({ user, groupData, contactData, updateGroup }) => {
   const { error: groupError, loading: groupLoading, group } = groupDataExtractor(groupData)
   const { error: contactsError, loading: contactsLoading, contacts } = contactDataExtractor(contactData)
   return {
     error: groupError || contactsError,
     loading: groupLoading && contactsLoading,
     group,
-    contacts
+    contacts,
+    updateGroupUsers: async ({ allGroupUsers, newUsers }) => {
+      try {
+        await updateGroup({ variables: { input: { authUsers: allGroupUsers } } })
+        Promise.all(newUsers.map(username => {
+          const input = { groupLinkUserId: username, groupLinkGroupId: group.id }
+          return createGroupLink(input)
+        }))
+      } catch (error) {
+        console.log('Error updating group members:', error)
+      }
+    }
   }
 }
 
@@ -133,10 +190,12 @@ const Connect = adopt(mapper, mapProps)
 const ConnectedGroupSettingsScreen = props => {
   return (
     <Connect groupId={props.navigation.getParam('groupId')}>
-      {({ error, loading, group, contacts }) => {
+      {({ error, loading, group, contacts, updateGroupUsers }) => {
         if (error) return <Error />
         if (loading) return <Loading />
-        return <GroupSettingsScreen group={group} authContacts={contacts} {...props} />
+        return (
+          <GroupSettingsScreen group={group} currentMembers={contacts} updateGroupUsers={updateGroupUsers} {...props} />
+        )
       }}
     </Connect>
   )

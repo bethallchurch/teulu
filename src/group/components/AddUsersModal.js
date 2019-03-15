@@ -1,42 +1,40 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, Modal, TouchableOpacity, StyleSheet } from 'react-native'
-import { Text } from '@global/components'
+import { View, StyleSheet, SafeAreaView } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { Text, Overlay, FullWidthButton } from '@global/components'
 import SelectContactList from '@contact/components/SelectContactList'
 import { colors, layout } from '@global/styles'
 
-const AddUsersModal = ({ visible, hide, toggleUser, users, newUsers }) => (
-  <Modal transparent visible={visible} onRequestClose={hide}>
-    <TouchableOpacity style={styles.touchable} onPress={hide}>
-      <View style={styles.container}>
-        <View style={styles.contentContainer}>
-          <Text h5 style={styles.text}>Add New Members</Text>
-          <SelectContactList
-            exclude={users.map(({ id }) => id)}
-            selectedContacts={newUsers}
-            onPressContact={toggleUser}
-          />
-          <Text subtitleTwo>Coming Soon!</Text>
-        </View>
+const AddUsersModal = ({ visible, hide, toggleUser, users, newUsers, addUsers }) => (
+  <Overlay isOpen={visible} close={hide} backgroundColor={colors.primaryBackground} iconColor={colors.textDefault}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
+      <View style={{ padding: layout.s3 }}>
+        <Text h5 style={styles.text}>Add Members</Text>
+        <SelectContactList
+          exclude={users.map(({ id }) => id)}
+          selectedContacts={newUsers}
+          onPressContact={toggleUser}
+        />
       </View>
-    </TouchableOpacity>
-  </Modal>
+      <FullWidthButton
+        title='Add Members'
+        onPress={addUsers}
+        rightIcon={<RightIcon numUsers={newUsers.length} />}
+      />
+    </SafeAreaView>
+  </Overlay>
+)
+
+const RightIcon = numUsers => (
+  <MaterialIcons
+    name={numUsers > 1 ? 'group-add' : 'person-add'}
+    size={layout.s4}
+    color={colors.primaryBackground}
+  />
 )
 
 const styles = StyleSheet.create({
-  touchable: {
-    flex: 1
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: colors.overlayBackground
-  },
-  contentContainer: {
-    padding: layout.s3,
-    margin: layout.s3,
-    backgroundColor: colors.primaryBackground
-  },
   text: {
     marginBottom: layout.s2
   }
