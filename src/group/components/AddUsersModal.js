@@ -8,8 +8,8 @@ import { colors, layout } from '@global/styles'
 
 const AddUsersModal = ({ visible, hide, toggleUser, users, newUsers, addUsers }) => (
   <Overlay isOpen={visible} close={hide} backgroundColor={colors.primaryBackground} iconColor={colors.textDefault}>
-    <SafeAreaView style={{ flex: 1, justifyContent: 'space-between' }}>
-      <View style={{ padding: layout.s3 }}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
         <Text h5 style={styles.text}>Add Members</Text>
         <SelectContactList
           exclude={users.map(({ id }) => id)}
@@ -35,6 +35,13 @@ const RightIcon = numUsers => (
 )
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between'
+  },
+  content: {
+    padding: layout.s3
+  },
   text: {
     marginBottom: layout.s2
   }

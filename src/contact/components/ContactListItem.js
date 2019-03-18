@@ -12,18 +12,20 @@ const ContactListItem = ({
   index,
   selectable,
   selected,
-  onPress = () => null
+  onPress = () => null,
+  itemContainerStyle = {}
 }) => {
   return (
     <>
-      {index !== 0 && <Divider style={{ backgroundColor: colors.textLight }} />}
+      {index !== 0 && <Divider style={styles.item.divider} />}
       <ListItem
         key={id}
         badge={badge(owner)}
         onPress={onPress}
         rightIcon={rightIcon(selectable, selected)}
         title={<Title title={name} subtitle={phoneNumber} />}
-        containerStyle={{ backgroundColor: 'transparent', paddingHorizontal: 0 }}
+        containerStyle={[ styles.item.container, itemContainerStyle ]}
+        underlayColor={colors.textLight}
       />
     </>
   )
@@ -43,10 +45,19 @@ const rightIcon = (selectable, selected) => selectable ? {
 
 const badge = owner => owner ? {
   value: <Badge>owner</Badge>,
-  badgeStyle: { backgroundColor: colors.primaryBackground }
+  badgeStyle: { backgroundColor: 'transparent' }
 } : null
 
 const styles = {
+  item: StyleSheet.create({
+    container: {
+      backgroundColor: 'transparent',
+      paddingHorizontal: 0
+    },
+    divider: {
+      backgroundColor: colors.textLight
+    }
+  }),
   title: StyleSheet.create({
     container: {
       flex: 1,

@@ -12,7 +12,7 @@ import { Icon } from 'react-native-elements'
 import { colors, layout } from '@global/styles'
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window')
-const STATUS_BAR_OFFSET = Platform.OS === 'android' ? -25 : 0
+const STATUS_BAR_OFFSET = Platform.OS === 'android' ? -24 : 0
 const IS_IOS = Platform.OS === 'ios'
 
 export default class Overlay extends Component {
@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
   },
   content: {
     left: 0,
-    top: STATUS_BAR_OFFSET + layout.s3 * 3,
+    top: 0,
     width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT - (STATUS_BAR_OFFSET + layout.s3 * 3),
+    height: WINDOW_HEIGHT + STATUS_BAR_OFFSET,
     position: 'absolute',
     flex: 1,
     justifyContent: 'center',

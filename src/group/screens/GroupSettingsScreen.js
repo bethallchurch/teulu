@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
-import { ListItem } from 'react-native-elements'
+import { ListItem, Divider } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import { GET_GROUP, UPDATE_GROUP, createGroupLink } from '@group/GroupService'
 import { LIST_CONTACTS } from '@contact/ContactService'
@@ -26,12 +26,13 @@ class GroupSettingsScreen extends Component {
   updateMembers = async () => {
     const { currentMembers, updateGroupUsers } = this.props
     const { newMembers } = this.state
-    // TODO: update screen with success/fail message
+
+    const newUsers = newMembers.map(({ id }) => id)
+    const allGroupUsers = [ ...currentMembers.map(({ id }) => id), ...newMembers ]
+
     try {
-      await updateGroupUsers({
-        allGroupUsers: [ ...currentMembers, ...newMembers ],
-        newUsers: newMembers
-      })
+      await updateGroupUsers({ allGroupUsers, newUsers })
+      this.hideModal()
     } catch (error) {
       console.log('Error updating group members:', error)
     }
@@ -40,25 +41,15 @@ class GroupSettingsScreen extends Component {
   showModal = () => this.setState({ modalVisible: true })
   hideModal = () => this.setState({ modalVisible: false })
 
-  renderItem = ({ item, index }) => {
-    if (item.id === 'add-participants-button') {
-      return (
-        <ListItem
-          title={<Text bodyOne>Add members</Text>}
-          leftIcon={<LeftIcon />}
-          onPress={this.showModal}
-        />
-      )
-    }
-    return (
-      <ContactListItem
-        {...item}
-        index={index}
-        name={item.name3}
-        owner={this.props.group.owner === item.id}
-      />
-    )
-  }
+  renderItem = ({ item, index }) => (
+    <ContactListItem
+      {...item}
+      index={index}
+      name={item.name3}
+      owner={this.props.group.owner === item.id}
+      itemContainerStyle={styles.itemContainer}
+    />
+  )
 
   render () {
     const { group, currentMembers } = this.props
@@ -73,12 +64,20 @@ class GroupSettingsScreen extends Component {
           containerStyle={styles.sectionContainer}
           title='Members'
           listComponent={(
-            <FlatList
-              style={styles.list}
-              keyExtractor={({ id }) => id}
-              data={[ { id: 'add-participants-button' }, ...currentMembers ]}
-              renderItem={this.renderItem}
-            />
+            <>
+              <ListItem
+                title={<Text bodyOne>Add members</Text>}
+                leftIcon={<LeftIcon />}
+                onPress={this.showModal}
+              />
+              <Divider style={styles.divider} />
+              <FlatList
+                style={styles.list}
+                keyExtractor={({ id }) => id}
+                data={currentMembers}
+                renderItem={this.renderItem}
+              />
+            </>
           )}
         />
         <AddUsersModal
@@ -87,7 +86,7 @@ class GroupSettingsScreen extends Component {
           toggleUser={this.toggleNewMember}
           users={currentMembers}
           newUsers={newMembers}
-          addUsers={() => null}
+          addUsers={this.updateMembers}
         />
       </ScreenBase>
     )
@@ -107,8 +106,10 @@ const styles = StyleSheet.create({
   sectionContainer: {
     marginBottom: layout.s3
   },
+  divider: {
+    backgroundColor: colors.textLight
+  },
   list: {
-    backgroundColor: colors.secondaryBackground,
     width: '100%'
   },
   imageContainer: {
@@ -124,16 +125,20 @@ const styles = StyleSheet.create({
     bottom: layout.s3,
     left: layout.s3,
     marginBottom: 0
+  },
+  itemContainer: {
+    paddingHorizontal: layout.s3,
+    backgroundColor: colors.secondaryBackground
   }
 })
 
-const groupDataExtractor = ({ data: { getGroup }, loading, error }) => ({
+const groupDataExtractor = ({ data: { getGroup } = {}, loading, error }) => ({
   error,
   loading: loading || !getGroup,
   group: getGroup
 })
 
-const contactDataExtractor = ({ data: { listUsers }, loading, error }) => ({
+const contactDataExtractor = ({ data: { listUsers } = {}, loading, error }) => ({
   error,
   loading: loading || !listUsers,
   contacts: listUsers ? listUsers.items : []
@@ -148,7 +153,7 @@ const mapper = {
     )
   },
   contactData: ({ render, groupData }) => {
-    const { authUsers } = groupData.data.getGroup
+    const { authUsers = [] } = groupData.data.getGroup || {}
     const variables = { filter: { id: { in: authUsers } } }
     return (
       <Query query={LIST_CONTACTS} variables={variables}>
@@ -173,9 +178,9 @@ const mapProps = ({ user, groupData, contactData, updateGroup }) => {
     contacts,
     updateGroupUsers: async ({ allGroupUsers, newUsers }) => {
       try {
-        await updateGroup({ variables: { input: { authUsers: allGroupUsers } } })
-        Promise.all(newUsers.map(username => {
-          const input = { groupLinkUserId: username, groupLinkGroupId: group.id }
+        await updateGroup({ variables: { input: { id: group.id, authUsers: allGroupUsers } } })
+        Promise.all(newUsers.map(id => {
+          const input = { groupLinkUserId: id, groupLinkGroupId: group.id }
           return createGroupLink(input)
         }))
       } catch (error) {

@@ -1,22 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet } from 'react-native'
-import { ListItem } from 'react-native-elements'
+import { StyleSheet, View } from 'react-native'
 import { Text } from '@global/components'
-import { colors, layout } from '@global/styles'
+import { layout } from '@global/styles'
 
 const NoContacts = ({ onEmptyMessage }) => (
-  <ListItem
-    title={<Text bodyTwo>{onEmptyMessage}</Text>}
-    containerStyle={styles.container}
-  />
+  <View style={styles.container}>
+    <Text bodyTwo style={styles.text}>{onEmptyMessage}</Text>
+  </View>
 )
 
 const styles = StyleSheet.create({
   container: {
     marginBottom: layout.s3,
-    backgroundColor: colors.secondaryBackground,
     width: '100%'
+  },
+  text: {
+    marginVertical: layout.s3
   }
 })
 

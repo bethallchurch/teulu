@@ -10,7 +10,7 @@ import { layout } from '@global/styles'
 
 class SelectContactList extends Component {
   renderItem = ({ item, index }) => {
-    const { selectedContacts, onPressContact } = this.props
+    const { selectedContacts, onPressContact, itemContainerStyle } = this.props
     const selected = selectedContacts.includes(item.id)
     return (
       <ContactListItem
@@ -20,15 +20,17 @@ class SelectContactList extends Component {
         name={item.name3}
         selected={selected}
         onPress={() => onPressContact(item.id)}
+        itemContainerStyle={itemContainerStyle}
       />
     )
   }
 
   render () {
-    const { contacts, exclude = [] } = this.props
+    const { exclude = [] } = this.props
     const message = exclude.length <= 0
       ? 'Contacts from your phone who have downloaded the app will automatically appear here.'
-      : 'No results.'
+      : 'No results'
+    const contacts = this.props.contacts.filter(({ id }) => !exclude.includes(id))
     return contacts.length > 0 ? (<FlatList
       extraData={this.props.selectedContacts}
       style={styles.list}
