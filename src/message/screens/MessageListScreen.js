@@ -25,7 +25,7 @@ class MessageListScreen extends Component {
     const { contacts, messages } = this.props
     return messages.map(m => {
       const user = contacts.find(({ id }) => id === m.owner) || {}
-      const username = user.name3 || user.phoneNumber
+      const username = user.name4 || user.phoneNumber
       const hasPhotos = m.photos.items.length > 0
       const albumName = hasPhotos ? m.photos.items[0].album.name : null
       const text = hasPhotos ? `${username} added a photo to ${albumName}` : m.text

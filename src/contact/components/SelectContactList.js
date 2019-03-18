@@ -17,7 +17,7 @@ class SelectContactList extends Component {
         {...item}
         selectable
         index={index}
-        name={item.name3}
+        name={item.name4}
         selected={selected}
         onPress={() => onPressContact(item.id)}
         itemContainerStyle={itemContainerStyle}

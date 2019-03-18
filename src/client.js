@@ -5,6 +5,7 @@ import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import config from '../aws-exports'
+import { getAuthUser } from '@auth/AuthService'
 import { listPhoneContacts } from '@contact/ContactService'
 
 const cache = new InMemoryCache()
@@ -12,13 +13,17 @@ const cache = new InMemoryCache()
 // NOTE: changed name to name2 to force resolver result to update.
 export const typeDefs = gql`
   extend type User {
-    name3: String
+    name4: String
   }
 `
 
 const resolvers = {
   User: {
-    name3: async (user, args, { cache }) => {
+    name4: async (user, args, { cache }) => {
+      const authUser = await getAuthUser()
+      if (authUser.username === user.id) {
+        return 'You'
+      }
       const phoneContacts = await listPhoneContacts()
       const { name = '' } = (phoneContacts.find(({ phoneNumber }) => phoneNumber === user.phoneNumber) || {})
       return name

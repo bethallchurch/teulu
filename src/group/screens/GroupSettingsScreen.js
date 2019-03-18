@@ -45,7 +45,7 @@ class GroupSettingsScreen extends Component {
     <ContactListItem
       {...item}
       index={index}
-      name={item.name3}
+      name={item.name4}
       owner={this.props.group.owner === item.id}
       itemContainerStyle={styles.itemContainer}
     />

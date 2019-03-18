@@ -7,7 +7,7 @@ export const listContacts = `query ListContacts(
     items {
       id
       phoneNumber
-      name3 @client
+      name4 @client
       createdAt
       updatedAt
     }
