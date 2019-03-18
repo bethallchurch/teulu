@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { View, TouchableOpacity, StyleSheet, ViewPropTypes } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, ViewPropTypes, ActivityIndicator } from 'react-native'
 import { ListItem } from 'react-native-elements'
-import { colors, layout } from '@global/styles'
+import { MaterialIcons } from '@expo/vector-icons'
 import Text from '@global/components/Text'
+import { colors, layout } from '@global/styles'
 
 const Button = ({ children, onPress, containerStyle }) => (
   <TouchableOpacity onPress={onPress} style={styles.buttonTouchable}>
@@ -13,18 +14,30 @@ const Button = ({ children, onPress, containerStyle }) => (
   </TouchableOpacity>
 )
 
-export const FullWidthButton = ({ title, onPress, rightIcon }) => (
+export const FullWidthButton = ({ title, onPress, rightIcon, loading, error }) => (
   <ListItem
     title={<Text button color={colors.primaryBackground}>{title.toUpperCase()}</Text>}
-    onPress={onPress}
-    containerStyle={styles.container}
-    rightIcon={rightIcon}
+    onPress={loading ? null : onPress}
+    containerStyle={[ styles.container, (loading ? styles.containerLoading : {}), (error ? styles.containerError : {}) ]}
+    rightIcon={<RightIcon component={rightIcon} {...{ loading, error }} />}
   />
 )
+
+const RightIcon = ({ error, loading, component }) => {
+  if (error) return <MaterialIcons name='warning' size={layout.s4} color={colors.primaryBackground} />
+  if (loading) return <ActivityIndicator color={colors.primaryBackground} />
+  return component
+}
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.primary
+  },
+  containerLoading: {
+    backgroundColor: colors.textLight
+  },
+  containerError: {
+    backgroundColor: colors.danger
   },
   buttonTouchable: {
     width: '100%'
@@ -49,11 +62,15 @@ Button.defaultProps = {
 FullWidthButton.propTypes = {
   title: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
-  rightIcon: PropTypes.node
+  rightIcon: PropTypes.node,
+  loading: PropTypes.bool,
+  error: PropTypes.bool
 }
 
 FullWidthButton.defaultProps = {
-  rightIcon: null
+  rightIcon: null,
+  loading: false,
+  error: false
 }
 
 export default Button

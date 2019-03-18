@@ -19,7 +19,12 @@ class PhotoUpload extends Component {
     uploadedImage: null,
     uploading: false,
     hasCameraRollPermission: null,
-    modalVisible: false
+    modalVisible: false,
+    error: false
+  }
+
+  componentWillUnmount () {
+    this.timeout && clearTimeout(this.timeout)
   }
 
   hideModal = () => {
@@ -46,11 +51,13 @@ class PhotoUpload extends Component {
       this.setState({ uploading: true })
       const { key } = await uploadImage({ uri, albumId, userId, groupId, authUsers: JSON.stringify(authUsers) })
       console.log('Image successfully uploaded:', key)
-      this.setState({ uploadedImage: key, modalVisible: false })
+      this.setState({ uploadedImage: key, uploading: false, modalVisible: false })
     } catch (error) {
       console.log('Error uploading image:', error)
-    } finally {
-      this.setState({ uploading: false, modalVisible: false })
+      this.setState({ error: true, uploading: false })
+      this.timeout = setTimeout(() => {
+        this.setState({ modalVisible: false, error: false })
+      }, 1500)
     }
   }
 
@@ -58,11 +65,14 @@ class PhotoUpload extends Component {
     const {
       hasCameraRollPermission,
       pickedImage,
-      modalVisible
+      modalVisible,
+      uploading,
+      error
     } = this.state
     if (hasCameraRollPermission === false) {
       return <Text subtitleTwo>No access to camera</Text>
     }
+    const uploadButtonTitle = error ? 'Error Uploading Photo' : uploading ? 'Uploading...' : 'Upload Photo'
     return (
       <>
         <FullWidthButton
@@ -75,13 +85,16 @@ class PhotoUpload extends Component {
             <SafeAreaView style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.overlayBackground }}>
               {pickedImage && (
                 <>
+                  {uploading && <Text bodyOne style={{ color: '#fff' }}>Image uploading...</Text>}
                   <Image
                     resizeMode='contain'
                     style={{ width: windowWidth, height: windowHeight - 80 }}
                     source={{ uri: pickedImage.uri }}
                   />
                   <FullWidthButton
-                    title='Upload Photo'
+                    error={error}
+                    loading={uploading}
+                    title={uploadButtonTitle}
                     onPress={this.saveImage}
                     rightIcon={<UploadRightIcon />}
                   />
