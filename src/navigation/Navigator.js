@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from 'react-navigation'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
-import GroupStack, { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
+import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 import GroupListScreen from '@group/screens/GroupListScreen'
@@ -45,7 +45,7 @@ const MainAppStack = createStackNavigator({
     })
   },
   [routes.GROUP]: {
-    screen: GroupStack,
+    screen: AlbumListScreen,
     navigationOptions: ({ navigation }) => ({
       title: navigation.getParam('groupName'),
       headerRight: (
