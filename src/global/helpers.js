@@ -43,6 +43,8 @@ export const chunk = (x, size) => {
   return chunked
 }
 
+export const isEmpty = obj => Object.entries(obj).length === 0 && obj.constructor === Object
+
 export const arrayToObject = (arr, options = {}) => {
   const { setKey = item => item, setValue = () => null } = options
   return arr.reduce((obj, item) => {

@@ -133,7 +133,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "teulu-20190312211949-deployment",
-					"S3Key": "amplify-builds/teuluphotoprocessor-1552504592-latest-build.zip"
+					"S3Key": "amplify-builds/teuluphotoprocessor-1552929477-latest-build.zip"
 				}
 			}
 		},

@@ -4,8 +4,9 @@ import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import uuid from 'uuid/v4'
 import { GET_GROUP } from '@group/GroupService'
-import { CREATE_ALBUM } from '@album/AlbumService'
+import { CREATE_ALBUM, LIST_ALBUMS } from '@album/AlbumService'
 import { ALBUM } from '@navigation/routes'
+import { isEmpty } from '@global/helpers'
 import { UserContext } from '@global/context'
 import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error } from '@global/components'
 import { layout } from '@global/styles'
@@ -16,8 +17,8 @@ class CreateAlbumScreen extends WithInputs {
   createAlbum = () => {
     const { albumName } = this.state
     const { userId, groupId, authUsers } = this.props
-    const input = { id: uuid(), owner: userId, name: albumName, albumGroupId: groupId, authUsers }
-    this.props.createAlbum({ input })
+    const input = { id: uuid(), owner: userId, name: albumName, authUsers: [ userId ] }
+    this.props.createAlbum({ input: groupId ? { ...input, albumGroupId: groupId, authUsers } : input })
   }
 
   render () {
@@ -44,9 +45,9 @@ const styles = StyleSheet.create({
   }
 })
 
-const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+const dataExtractor = ({ data: { getGroup = {} } = {}, loading, error }) => ({
   error,
-  loading: loading || !getGroup,
+  loading: loading,
   group: getGroup
 })
 
@@ -84,25 +85,25 @@ const mapProps = ({ user, groupData, createAlbum }) => {
         createAlbum: {
           __typename: 'Album',
           ...input,
-          group: {
-            __typename: 'ModelGroupConnection',
-            ...group
-          },
           photos: {
             __typename: 'ModelPhotoConnection',
             items: [],
             nextToken: null
           },
+          group: !isEmpty(group) ? {
+            __typename: 'ModelGroupConnection',
+            ...group
+          } : null,
+          albumGroupId: createAlbum.albumGroupId || null,
           createdAt: time,
           updatedAt: time
         }
       }
       const update = async (cache, { data: { createAlbum } }) => {
-        const query = GET_GROUP
-        const variables = { id: createAlbum.albumGroupId }
-        const data = cache.readQuery({ query, variables })
-        data.getGroup.albums.items = [ createAlbum, ...data.getGroup.albums.items ]
-        cache.writeQuery({ query, variables, data })
+        const query = LIST_ALBUMS
+        const data = cache.readQuery({ query })
+        data.listAlbums.items = [ createAlbum, ...data.listAlbums.items ]
+        cache.writeQuery({ query, data })
         navigateToAlbum({ albumId: createAlbum.id, albumName: createAlbum.name })
       }
       createAlbum.mutation({ variables: { input }, optimisticResponse, update })

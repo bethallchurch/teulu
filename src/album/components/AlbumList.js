@@ -2,11 +2,18 @@ import React, { Component } from 'react'
 import { Query } from 'react-apollo'
 import { GET_GROUP } from '@group/GroupService'
 import { LIST_ALBUMS } from '@album/AlbumService'
-import { ALBUM } from '@navigation/routes'
+import { ALBUM, CREATE_ALBUM } from '@navigation/routes'
 import { Error, Loading, SquareGrid } from '@global/components'
 import AlbumListItem from '@album/components/AlbumListItem'
+import CreateAlbumButton from '@album/components/CreateAlbumButton'
 
 class AlbumList extends Component {
+  navigateToCreateAlbum = () => {
+    this.props.navigation.navigate(CREATE_ALBUM, {
+      groupId: this.props.groupId
+    })
+  }
+
   navigateToAlbum = (id, name) => {
     this.props.navigation.navigate(ALBUM, {
       albumId: id,
@@ -19,14 +26,17 @@ class AlbumList extends Component {
     index,
     width,
     margin,
-    item: { id, name, photos: { items = [] } }
-  }) => (
+    item: { id, name, group, photos: { items = [] } = {} }
+  }) => id === 'create-button' ? (
+    <CreateAlbumButton onPress={this.navigateToCreateAlbum} width={width} margin={margin} />
+  ) : (
     <AlbumListItem
       name={name}
       width={width}
       margin={margin}
       photoId={items.length ? items[0].id : null}
       onPress={() => this.navigateToAlbum(id, name)}
+      shared={!!group}
     />
   )
 
@@ -37,13 +47,17 @@ class AlbumList extends Component {
       containerStyle,
       containerPadding,
       gutterWidth,
-      containerWidth
+      containerWidth,
+      createButton
     } = this.props
+
+    const data = createButton ? [{ id: 'create-button' }, ...albums] : albums
+
     return (
       <SquareGrid
         keyExtractor={({ id }) => id}
         renderItem={this.renderItem}
-        data={albums}
+        data={data}
         containerStyle={containerStyle}
         containerPadding={containerPadding}
         containerWidth={containerWidth}

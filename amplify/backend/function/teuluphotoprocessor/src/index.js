@@ -17,26 +17,13 @@ const Sharp = require('sharp')
 const THUMBNAIL_WIDTH = parseInt(process.env.THUMBNAIL_WIDTH || 50)
 const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT || 50)
 const DYNAMODB_PHOTO_TABLE_NAME = process.env.DYNAMODB_PHOTO_TABLE_ARN.split('/')[1]
-const DYNAMODB_MESSAGE_TABLE_NAME = process.env.DYNAMODB_MESSAGE_TABLE_ARN.split('/')[1]
 
-console.log('PHOTO TABLE:', DYNAMODB_PHOTO_TABLE_NAME)
-console.log('MESSAGE TABLE:', DYNAMODB_MESSAGE_TABLE_NAME)
-
-const storePhotoInfo = ({ photo, message }) => {
-  const photoParams = {
+const storePhotoInfo = (photo) => {
+  const params = {
     Item: photo,
     TableName: DYNAMODB_PHOTO_TABLE_NAME
   }
-
-  const messageParams = {
-    Item: message,
-    TableName: DYNAMODB_MESSAGE_TABLE_NAME
-  }
-
-  return Promise.all([
-    DynamoDBDocClient.put(photoParams).promise(),
-    DynamoDBDocClient.put(messageParams).promise()
-  ])
+  return DynamoDBDocClient.put(params).promise()
 }
 
 const getMetadata = async (bucketName, key) => {
@@ -112,37 +99,21 @@ const processRecord = async record => {
 
   const metadata = await getMetadata(bucketName, key)
   const sizes = await resize(bucketName, key)
-  const photoId = uuid()
-  const messageId = uuid()
 
-  const sharedParams = {
+  const photo = {
+    id: uuid(),
     owner: metadata.userid,
     authUsers: JSON.parse(metadata.authusers),
+    bucket: bucketName,
+    fullsize: sizes.fullsize,
+    thumbnail: sizes.thumbnail,
+    photoAlbumId: metadata.albumid,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
 
-  const photo = {
-    ...sharedParams,
-    id: photoId,
-    bucket: bucketName,
-    fullsize: sizes.fullsize,
-    thumbnail: sizes.thumbnail,
-    photoMessageId: messageId,
-    photoAlbumId: metadata.albumid
-  }
-
-  const message = {
-    ...sharedParams,
-    id: messageId,
-    type: 'PHOTO',
-    text: metadata.text,
-    messageGroupId: metadata.groupid,
-    photos: [ photoId ]
-  }
-
   try {
-    await storePhotoInfo({ photo, message })
+    await storePhotoInfo(photo)
   } catch (error) {
     console.log('Error storing photo information to database:', error)
   }

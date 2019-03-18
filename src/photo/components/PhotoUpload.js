@@ -46,10 +46,10 @@ class PhotoUpload extends Component {
 
   saveImage = async () => {
     const { pickedImage: { uri } } = this.state
-    const { albumId, groupId, authUsers, userId } = this.props
+    const { albumId, authUsers, userId } = this.props
     try {
       this.setState({ uploading: true })
-      const { key } = await uploadImage({ uri, albumId, userId, groupId, authUsers: JSON.stringify(authUsers) })
+      const { key } = await uploadImage({ uri, albumId, userId, authUsers: JSON.stringify(authUsers) })
       console.log('Image successfully uploaded:', key)
       this.setState({ uploadedImage: key, uploading: false, modalVisible: false })
     } catch (error) {
@@ -144,8 +144,7 @@ const ConnectedPhotoUpload = props => (
         <PhotoUpload
           userId={userId}
           albumId={album.id}
-          groupId={album.group.id}
-          authUsers={album.group.authUsers}
+          authUsers={album.authUsers}
           {...props}
         />
       )

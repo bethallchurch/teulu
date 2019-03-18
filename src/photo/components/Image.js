@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { ActivityIndicator, View, ImageBackground } from 'react-native'
+import { View, ImageBackground } from 'react-native'
 import { Image as RNEImage } from 'react-native-elements'
 import { Storage } from 'aws-amplify'
+import { colors } from '@global/styles'
 
 class ImageBase extends Component {
   state = { src: null }
@@ -51,9 +52,7 @@ export default class Image extends ImageBase {
     return src ? (
       <RNEImage source={src} resizeMode={resizeMode} style={style} />
     ) : (
-      <View style={[ style, { justifyContent: 'center', alignItems: 'center' } ]}>
-        <ActivityIndicator />
-      </View>
+      <View style={[ { justifyContent: 'center', alignItems: 'center', backgroundColor: colors.textLight }, style ]} />
     )
   }
 }

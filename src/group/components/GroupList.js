@@ -2,11 +2,12 @@ import React, { Component } from 'react'
 import { FlatList, StyleSheet } from 'react-native'
 import { Query } from 'react-apollo'
 import { adopt } from 'react-adopt'
-import { GROUP } from '@navigation/routes'
+import { GROUP, CREATE_GROUP } from '@navigation/routes'
 import { LIST_GROUPS } from '@group/GroupService'
 import { UserContext } from '@global/context'
 import { Error, Loading } from '@global/components'
 import GroupListItem from '@group/components/GroupListItem'
+import CreateGroupButton from '@group/components/CreateGroupButton'
 import { layout } from '@global/styles'
 
 class GroupList extends Component {
@@ -17,22 +18,33 @@ class GroupList extends Component {
     })
   }
 
+  renderItem = ({
+    index,
+    item: { id, name }
+  }) => {
+    const { compact = false, navigation: { navigate } } = this.props
+    return id === 'create-button' ? (
+      <CreateGroupButton onPress={() => navigate(CREATE_GROUP)} />
+    ) : (
+      <GroupListItem
+        id={id}
+        compact={compact}
+        title={name}
+        index={index}
+        navigateToGroup={this.navigateToGroup}
+      />
+    )
+  }
+
   render () {
-    const { compact = false } = this.props
+    const { compact = false, createButton = false, groups } = this.props
+    const data = createButton ? [{ id: 'create-button' }, ...groups] : groups
     return (
       <FlatList
         style={compact ? {} : styles.container}
         keyExtractor={({ id }) => id}
-        data={this.props.groups}
-        renderItem={({ item: { id, name }, index }) => (
-          <GroupListItem
-            id={id}
-            compact={compact}
-            title={name}
-            index={index}
-            navigateToGroup={this.navigateToGroup}
-          />
-        )}
+        data={data}
+        renderItem={this.renderItem}
       />
     )
   }
