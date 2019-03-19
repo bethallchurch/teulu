@@ -37,7 +37,7 @@ const ConnectedPhotoList = ({ query, variables, dataExtractor, ...props }) => (
 
 export const AlbumPhotoList = props => {
   const { albumId } = props
-  const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+  const dataExtractor = ({ data: { getAlbum } = {}, loading, error }) => ({
     error,
     loading: loading || !getAlbum,
     items: getAlbum ? getAlbum.photos.items : []
@@ -55,7 +55,7 @@ export const AlbumPhotoList = props => {
 const PhotoListAll = props => {
   const query = LIST_PHOTOS
   const variables = props.limit ? { limit: props.limit } : {}
-  const dataExtractor = ({ data: { listPhotos }, loading, error }) => ({
+  const dataExtractor = ({ data: { listPhotos } = {}, loading, error }) => ({
     error,
     loading: loading || !listPhotos,
     items: listPhotos ? listPhotos.items : []

@@ -111,7 +111,7 @@ class PhotoUpload extends Component {
 const AddRightIcon = () => <MaterialIcons name='photo' size={layout.s4} color={colors.primaryBackground} />
 const UploadRightIcon = () => <Feather name='upload' size={layout.s4} color={colors.primaryBackground} />
 
-const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+const dataExtractor = ({ data: { getAlbum } = {}, loading, error }) => ({
   error,
   loading: loading || !getAlbum,
   album: getAlbum

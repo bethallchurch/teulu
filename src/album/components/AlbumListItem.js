@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const dataExtractor = ({ data: { getPhoto }, loading, error }) => ({
+const dataExtractor = ({ data: { getPhoto } = {}, loading, error }) => ({
   error,
   loading: loading || !getPhoto,
   photo: getPhoto

@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const contactDataExtractor = ({ data: { contacts }, loading, error }) => ({
+const dataExtractor = ({ data: { contacts } = {}, loading, error }) => ({
   error,
   loading: loading || !contacts,
   contacts: contacts || []
@@ -62,7 +62,7 @@ const mapper = {
 }
 
 const mapProps = ({ user, contactData }) => {
-  const { error, loading, contacts } = contactDataExtractor(contactData)
+  const { error, loading, contacts } = dataExtractor(contactData)
   return { userId: user.id, error, loading, contacts }
 }
 

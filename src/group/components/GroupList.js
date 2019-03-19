@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const dataExtractor = ({ data: { listGroups }, loading, error }) => ({
+const dataExtractor = ({ data: { listGroups } = {}, loading, error }) => ({
   error,
   loading: loading || !listGroups,
   groups: listGroups ? listGroups.items : []

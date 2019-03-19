@@ -81,13 +81,13 @@ class MessageListScreen extends Component {
   }
 }
 
-const messageDataExtractor = ({ data: { getGroup }, loading, error }) => ({
+const messageDataExtractor = ({ data: { getGroup } = {}, loading, error }) => ({
   error,
   loading: loading || !getGroup,
   messages: getGroup ? getGroup.messages.items : []
 })
 
-const contactDataExtractor = ({ data: { listUsers }, loading, error }) => ({
+const contactDataExtractor = ({ data: { listUsers } = {}, loading, error }) => ({
   error,
   loading: loading || !listUsers,
   contacts: listUsers ? listUsers.items : []

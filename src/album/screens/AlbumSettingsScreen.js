@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const dataExtractor = ({ data: { getAlbum }, loading, error }) => ({
+const dataExtractor = ({ data: { getAlbum } = {}, loading, error }) => ({
   error,
   loading: loading || !getAlbum,
   item: getAlbum

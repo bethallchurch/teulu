@@ -81,7 +81,7 @@ const ConnectedAlbumList = ({ query, variables, dataExtractor, ...props }) => (
 
 export const GroupAlbumList = props => {
   const { groupId } = props
-  const dataExtractor = ({ data: { getGroup }, loading, error }) => ({
+  const dataExtractor = ({ data: { getGroup } = {}, loading, error }) => ({
     error,
     loading: loading || !getGroup,
     items: getGroup ? getGroup.albums.items : []
@@ -98,7 +98,7 @@ export const GroupAlbumList = props => {
 
 const AlbumListAll = props => {
   const variables = props.limit ? { limit: props.limit } : {}
-  const dataExtractor = ({ data: { listAlbums }, loading, error }) => ({
+  const dataExtractor = ({ data: { listAlbums } = {}, loading, error }) => ({
     error,
     loading: loading || !listAlbums,
     items: listAlbums ? listAlbums.items : []
