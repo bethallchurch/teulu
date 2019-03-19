@@ -5,10 +5,10 @@ import { adopt } from 'react-adopt'
 import uuid from 'uuid/v4'
 import { GET_GROUP } from '@group/GroupService'
 import { CREATE_ALBUM, LIST_ALBUMS } from '@album/AlbumService'
-import { ALBUM } from '@navigation/routes'
+import { GROUP_LIST, ALBUM } from '@navigation/routes'
 import { isEmpty } from '@global/helpers'
 import { UserContext } from '@global/context'
-import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error } from '@global/components'
+import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error, Link, LinkContainer } from '@global/components'
 import { layout } from '@global/styles'
 
 class CreateAlbumScreen extends WithInputs {
@@ -16,14 +16,17 @@ class CreateAlbumScreen extends WithInputs {
 
   createAlbum = () => {
     const { albumName } = this.state
-    const { userId, groupId, authUsers } = this.props
+    const { userId, group, authUsers, createAlbum } = this.props
     const input = { id: uuid(), owner: userId, name: albumName, authUsers: [ userId ] }
-    this.props.createAlbum({ input: groupId ? { ...input, albumGroupId: groupId, authUsers } : input })
+    createAlbum({ input: group.id ? { ...input, albumGroupId: group.id, authUsers } : input })
   }
 
   render () {
+    const { group, navigation: { navigate } } = this.props
     return (
       <ScreenBase avoidKeyboard contentContainer>
+        {group.name && <Text caption style={styles.title}>Shared album in {group.name}</Text>}
+        {!group.name && <Text caption style={styles.title}>Private album</Text>}
         <Text h5 style={styles.title}>Name your album</Text>
         <TextInput
           placeholder='Album Name'
@@ -33,6 +36,11 @@ class CreateAlbumScreen extends WithInputs {
           onChangeText={value => this.onChangeText('albumName', value)}
         />
         <Button onPress={this.createAlbum}>Create Album</Button>
+        {!group.name && (
+          <LinkContainer>
+            <Link onPress={() => navigate(GROUP_LIST)}>Create shared album instead?</Link>
+          </LinkContainer>
+        )}
       </ScreenBase>
     )
   }
@@ -121,7 +129,7 @@ const ConnectedCreateAlbumScreen = props => (
       return (
         <CreateAlbumScreen
           userId={userId}
-          groupId={group.id}
+          group={group}
           authUsers={group.authUsers}
           createAlbum={createAlbum}
           {...props}
