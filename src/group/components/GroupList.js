@@ -18,20 +18,26 @@ class GroupList extends Component {
     })
   }
 
-  renderItem = ({
-    index,
-    item: { id, name }
-  }) => {
-    const { compact = false, navigation: { navigate } } = this.props
-    return id === 'create-button' ? (
+  renderItem = ({ index, item }) => {
+    const {
+      compact = false,
+      selectable = false,
+      onPressItem = null,
+      selectedGroupId = null,
+      navigation: { navigate }
+    } = this.props
+    return item.id === 'create-button' ? (
       <CreateGroupButton onPress={() => navigate(CREATE_GROUP)} />
     ) : (
       <GroupListItem
-        id={id}
-        compact={compact}
-        title={name}
+        id={item.id}
+        group={item}
         index={index}
+        compact={compact}
+        onPress={onPressItem}
+        selectable={selectable}
         navigateToGroup={this.navigateToGroup}
+        selected={selectable && item.id === selectedGroupId}
       />
     )
   }
@@ -41,10 +47,10 @@ class GroupList extends Component {
     const data = createButton ? [{ id: 'create-button' }, ...groups] : groups
     return (
       <FlatList
-        style={compact ? {} : styles.container}
-        keyExtractor={({ id }) => id}
         data={data}
         renderItem={this.renderItem}
+        keyExtractor={({ id }) => id}
+        style={compact ? {} : styles.container}
       />
     )
   }

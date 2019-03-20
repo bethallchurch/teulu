@@ -1,6 +1,6 @@
 import React from 'react'
 import { createStackNavigator } from 'react-navigation'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
 import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
 import UserStack from '@user/UserNavigation'
@@ -41,7 +41,13 @@ const MainAppStack = createStackNavigator({
   [routes.ALBUM_LIST]: {
     screen: AlbumListScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'All Albums'
+      title: 'Albums',
+      headerRight: (
+        <HeaderIcon
+          icon={<MaterialIcons name='filter-list' size={layout.s4} color={colors.textDefault} />}
+          onPress={() => null}
+        />
+      )
     })
   },
   [routes.GROUP]: {

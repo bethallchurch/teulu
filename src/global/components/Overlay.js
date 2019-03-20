@@ -9,16 +9,17 @@ import {
   StatusBar
 } from 'react-native'
 import { Icon } from 'react-native-elements'
+import { Constants } from 'expo'
 import { colors, layout } from '@global/styles'
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window')
-const STATUS_BAR_OFFSET = Platform.OS === 'android' ? -24 : 0
+const STATUS_BAR_OFFSET = Constants.statusBarHeight
 const IS_IOS = Platform.OS === 'ios'
 
 export default class Overlay extends Component {
   componentDidMount () {
-    if (this.props.isOpen) {
-      this.open()
+    if (this.props.isOpen && IS_IOS) {
+      StatusBar.setHidden(this.props.isOpen, 'fade')
     }
   }
 
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
   },
   content: {
     left: 0,
-    top: 0,
+    top: STATUS_BAR_OFFSET,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT + STATUS_BAR_OFFSET,
     position: 'absolute',

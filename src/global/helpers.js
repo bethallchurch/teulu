@@ -1,3 +1,5 @@
+export { default as deepEqual } from 'deep-equal'
+
 export const restrictRange = (x, min, max) => {
   if (x > max) return max
   if (x < min) return min

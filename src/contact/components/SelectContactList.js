@@ -31,13 +31,15 @@ class SelectContactList extends Component {
       ? 'Contacts from your phone who have downloaded the app will automatically appear here.'
       : 'No results'
     const contacts = this.props.contacts.filter(({ id }) => !exclude.includes(id))
-    return contacts.length > 0 ? (<FlatList
-      extraData={this.props.selectedContacts}
-      style={styles.list}
-      keyExtractor={({ id }) => id}
-      data={contacts}
-      renderItem={this.renderItem}
-    />) : <NoContacts onEmptyMessage={message} />
+    return contacts.length > 0 ? (
+      <FlatList
+        extraData={this.props.selectedContacts}
+        style={styles.list}
+        keyExtractor={({ id }) => id}
+        data={contacts}
+        renderItem={this.renderItem}
+      />
+    ) : <NoContacts onEmptyMessage={message} />
   }
 }
 

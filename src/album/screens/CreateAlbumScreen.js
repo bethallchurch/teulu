@@ -1,46 +1,66 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import uuid from 'uuid/v4'
 import { GET_GROUP } from '@group/GroupService'
 import { CREATE_ALBUM, LIST_ALBUMS } from '@album/AlbumService'
-import { GROUP_LIST, ALBUM } from '@navigation/routes'
-import { isEmpty } from '@global/helpers'
+import { ALBUM } from '@navigation/routes'
+import { isEmpty, deepEqual } from '@global/helpers'
 import { UserContext } from '@global/context'
-import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error, Link, LinkContainer } from '@global/components'
+import { WithInputs, ScreenBase, TextInput, Button, Text, Loading, Error } from '@global/components'
+import SelectGroupDropdown from '@group/components/SelectGroupDropdown'
 import { layout } from '@global/styles'
 
 class CreateAlbumScreen extends WithInputs {
-  state = { albumName: '' }
+  state = { albumName: '', group: {} }
+
+  componentDidMount () {
+    this.setState({ group: this.props.group })
+  }
+
+  componentDidUpdate (prevProps) {
+    if (!deepEqual(prevProps.group, this.props.group)) {
+      this.setState({ group: this.props.group })
+    }
+  }
 
   createAlbum = () => {
-    const { albumName } = this.state
-    const { userId, group, authUsers, createAlbum } = this.props
+    const { albumName, group } = this.state
+    const { userId, authUsers, createAlbum } = this.props
     const input = { id: uuid(), owner: userId, name: albumName, authUsers: [ userId ] }
     createAlbum({ input: group.id ? { ...input, albumGroupId: group.id, authUsers } : input })
   }
 
   render () {
-    const { group, navigation: { navigate } } = this.props
+    const { group, albumName } = this.state
+    const { group: initialGroup, navigation } = this.props
     return (
       <ScreenBase avoidKeyboard contentContainer>
-        {group.name && <Text caption style={styles.title}>Shared album in {group.name}</Text>}
-        {!group.name && <Text caption style={styles.title}>Private album</Text>}
-        <Text h5 style={styles.title}>Name your album</Text>
-        <TextInput
-          placeholder='Album Name'
-          value={this.state.albumName}
-          returnKeyType='go'
-          autoCorrect={false}
-          onChangeText={value => this.onChangeText('albumName', value)}
-        />
-        <Button onPress={this.createAlbum}>Create Album</Button>
-        {!group.name && (
-          <LinkContainer>
-            <Link onPress={() => navigate(GROUP_LIST)}>Create shared album instead?</Link>
-          </LinkContainer>
+        <View style={styles.fieldOne}>
+          <Text h5 style={styles.title}>Name your album</Text>
+          <TextInput
+            placeholder='Album Name'
+            value={albumName}
+            returnKeyType='go'
+            autoCorrect={false}
+            onChangeText={value => this.onChangeText('albumName', value)}
+          />
+        </View>
+        {!initialGroup.id && (
+          <View style={styles.fieldTwo}>
+            <Text h5 style={styles.title}>Choose group</Text>
+            <SelectGroupDropdown
+              closeOnSelect
+              navigation={navigation}
+              selectedGroupId={group.id}
+              onSelectGroup={group => this.setState({ group })}
+            >
+              {group.name}
+            </SelectGroupDropdown>
+          </View>
         )}
+        <Button onPress={this.createAlbum}>Create Album</Button>
       </ScreenBase>
     )
   }
@@ -50,6 +70,14 @@ const styles = StyleSheet.create({
   title: {
     width: '100%',
     marginBottom: layout.s2
+  },
+  fieldOne: {
+    width: '100%',
+    marginBottom: layout.s3
+  },
+  fieldTwo: {
+    width: '100%',
+    marginBottom: layout.s6
   }
 })
 
