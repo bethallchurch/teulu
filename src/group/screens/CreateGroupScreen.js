@@ -81,11 +81,6 @@ const mapProps = ({ user, createGroup }) => ({
       createGroup: {
         __typename: 'Group',
         ...input,
-        messages: {
-          __typename: 'ModelMessageConnection',
-          items: [],
-          nextToken: null
-        },
         albums: {
           __typename: 'ModelAlbumConnection',
           items: [],
@@ -100,11 +95,14 @@ const mapProps = ({ user, createGroup }) => ({
         updatedAt: time
       }
     }
-    const update = (cache, { data: { createGroup } }) => {
+    const update = async (cache, { data: { createGroup } }) => {
       const query = LIST_GROUPS
       const groups = cache.readQuery({ query })
-      groups.listGroups.items = [ createGroup, ...groups.listGroups.items ]
-      cache.writeQuery({ query, data: groups })
+      const itemExists = groups.listGroups.items.map(({ id }) => id).includes(createGroup.id)
+      if (!itemExists) {
+        groups.listGroups.items = [ createGroup, ...groups.listGroups.items ]
+        await cache.writeQuery({ query, data: groups })
+      }
       navigateToGroup({ groupId: createGroup.id, groupName: createGroup.name })
     }
     createGroup.mutation({ variables: { input }, optimisticResponse, update })
