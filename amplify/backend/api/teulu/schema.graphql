@@ -51,6 +51,8 @@ type GroupLink
   id: ID!
   user: User @connection(name: "UserGroupLinks")
   group: Group! @connection(name: "GroupUserLinks")
+  createdAt: String
+  updatedAt: String
 }
 
 type Group
@@ -65,7 +67,7 @@ type Group
   authUsers: [String]
   userLinks: [GroupLink] @connection(name: "GroupUserLinks")
   messages: [Message] @connection(name: "GroupMessages", sortField: "createdAt")
-  albums: [Album] @connection(name: "GroupAlbums")
+  albums: [Album] @connection(name: "GroupAlbums", sortField: "updatedAt")
   createdAt: String
   updatedAt: String
 }
@@ -85,7 +87,7 @@ type Album
   authUsers: [String]
   albumGroupId: ID
   group: Group @connection(name: "GroupAlbums")
-  photos: [Photo] @connection(name: "AlbumPhotos")
+  photos: [Photo] @connection(name: "AlbumPhotos", sortField: "createdAt")
   createdAt: String
   updatedAt: String
 }

@@ -30,6 +30,8 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -181,6 +183,8 @@ export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -333,6 +337,8 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -421,6 +427,8 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -532,6 +540,8 @@ export const onCreateUser = `subscription OnCreateUser {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -573,6 +583,8 @@ export const onUpdateUser = `subscription OnUpdateUser {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -614,6 +626,8 @@ export const onDeleteUser = `subscription OnDeleteUser {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -645,6 +659,8 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -673,6 +689,8 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -726,6 +744,8 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -752,6 +772,8 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -780,6 +802,8 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -833,6 +857,8 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -859,6 +885,8 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -887,6 +915,8 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -940,6 +970,8 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -978,6 +1010,8 @@ export const onCreateGroup = `subscription OnCreateGroup {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -1104,6 +1138,8 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -1230,6 +1266,8 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }

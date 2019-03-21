@@ -34,6 +34,8 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -75,6 +77,8 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -116,6 +120,8 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -147,6 +153,8 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -175,6 +183,8 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -228,6 +238,8 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -254,6 +266,8 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -282,6 +296,8 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -335,6 +351,8 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -361,6 +379,8 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -389,6 +409,8 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -442,6 +464,8 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -480,6 +504,8 @@ export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -606,6 +632,8 @@ export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -732,6 +760,8 @@ export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -852,6 +882,8 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -1003,6 +1035,8 @@ export const createMessage = `mutation CreateMessage($input: CreateMessageInput!
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -1155,6 +1189,8 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -1243,6 +1279,8 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }

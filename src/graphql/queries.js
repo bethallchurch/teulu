@@ -34,6 +34,8 @@ export const getUser = `query GetUser($id: ID!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -68,6 +70,8 @@ export const listUsers = `query ListUsers(
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -101,6 +105,8 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -129,6 +135,8 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -182,6 +190,8 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
       createdAt
       updatedAt
     }
+    createdAt
+    updatedAt
   }
 }
 `
@@ -199,6 +209,8 @@ export const listGroupLinks = `query ListGroupLinks(
         groups {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -213,6 +225,8 @@ export const listGroupLinks = `query ListGroupLinks(
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -243,6 +257,8 @@ export const listGroupLinks = `query ListGroupLinks(
         createdAt
         updatedAt
       }
+      createdAt
+      updatedAt
     }
     nextToken
   }
@@ -283,6 +299,8 @@ export const getGroup = `query GetGroup($id: ID!) {
           createdAt
           updatedAt
         }
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -402,6 +420,8 @@ export const listGroups = `query ListGroups(
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -488,6 +508,8 @@ export const getAlbum = `query GetAlbum($id: ID!) {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -629,6 +651,8 @@ export const listAlbums = `query ListAlbums(
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -736,6 +760,8 @@ export const getMessage = `query GetMessage($id: ID!) {
             createdAt
             updatedAt
           }
+          createdAt
+          updatedAt
         }
         nextToken
       }
@@ -878,6 +904,8 @@ export const listMessages = `query ListMessages(
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -986,6 +1014,8 @@ export const getPhoto = `query GetPhoto($id: ID!) {
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
@@ -1074,6 +1104,8 @@ export const getPhoto = `query GetPhoto($id: ID!) {
         userLinks {
           items {
             id
+            createdAt
+            updatedAt
           }
           nextToken
         }
