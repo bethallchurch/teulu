@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, ScrollView, StyleSheet } from 'react-native'
 import { ImagePicker, Permissions } from 'expo'
 import { ScreenBase, Text } from '@global/components'
 import PhotoUpload from '@photo/components/PhotoUpload'
@@ -50,7 +50,7 @@ class PhotoListScreen extends Component {
         <View style={styles.container}>
           {this.albumId && (
             <>
-              <View>
+              <ScrollView>
                 <Text h5 style={styles.title}>{this.albumName}</Text>
                 <AlbumPhotoList
                   albumId={this.albumId}
@@ -59,7 +59,7 @@ class PhotoListScreen extends Component {
                   numColumns={2}
                   {...this.props}
                 />
-              </View>
+              </ScrollView>
               <PhotoUpload
                 visible={this.state.modalVisible}
                 close={this.closeModal}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { ScreenBase, Text } from '@global/components'
 import AlbumList, { GroupAlbumList } from '@album/components/AlbumList'
 import { layout } from '@global/styles'
@@ -17,7 +17,7 @@ class GroupScreen extends Component {
     return (
       <ScreenBase headerVisible={!!this.groupId}>
         {this.groupId && (
-          <>
+          <ScrollView>
             <Text h5 style={styles.title}>{this.groupName}</Text>
             <GroupAlbumList
               groupId={this.groupId}
@@ -27,7 +27,7 @@ class GroupScreen extends Component {
               numColumns={2}
               createButton
             />
-          </>
+          </ScrollView>
         )}
         {!this.groupId && (
           <AlbumList

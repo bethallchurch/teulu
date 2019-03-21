@@ -44,6 +44,7 @@ class PhotoUpload extends Component {
   render () {
     const { uploading, error } = this.state
     const {
+      close,
       visible,
       pickedImage,
       hasCameraRollPermission
@@ -53,8 +54,8 @@ class PhotoUpload extends Component {
     }
     const uploadButtonTitle = error ? 'Error Uploading Photo' : uploading ? 'Uploading...' : 'Upload Photo'
     return (
-      <Modal transparent visible={visible} onRequestClose={this.props.hideModal}>
-        <TouchableOpacity style={{ flex: 1 }} onPress={this.props.hideModal}>
+      <Modal transparent visible={visible} onRequestClose={close}>
+        <TouchableOpacity style={{ flex: 1 }} onPress={close}>
           <SafeAreaView style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: colors.overlayBackground }}>
             {pickedImage && (
               <>

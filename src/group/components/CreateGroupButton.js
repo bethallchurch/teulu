@@ -18,7 +18,7 @@ const CreateGroupButton = ({ onPress }) => (
 const styles = StyleSheet.create({
   container: {
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: colors.textLight,
+    borderColor: colors.primary,
     backgroundColor: 'transparent'
   },
   contentContainer: {

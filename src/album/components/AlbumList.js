@@ -35,8 +35,9 @@ class AlbumList extends Component {
       width={width}
       margin={margin}
       photoId={items.length ? items[0].id : null}
+      numPhotos={items.length || 0}
       onPress={() => this.navigateToAlbum(id, name)}
-      shared={!!group}
+      groupName={!this.props.groupList && group ? group.name : null}
     />
   )
 
@@ -91,6 +92,7 @@ export const GroupAlbumList = props => {
       query={GET_GROUP}
       variables={{ id: groupId }}
       dataExtractor={dataExtractor}
+      groupList
       {...props}
     />
   )
@@ -108,6 +110,7 @@ const AlbumListAll = props => {
       query={LIST_ALBUMS}
       variables={variables}
       dataExtractor={dataExtractor}
+      groupList={false}
       {...props}
     />
   )
