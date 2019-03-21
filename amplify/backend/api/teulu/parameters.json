@@ -6,5 +6,6 @@
             "authcognito12851efa",
             "Outputs.UserPoolId"
         ]
-    }
+    },
+    "APIKeyExpirationEpoch": "0"
 }

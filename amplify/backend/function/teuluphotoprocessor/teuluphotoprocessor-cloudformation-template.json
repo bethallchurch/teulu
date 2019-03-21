@@ -132,8 +132,8 @@
 				"Runtime": "nodejs8.10",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "teulu-20190312211949-deployment",
-					"S3Key": "amplify-builds/teuluphotoprocessor-1552929477-latest-build.zip"
+					"S3Bucket": "teulu-20190311215436-deployment",
+					"S3Key": "amplify-builds/teuluphotoprocessor-1553193661-latest-build.zip"
 				}
 			}
 		},
