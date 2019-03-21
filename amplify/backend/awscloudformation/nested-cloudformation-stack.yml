@@ -159,7 +159,7 @@
 					},
 					"APIKeyExpirationEpoch": "0",
 					"S3DeploymentBucket": "teulu-20190312211949-deployment",
-					"S3DeploymentRootKey": "amplify-appsync-files/9f6eda882d606c21d4afc6ff916bb420e1b0958a",
+					"S3DeploymentRootKey": "amplify-appsync-files/d660295f355c3a282dcd26ffe4632cfedc5badfc",
 					"env": "dev"
 				}
 			}

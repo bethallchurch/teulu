@@ -73,7 +73,7 @@ type Group
 
 type Album
   @model(
-    mutations: { create: "createAlbum" },
+    mutations: { create: "createAlbum", delete: "deleteAlbum", update: "updateAlbum" },
     subscriptions: null
   )
   @auth(rules: [
