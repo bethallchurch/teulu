@@ -23,7 +23,6 @@ module.exports = function (api) {
           '@photo': './src/photo',
           '@styles': './src/styles',
           '@user': './src/user',
-          '@home': './src/home',
           '@navigation': './src/navigation'
         }
       }]
