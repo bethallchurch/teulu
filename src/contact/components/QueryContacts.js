@@ -37,7 +37,7 @@ class QueryContacts extends Component {
           fetchPolicy: 'cache-and-network'
         })
       })).subscribe(result => {
-        const contacts = flatten(result.map(({ data }) => data.listUsers.items))
+        const contacts = flatten(result.map(({ data = {} }) => data.listUsers ? data.listUsers.items : []))
         this.setState({ data: { contacts }, loading: false })
       })
     } catch (error) {
