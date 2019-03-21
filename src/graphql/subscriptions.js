@@ -35,30 +35,6 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
         }
         nextToken
       }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       albums {
         items {
           id
@@ -122,27 +98,6 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
           createdAt
           updatedAt
         }
-        message {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -152,160 +107,7 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
     updatedAt
   }
 }
-`
-export const onCreateMessage = `subscription OnCreateMessage($messageGroupId: ID) {
-  onCreateMessage(messageGroupId: $messageGroupId) {
-    id
-    owner
-    authUsers
-    type
-    text
-    messageGroupId
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        items {
-          id
-          user {
-            id
-            phoneNumber
-            createdAt
-            updatedAt
-          }
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      albums {
-        items {
-          id
-          name
-          owner
-          authUsers
-          albumGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
-        fullsize {
-          key
-          width
-          height
-        }
-        thumbnail {
-          key
-          width
-          height
-        }
-        photoAlbumId
-        album {
-          id
-          name
-          owner
-          authUsers
-          albumGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        message {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`
+`;
 export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
   onCreatePhoto(photoAlbumId: $photoAlbumId) {
     id
@@ -342,18 +144,6 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
           }
           nextToken
         }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
         albums {
           items {
             id
@@ -392,105 +182,6 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
             owner
             authUsers
             albumGroupId
-            createdAt
-            updatedAt
-          }
-          message {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    message {
-      id
-      owner
-      authUsers
-      type
-      text
-      messageGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        userLinks {
-          items {
-            id
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        albums {
-          items {
-            id
-            name
-            owner
-            authUsers
-            albumGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      photos {
-        items {
-          id
-          owner
-          authUsers
-          bucket
-          fullsize {
-            key
-            width
-            height
-          }
-          thumbnail {
-            key
-            width
-            height
-          }
-          photoAlbumId
-          album {
-            id
-            name
-            owner
-            authUsers
-            albumGroupId
-            createdAt
-            updatedAt
-          }
-          message {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
             createdAt
             updatedAt
           }
@@ -506,7 +197,7 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
     updatedAt
   }
 }
-`
+`;
 export const onCreateUser = `subscription OnCreateUser {
   onCreateUser {
     id
@@ -531,9 +222,6 @@ export const onCreateUser = `subscription OnCreateUser {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
@@ -549,7 +237,7 @@ export const onCreateUser = `subscription OnCreateUser {
     updatedAt
   }
 }
-`
+`;
 export const onUpdateUser = `subscription OnUpdateUser {
   onUpdateUser {
     id
@@ -574,9 +262,6 @@ export const onUpdateUser = `subscription OnUpdateUser {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
@@ -592,7 +277,7 @@ export const onUpdateUser = `subscription OnUpdateUser {
     updatedAt
   }
 }
-`
+`;
 export const onDeleteUser = `subscription OnDeleteUser {
   onDeleteUser {
     id
@@ -617,9 +302,6 @@ export const onDeleteUser = `subscription OnDeleteUser {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
@@ -635,7 +317,7 @@ export const onDeleteUser = `subscription OnDeleteUser {
     updatedAt
   }
 }
-`
+`;
 export const onCreateGroupLink = `subscription OnCreateGroupLink {
   onCreateGroupLink {
     id
@@ -694,30 +376,6 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
         }
         nextToken
       }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       albums {
         items {
           id
@@ -748,7 +406,7 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
     updatedAt
   }
 }
-`
+`;
 export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
   onUpdateGroupLink {
     id
@@ -807,30 +465,6 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
         }
         nextToken
       }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       albums {
         items {
           id
@@ -861,7 +495,7 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
     updatedAt
   }
 }
-`
+`;
 export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
   onDeleteGroupLink {
     id
@@ -920,30 +554,6 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
         }
         nextToken
       }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       albums {
         items {
           id
@@ -974,7 +584,7 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
     updatedAt
   }
 }
-`
+`;
 export const onCreateGroup = `subscription OnCreateGroup {
   onCreateGroup {
     id
@@ -1001,56 +611,11 @@ export const onCreateGroup = `subscription OnCreateGroup {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
           createdAt
           updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        type
-        text
-        messageGroupId
-        group {
-          id
-          name
-          owner
-          authUsers
-          userLinks {
-            nextToken
-          }
-          messages {
-            nextToken
-          }
-          albums {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        photos {
-          items {
-            id
-            owner
-            authUsers
-            bucket
-            photoAlbumId
-            createdAt
-            updatedAt
-          }
-          nextToken
         }
         createdAt
         updatedAt
@@ -1070,9 +635,6 @@ export const onCreateGroup = `subscription OnCreateGroup {
           owner
           authUsers
           userLinks {
-            nextToken
-          }
-          messages {
             nextToken
           }
           albums {
@@ -1102,7 +664,7 @@ export const onCreateGroup = `subscription OnCreateGroup {
     updatedAt
   }
 }
-`
+`;
 export const onUpdateGroup = `subscription OnUpdateGroup {
   onUpdateGroup {
     id
@@ -1129,56 +691,11 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
           createdAt
           updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        type
-        text
-        messageGroupId
-        group {
-          id
-          name
-          owner
-          authUsers
-          userLinks {
-            nextToken
-          }
-          messages {
-            nextToken
-          }
-          albums {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        photos {
-          items {
-            id
-            owner
-            authUsers
-            bucket
-            photoAlbumId
-            createdAt
-            updatedAt
-          }
-          nextToken
         }
         createdAt
         updatedAt
@@ -1198,9 +715,6 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
           owner
           authUsers
           userLinks {
-            nextToken
-          }
-          messages {
             nextToken
           }
           albums {
@@ -1230,7 +744,7 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
     updatedAt
   }
 }
-`
+`;
 export const onDeleteGroup = `subscription OnDeleteGroup {
   onDeleteGroup {
     id
@@ -1257,56 +771,11 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
           createdAt
           updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        type
-        text
-        messageGroupId
-        group {
-          id
-          name
-          owner
-          authUsers
-          userLinks {
-            nextToken
-          }
-          messages {
-            nextToken
-          }
-          albums {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        photos {
-          items {
-            id
-            owner
-            authUsers
-            bucket
-            photoAlbumId
-            createdAt
-            updatedAt
-          }
-          nextToken
         }
         createdAt
         updatedAt
@@ -1326,9 +795,6 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
           owner
           authUsers
           userLinks {
-            nextToken
-          }
-          messages {
             nextToken
           }
           albums {
@@ -1358,4 +824,4 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
     updatedAt
   }
 }
-`
+`;

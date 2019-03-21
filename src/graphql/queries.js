@@ -25,9 +25,6 @@ export const getUser = `query GetUser($id: ID!) {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
@@ -43,7 +40,7 @@ export const getUser = `query GetUser($id: ID!) {
     updatedAt
   }
 }
-`
+`;
 export const listUsers = `query ListUsers(
   $filter: ModelUserFilterInput
   $limit: Int
@@ -81,7 +78,7 @@ export const listUsers = `query ListUsers(
     nextToken
   }
 }
-`
+`;
 export const getGroupLink = `query GetGroupLink($id: ID!) {
   getGroupLink(id: $id) {
     id
@@ -140,30 +137,6 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
         }
         nextToken
       }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       albums {
         items {
           id
@@ -194,7 +167,7 @@ export const getGroupLink = `query GetGroupLink($id: ID!) {
     updatedAt
   }
 }
-`
+`;
 export const listGroupLinks = `query ListGroupLinks(
   $filter: ModelGroupLinkFilterInput
   $limit: Int
@@ -230,18 +203,6 @@ export const listGroupLinks = `query ListGroupLinks(
           }
           nextToken
         }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
         albums {
           items {
             id
@@ -263,7 +224,7 @@ export const listGroupLinks = `query ListGroupLinks(
     nextToken
   }
 }
-`
+`;
 export const getGroup = `query GetGroup($id: ID!) {
   getGroup(id: $id) {
     id
@@ -290,56 +251,11 @@ export const getGroup = `query GetGroup($id: ID!) {
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
           createdAt
           updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    messages {
-      items {
-        id
-        owner
-        authUsers
-        type
-        text
-        messageGroupId
-        group {
-          id
-          name
-          owner
-          authUsers
-          userLinks {
-            nextToken
-          }
-          messages {
-            nextToken
-          }
-          albums {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        photos {
-          items {
-            id
-            owner
-            authUsers
-            bucket
-            photoAlbumId
-            createdAt
-            updatedAt
-          }
-          nextToken
         }
         createdAt
         updatedAt
@@ -359,9 +275,6 @@ export const getGroup = `query GetGroup($id: ID!) {
           owner
           authUsers
           userLinks {
-            nextToken
-          }
-          messages {
             nextToken
           }
           albums {
@@ -391,7 +304,7 @@ export const getGroup = `query GetGroup($id: ID!) {
     updatedAt
   }
 }
-`
+`;
 export const listGroups = `query ListGroups(
   $filter: ModelGroupFilterInput
   $limit: Int
@@ -419,30 +332,6 @@ export const listGroups = `query ListGroups(
             authUsers
             createdAt
             updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
           }
           createdAt
           updatedAt
@@ -478,7 +367,7 @@ export const listGroups = `query ListGroups(
     nextToken
   }
 }
-`
+`;
 export const getAlbum = `query GetAlbum($id: ID!) {
   getAlbum(id: $id) {
     id
@@ -513,30 +402,6 @@ export const getAlbum = `query GetAlbum($id: ID!) {
         }
         nextToken
       }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
       albums {
         items {
           id
@@ -600,27 +465,6 @@ export const getAlbum = `query GetAlbum($id: ID!) {
           createdAt
           updatedAt
         }
-        message {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }
@@ -630,7 +474,7 @@ export const getAlbum = `query GetAlbum($id: ID!) {
     updatedAt
   }
 }
-`
+`;
 export const listAlbums = `query ListAlbums(
   $filter: ModelAlbumFilterInput
   $limit: Int
@@ -656,18 +500,6 @@ export const listAlbums = `query ListAlbums(
           }
           nextToken
         }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
         albums {
           items {
             id
@@ -709,15 +541,6 @@ export const listAlbums = `query ListAlbums(
             createdAt
             updatedAt
           }
-          message {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
           createdAt
           updatedAt
         }
@@ -729,260 +552,7 @@ export const listAlbums = `query ListAlbums(
     nextToken
   }
 }
-`
-export const getMessage = `query GetMessage($id: ID!) {
-  getMessage(id: $id) {
-    id
-    owner
-    authUsers
-    type
-    text
-    messageGroupId
-    group {
-      id
-      name
-      owner
-      authUsers
-      userLinks {
-        items {
-          id
-          user {
-            id
-            phoneNumber
-            createdAt
-            updatedAt
-          }
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      messages {
-        items {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      albums {
-        items {
-          id
-          name
-          owner
-          authUsers
-          albumGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    photos {
-      items {
-        id
-        owner
-        authUsers
-        bucket
-        fullsize {
-          key
-          width
-          height
-        }
-        thumbnail {
-          key
-          width
-          height
-        }
-        photoAlbumId
-        album {
-          id
-          name
-          owner
-          authUsers
-          albumGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        message {
-          id
-          owner
-          authUsers
-          type
-          text
-          messageGroupId
-          group {
-            id
-            name
-            owner
-            authUsers
-            createdAt
-            updatedAt
-          }
-          photos {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-    createdAt
-    updatedAt
-  }
-}
-`
-export const listMessages = `query ListMessages(
-  $filter: ModelMessageFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      owner
-      authUsers
-      type
-      text
-      messageGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        userLinks {
-          items {
-            id
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        albums {
-          items {
-            id
-            name
-            owner
-            authUsers
-            albumGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      photos {
-        items {
-          id
-          owner
-          authUsers
-          bucket
-          fullsize {
-            key
-            width
-            height
-          }
-          thumbnail {
-            key
-            width
-            height
-          }
-          photoAlbumId
-          album {
-            id
-            name
-            owner
-            authUsers
-            albumGroupId
-            createdAt
-            updatedAt
-          }
-          message {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    nextToken
-  }
-}
-`
+`;
 export const getPhoto = `query GetPhoto($id: ID!) {
   getPhoto(id: $id) {
     id
@@ -1019,18 +589,6 @@ export const getPhoto = `query GetPhoto($id: ID!) {
           }
           nextToken
         }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
         albums {
           items {
             id
@@ -1069,105 +627,6 @@ export const getPhoto = `query GetPhoto($id: ID!) {
             owner
             authUsers
             albumGroupId
-            createdAt
-            updatedAt
-          }
-          message {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          createdAt
-          updatedAt
-        }
-        nextToken
-      }
-      createdAt
-      updatedAt
-    }
-    message {
-      id
-      owner
-      authUsers
-      type
-      text
-      messageGroupId
-      group {
-        id
-        name
-        owner
-        authUsers
-        userLinks {
-          items {
-            id
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        messages {
-          items {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        albums {
-          items {
-            id
-            name
-            owner
-            authUsers
-            albumGroupId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      photos {
-        items {
-          id
-          owner
-          authUsers
-          bucket
-          fullsize {
-            key
-            width
-            height
-          }
-          thumbnail {
-            key
-            width
-            height
-          }
-          photoAlbumId
-          album {
-            id
-            name
-            owner
-            authUsers
-            albumGroupId
-            createdAt
-            updatedAt
-          }
-          message {
-            id
-            owner
-            authUsers
-            text
-            messageGroupId
             createdAt
             updatedAt
           }
@@ -1183,7 +642,7 @@ export const getPhoto = `query GetPhoto($id: ID!) {
     updatedAt
   }
 }
-`
+`;
 export const listPhotos = `query ListPhotos(
   $filter: ModelPhotoFilterInput
   $limit: Int
@@ -1220,48 +679,6 @@ export const listPhotos = `query ListPhotos(
           userLinks {
             nextToken
           }
-          messages {
-            nextToken
-          }
-          albums {
-            nextToken
-          }
-          createdAt
-          updatedAt
-        }
-        photos {
-          items {
-            id
-            owner
-            authUsers
-            bucket
-            photoAlbumId
-            createdAt
-            updatedAt
-          }
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      message {
-        id
-        owner
-        authUsers
-        type
-        text
-        messageGroupId
-        group {
-          id
-          name
-          owner
-          authUsers
-          userLinks {
-            nextToken
-          }
-          messages {
-            nextToken
-          }
           albums {
             nextToken
           }
@@ -1289,4 +706,4 @@ export const listPhotos = `query ListPhotos(
     nextToken
   }
 }
-`
+`;
