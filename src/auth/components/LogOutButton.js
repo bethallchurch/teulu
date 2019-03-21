@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Alert } from 'react-native'
-import { AntDesign } from '@expo/vector-icons'
+import { Icon } from 'react-native-elements'
 import { AUTH_LOADING } from '@navigation/routes'
 import { signOut } from '@auth/AuthService'
 import { colors, layout } from '@global/styles'
@@ -21,12 +21,14 @@ export default class LogOutButton extends Component {
   render () {
     return (
       <FullWidthButton
+        invert
         title='Log Out'
         onPress={this.logOut}
         rightIcon={<RightIcon />}
+        containerStyle={this.props.containerStyle}
       />
     )
   }
 }
 
-const RightIcon = () => <AntDesign name='logout' size={layout.s4} color={colors.primaryBackground} />
+const RightIcon = () => <Icon name='logout-variant' type='material-community' size={layout.s4} color={colors.primary} />

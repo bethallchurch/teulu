@@ -1,6 +1,6 @@
 import React from 'react'
-import { Alert } from 'react-native'
-import { ACCOUNT } from '@navigation/routes'
+import { Alert, StyleSheet } from 'react-native'
+import { USER_SETTINGS } from '@navigation/routes'
 import { getAuthUser, updateUserAttributes, verifyCurrentUserAttributeSubmit } from '@auth/AuthService'
 import { updateUser } from '@user/UserService'
 import {
@@ -9,8 +9,10 @@ import {
   defaultDialCode,
   PhoneInput,
   TextInput,
-  Button
+  Button,
+  Text
 } from '@global/components'
+import { layout } from '@global/styles'
 
 export default class ResetPhoneNumberScreen extends WithPhoneInput {
   constructor (props) {
@@ -55,7 +57,7 @@ export default class ResetPhoneNumberScreen extends WithPhoneInput {
       await updateUser({ id: user.username, phoneNumber })
       Alert.alert('Phone Number Changed!', 'Successfully updated phone number.', [{
         text: 'OK',
-        onPress: () => this.props.navigation.navigate(ACCOUNT)
+        onPress: () => this.props.navigation.navigate(USER_SETTINGS)
       }])
     } catch (error) {
       const { message } = error
@@ -74,6 +76,7 @@ export default class ResetPhoneNumberScreen extends WithPhoneInput {
     } = this.state
     return (
       <ScreenBase avoidKeyboard contentContainer>
+        <Text h4 style={styles.title}>Reset Phone Number</Text>
         <PhoneInput
           showModal={this.showModal}
           hideModal={this.hideModal}
@@ -105,3 +108,10 @@ export default class ResetPhoneNumberScreen extends WithPhoneInput {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  title: {
+    width: '100%',
+    marginBottom: layout.s5
+  }
+})

@@ -1,9 +1,9 @@
 import React from 'react'
-import { AntDesign } from '@expo/vector-icons'
+import { Icon } from 'react-native-elements'
 import { colors, layout } from '@global/styles'
 
-const TabBarIcon = ({ name, focused }) => (
-  <AntDesign name={name} size={layout.s4} color={focused ? colors.primary : colors.textLight} />
+const TabBarIcon = ({ name, focused, type = 'material' }) => (
+  <Icon name={name} type={type} size={layout.s4} color={focused ? colors.textDefault : colors.textLight} />
 )
 
 export default TabBarIcon

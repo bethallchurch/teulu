@@ -5,7 +5,7 @@ import { Rehydrated } from 'aws-appsync-react'
 import { createAppContainer } from 'react-navigation'
 import { Font } from 'expo'
 import config from './aws-exports'
-import appConfig from './app.json'
+// import appConfig from './app.json'
 import client from '@client'
 import AuthStack from '@auth/AuthNavigation'
 import { getOrCreateUser } from '@user/UserService'
@@ -54,7 +54,7 @@ class App extends Component {
     return fontLoaded && user ? (
       <UserContext.Provider value={user}>
         <AppNavigator
-          persistenceKey={`persistenceKey${appConfig.expo.version}`}
+          // persistenceKey={`persistenceKey${appConfig.expo.version}`}
           renderLoadingExperimental={() => <Loading />}
         />
       </UserContext.Provider>

@@ -2,10 +2,10 @@ import React, { Component } from 'react'
 import { View } from 'react-native'
 import { getAuthUser } from '@auth/AuthService'
 import { Avatar, ListItem } from 'react-native-elements'
-import { colors } from '@global/styles'
 import * as routes from '@navigation/routes'
 import { LogOutButton } from '@auth/components'
 import { ScreenBase, Text } from '@global/components'
+import { colors, layout } from '@global/styles'
 
 export default class UserSettingsScreen extends Component {
   state = { phoneNumber: '' }
@@ -23,39 +23,38 @@ export default class UserSettingsScreen extends Component {
     const { phoneNumber } = this.state
     const { navigation: { navigate } } = this.props
     return (
-      <ScreenBase>
-        <View style={{ alignItems: 'center', paddingVertical: 32 }}>
+      <ScreenBase headerVisible={false}>
+        <View style={{ alignItems: 'center', paddingVertical: layout.s5 }}>
           <Avatar
             rounded
-            icon={{ name: 'person' }}
+            icon={{ name: 'person', color: colors.backgroundPrimary }}
             size='large'
             titleStyle={{ color: colors.backgroundPrimary }}
             overlayContainerStyle={{ backgroundColor: colors.textDefault }}
           />
         </View>
-        <View style={{ justifyContent: 'space-between', flex: 1 }}>
-          <View>
-            <ListItem
-              title={<Text subtitleOne>{phoneNumber}</Text>}
-              bottomDivider
-              rightIcon={this.chevronProps}
-              leftIcon={{ name: 'smartphone' }}
-              onPress={() => navigate(routes.RESET_PHONE_NUMBER)}
-            />
-            <ListItem
-              title={<Text subtitleOne>Notifications</Text>}
-              bottomDivider
-              rightIcon={this.chevronProps}
-              leftIcon={{ name: 'notifications-none' }}
-              onPress={() => navigate(routes.NOTIFICATION_SETTINGS)}
-            />
-            <ListItem
-              title={<Text subtitleOne>Reset Password</Text>}
-              rightIcon={this.chevronProps}
-              leftIcon={{ name: 'lock-outline' }}
-              onPress={() => navigate(routes.RESET_PASSWORD)}
-            />
-          </View>
+        <View style={{ justifyContent: 'flex-start', flex: 1 }}>
+          <ListItem
+            title={<Text subtitleOne>{phoneNumber}</Text>}
+            bottomDivider
+            rightIcon={this.chevronProps}
+            leftIcon={{ name: 'smartphone', color: colors.textDefault }}
+            onPress={() => navigate(routes.RESET_PHONE_NUMBER)}
+          />
+          <ListItem
+            title={<Text subtitleOne>Notifications</Text>}
+            bottomDivider
+            rightIcon={this.chevronProps}
+            leftIcon={{ name: 'notifications-none', color: colors.textDefault }}
+            onPress={() => navigate(routes.NOTIFICATION_SETTINGS)}
+          />
+          <ListItem
+            title={<Text subtitleOne>Reset Password</Text>}
+            rightIcon={this.chevronProps}
+            leftIcon={{ name: 'lock-outline', color: colors.textDefault }}
+            onPress={() => navigate(routes.RESET_PASSWORD)}
+            bottomDivider
+          />
           <LogOutButton navigation={this.props.navigation} />
         </View>
       </ScreenBase>

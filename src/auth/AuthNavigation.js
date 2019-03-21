@@ -13,13 +13,13 @@ const AuthTabs = createBottomTabNavigator({
   [routes.LOGIN]: {
     screen: LoginScreen,
     navigationOptions: {
-      tabBarIcon: ({ focused }) => <TabBarIcon name='login' focused={focused} />
+      tabBarIcon: ({ focused }) => <TabBarIcon name='login-variant' type='material-community' focused={focused} />
     }
   },
   [routes.REGISTER]: {
     screen: RegisterScreen,
     navigationOptions: {
-      tabBarIcon: ({ focused }) => <TabBarIcon name='adduser' focused={focused} />
+      tabBarIcon: ({ focused }) => <TabBarIcon name='person-add' focused={focused} />
     }
   }
 }, { tabBarOptions: { style: bottomTabNavigatorStyle.container, labelStyle: bottomTabNavigatorStyle.label }

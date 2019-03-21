@@ -8,12 +8,27 @@ import {
   StatusBar,
   KeyboardAvoidingView,
   Keyboard,
-  ViewPropTypes
+  ViewPropTypes,
+  Platform
 } from 'react-native'
+import { Constants } from 'expo'
 import { colors, layout } from '@global/styles'
 
-const ScreenBase = ({ avoidKeyboard, contentContainer, style, keyboardAvoidingViewProps, children }) => (
-  <SafeAreaView style={[ styles.container, style ]}>
+const IS_ANDROID = Platform.OS !== 'ios'
+
+const ScreenBase = ({
+  style,
+  children,
+  headerVisible,
+  avoidKeyboard,
+  contentContainer,
+  keyboardAvoidingViewProps
+}) => (
+  <SafeAreaView style={[
+    styles.container,
+    style,
+    (headerVisible ? {} : { marginTop: IS_ANDROID ? Constants.statusBarHeight : 0 })
+  ]}>
     <StatusBar barStyle='light-content' />
     <AvoidKeyboard props={keyboardAvoidingViewProps} avoid={avoidKeyboard}>
       <Content container={contentContainer} children={children} />
@@ -55,14 +70,16 @@ ScreenBase.propTypes = {
   contentContainer: PropTypes.bool,
   style: ViewPropTypes.style,
   keyboardAvoidingViewProps: PropTypes.object,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  headerVisible: PropTypes.bool
 }
 
-ScreenBase.defaultTypes = {
+ScreenBase.defaultProps = {
   avoidKeyboard: false,
   contentContainer: false,
   style: {},
-  keyboardAvoidingViewProps: {}
+  keyboardAvoidingViewProps: {},
+  headerVisible: true
 }
 
 export default ScreenBase

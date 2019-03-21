@@ -1,16 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { View, TouchableOpacity, StyleSheet } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Icon } from 'react-native-elements'
 import { colors, layout } from '@global/styles'
 
 // TODO: need to wrap in TouchableOpacity?
 
-const HeaderIcon = ({ onPress, iconName, icon = null }) => (
+const HeaderIcon = ({ onPress, name, type, icon = null }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={styles.container}>
       {icon}
-      {!icon && <MaterialIcons name={iconName} size={layout.s4} color={colors.textDefault} />}
+      {!icon && <Icon name={name} type={type} size={layout.s4} color={colors.textDefault} />}
     </View>
   </TouchableOpacity>
 )
@@ -24,12 +24,14 @@ const styles = StyleSheet.create({
 
 HeaderIcon.propTypes = {
   onPress: PropTypes.func.isRequired,
-  iconName: PropTypes.string,
+  name: PropTypes.string,
+  type: PropTypes.string,
   icon: PropTypes.node
 }
 
 HeaderIcon.defaultProps = {
-  iconName: '',
+  name: '',
+  type: 'material',
   icon: null
 }
 

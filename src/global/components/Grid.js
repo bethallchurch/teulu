@@ -40,7 +40,7 @@ export class SquareGrid extends Component {
     const { data, numColumns, containerPadding, keyExtractor } = this.props
     return (
       <FlatList
-        style={{ padding: containerPadding }}
+        contentContainerStyle={{ padding: containerPadding }}
         keyExtractor={keyExtractor}
         numColumns={numColumns}
         data={data}

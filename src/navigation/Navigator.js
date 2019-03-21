@@ -1,94 +1,59 @@
 import React from 'react'
-import { createStackNavigator } from 'react-navigation'
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
-import { CreateAlbumStack, AlbumSettingsStack } from '@album/AlbumNavigation'
-import { CreateGroupStack, GroupSettingsStack } from '@group/GroupNavigation'
-import UserStack from '@user/UserNavigation'
-import HeaderIcon from '@navigation/components/HeaderIcon'
-import GroupListScreen from '@group/screens/GroupListScreen'
+import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
+import AlbumStack, { CreateAlbumStack } from '@album/AlbumNavigation'
+import GroupStack, { CreateGroupStack } from '@group/GroupNavigation'
+import { ResetPasswordStack, ResetPhoneNumberStack, NotificationSettingsStack } from '@user/UserNavigation'
 import AlbumListScreen from '@album/screens/AlbumListScreen'
-import PhotoListScreen from '@photo/screens/PhotoListScreen'
-import HomeScreen from '@home/screens/HomeScreen'
+import GroupListScreen from '@group/screens/GroupListScreen'
+import UserSettingsScreen from '@user/screens/UserSettingsScreen'
+import TabBarIcon from '@navigation/components/TabBarIcon'
 import * as routes from '@navigation/routes'
-import { colors, layout } from '@global/styles'
-import { stackNavigatorStyle } from '@navigation/styles'
+import { bottomTabNavigatorStyle } from '@navigation/styles'
 
-const MainAppStack = createStackNavigator({
+const MainAppTabs = createBottomTabNavigator({
   [routes.HOME]: {
-    screen: HomeScreen,
+    screen: AlbumListScreen,
     navigationOptions: ({ navigation }) => ({
       title: 'Home',
-      headerRight: (
-        <HeaderIcon
-          iconName='person-outline'
-          onPress={() => navigation.navigate(routes.USER_SETTINGS)}
-        />
-      )
+      tabBarIcon: ({ focused }) => <TabBarIcon name='home' focused={focused} />
     })
   },
   [routes.GROUP_LIST]: {
     screen: GroupListScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'Groups'
+      title: 'Groups',
+      tabBarIcon: ({ focused }) => <TabBarIcon name='people' focused={focused} />
     })
   },
-  [routes.PHOTO_LIST]: {
-    screen: PhotoListScreen,
+  [routes.USER_SETTINGS]: {
+    screen: UserSettingsScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'All Photos'
-    })
-  },
-  [routes.ALBUM_LIST]: {
-    screen: AlbumListScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: 'Albums',
-      headerRight: (
-        <HeaderIcon
-          icon={<MaterialIcons name='filter-list' size={layout.s4} color={colors.textDefault} />}
-          onPress={() => null}
-        />
-      )
-    })
-  },
-  [routes.GROUP]: {
-    screen: AlbumListScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: navigation.getParam('groupName'),
-      headerRight: (
-        <HeaderIcon
-          icon={<MaterialCommunityIcons name='dots-vertical' size={layout.s4} color={colors.textDefault} />}
-          onPress={() => navigation.navigate(routes.GROUP_SETTINGS, {
-            groupId: navigation.getParam('groupId')
-          })}
-        />
-      )
-    })
-  },
-  [routes.ALBUM]: {
-    screen: PhotoListScreen,
-    navigationOptions: ({ navigation }) => ({
-      title: navigation.getParam('albumName'),
-      headerRight: (
-        <HeaderIcon
-          icon={<MaterialCommunityIcons name='dots-vertical' size={layout.s4} color={colors.textDefault} />}
-          onPress={() => navigation.navigate(routes.ALBUM_SETTINGS, {
-            albumId: navigation.getParam('albumId')
-          })}
-        />
-      )
+      title: 'Profile',
+      tabBarIcon: ({ focused }) => <TabBarIcon name='person' focused={focused} />
     })
   }
 }, {
-  defaultNavigationOptions: stackNavigatorStyle
+  tabBarOptions: {
+    style: bottomTabNavigatorStyle.container,
+    labelStyle: bottomTabNavigatorStyle.label
+  }
+})
+
+const MainStack = createStackNavigator({
+  [routes.MAIN_APP]: MainAppTabs,
+  [routes.GROUP]: GroupStack,
+  [routes.ALBUM]: AlbumStack,
+  [routes.RESET_PASSWORD]: ResetPasswordStack,
+  [routes.RESET_PHONE_NUMBER]: ResetPhoneNumberStack,
+  [routes.NOTIFICATION_SETTINGS]: NotificationSettingsStack
+}, {
+  headerMode: 'none'
 })
 
 const Navigator = createStackNavigator({
-  [routes.MAIN_APP]: { screen: MainAppStack },
-  [routes.CREATE_GROUP]: { screen: CreateGroupStack },
-  [routes.GROUP_SETTINGS]: { screen: GroupSettingsStack },
-  [routes.USER]: { screen: UserStack },
-  [routes.CREATE_ALBUM]: { screen: CreateAlbumStack },
-  [routes.ALBUM_SETTINGS]: { screen: AlbumSettingsStack }
+  [routes.MAIN_APP]: MainStack,
+  [routes.CREATE_GROUP]: CreateGroupStack,
+  [routes.CREATE_ALBUM]: CreateAlbumStack
 }, {
   headerMode: 'none',
   mode: 'modal'

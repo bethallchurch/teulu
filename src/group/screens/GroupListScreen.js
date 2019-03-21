@@ -5,7 +5,7 @@ import GroupList from '@group/components/GroupList'
 export default class GroupListScreen extends Component {
   render () {
     return (
-      <ScreenBase>
+      <ScreenBase headerVisible={false}>
         <GroupList createButton navigation={this.props.navigation} />
       </ScreenBase>
     )

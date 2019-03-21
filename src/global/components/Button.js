@@ -14,11 +14,16 @@ const Button = ({ children, onPress, containerStyle }) => (
   </TouchableOpacity>
 )
 
-export const FullWidthButton = ({ title, onPress, rightIcon, loading, error }) => (
+export const FullWidthButton = ({ title, onPress, rightIcon, loading, error, containerStyle, invert }) => (
   <ListItem
-    title={<Text button color={colors.primaryBackground}>{title.toUpperCase()}</Text>}
+    title={<Text button color={invert ? colors.primary : colors.secondaryBackground}>{title.toUpperCase()}</Text>}
     onPress={loading ? null : onPress}
-    containerStyle={[ styles.container, (loading ? styles.containerLoading : {}), (error ? styles.containerError : {}) ]}
+    containerStyle={[
+      { backgroundColor: invert ? colors.secondaryBackground : colors.primary },
+      (loading ? styles.containerLoading : {}),
+      (error ? styles.containerError : {}),
+      containerStyle
+    ]}
     rightIcon={<RightIcon component={rightIcon} {...{ loading, error }} />}
   />
 )
@@ -64,13 +69,17 @@ FullWidthButton.propTypes = {
   onPress: PropTypes.func.isRequired,
   rightIcon: PropTypes.node,
   loading: PropTypes.bool,
-  error: PropTypes.bool
+  error: PropTypes.bool,
+  containerStyle: ViewPropTypes.style,
+  invert: PropTypes.bool
 }
 
 FullWidthButton.defaultProps = {
   rightIcon: null,
   loading: false,
-  error: false
+  error: false,
+  containerStyle: {},
+  invert: false
 }
 
 export default Button
