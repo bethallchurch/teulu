@@ -2,39 +2,50 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import { ListItem } from 'react-native-elements'
 import { Text } from '@global/components'
+import { darken } from '@global/styles/helpers'
 import { colors, layout } from '@global/styles'
 
-const GroupListItem = ({
+const GroupListItem = ({ group, navigateToGroup }) => (
+  <ListItem
+    style={styles.default.item}
+    leftAvatar={avatarConfig(group.name[0])}
+    title={<Text subtitleOne>{group.name}</Text>}
+    containerStyle={styles.default.container}
+    onPress={() => navigateToGroup(group.id, group.name)}
+    contentContainerStyle={styles.default.contentContainer}
+    rightIcon={{ name: 'chevron-right', color: colors.textLight }}
+  />
+)
+
+export const SelectGroupListItem = ({
   group,
-  compact,
-  navigateToGroup,
-  selected = false,
-  selectable = false,
-  onPress = () => null,
-  selectedGroupId = null
+  onPress,
+  selected,
+  selectedGroupId
 }) => {
-  const { id, name } = group
-  const defaultOnPress = () => navigateToGroup(id, name)
   return (
     <ListItem
+      style={styles.select.item}
+      onPress={() => onPress(group)}
       selectedGroupId={selectedGroupId}
-      leftAvatar={avatarConfig(name[0])}
-      title={<Text subtitleOne>{name}</Text>}
-      style={compact ? {} : styles.default.item}
-      rightIcon={rightIcon(selectable, selected)}
-      onPress={onPress ? () => onPress(group) : defaultOnPress}
-      contentContainerStyle={compact ? {} : styles.default.contentContainer}
-      containerStyle={compact ? styles.compact.container : styles.default.container}
+      rightIcon={rightIconConfig(selected)}
+      leftAvatar={avatarConfig(group.name[0])}
+      title={<Text subtitleOne>{group.name}</Text>}
+      containerStyle={[
+        styles.select.container,
+        { backgroundColor: selected ? darken(colors.primaryBackground, 15) : 'transparent' }
+      ]}
     />
   )
 }
 
-const avatarConfig = initial => ({ rounded: true, title: initial, overlayContainerStyle: styles.avatar.overlay })
+const avatarConfig = initial => ({
+  rounded: true, title: initial, overlayContainerStyle: styles.avatar.overlay
+})
 
-const rightIcon = (selectable, selected) => selectable ? {
-  name: selected ? 'check-box' : 'check-box-outline-blank',
-  color: selected ? colors.primary : colors.textDefault
-} : { name: 'chevron-right', color: colors.textLight }
+const rightIconConfig = selected => selected ? ({
+  name: 'check', color: colors.primary
+}) : null
 
 const styles = {
   default: StyleSheet.create({
@@ -46,9 +57,12 @@ const styles = {
       marginVertical: layout.s2
     }
   }),
-  compact: StyleSheet.create({
+  select: StyleSheet.create({
     container: {
       paddingVertical: layout.s2
+    },
+    item: {
+      marginHorizontal: layout.s3
     }
   }),
   avatar: StyleSheet.create({

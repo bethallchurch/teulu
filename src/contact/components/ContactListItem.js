@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ListItem, Divider } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { Text, Badge } from '@global/components'
+import { darken } from '@global/styles/helpers'
 import { colors, layout } from '@global/styles'
 
 const ContactListItem = ({
@@ -16,31 +17,34 @@ const ContactListItem = ({
   itemContainerStyle = {}
 }) => {
   return (
-    <>
-      {index !== 0 && <Divider style={styles.item.divider} />}
-      <ListItem
-        key={id}
-        badge={badge(owner)}
-        onPress={onPress}
-        rightIcon={rightIcon(selectable, selected)}
-        title={<Title title={name} subtitle={phoneNumber} />}
-        containerStyle={[ styles.item.container, itemContainerStyle ]}
-        underlayColor={colors.textLight}
-      />
-    </>
+    <ListItem
+      key={id}
+      badge={badge(owner)}
+      onPress={onPress}
+      rightIcon={rightIcon(selectable, selected)}
+      title={<Title title={name} subtitle={phoneNumber} />}
+      containerStyle={[
+        styles.item.container,
+        { backgroundColor: selected ? darken(colors.primaryBackground, 15) : colors.secondaryBackground },
+        itemContainerStyle
+      ]}
+      underlayColor='transparent'
+    />
   )
 }
 
 const Title = ({ title, subtitle }) => title && title.length ? (
   <View style={styles.title.container}>
-    <Text bodyOne>{title}</Text>
+    <Text subtitleOne>{title}</Text>
     <Text caption color={colors.textLight} style={styles.title.subtitle}>{subtitle}</Text>
   </View>
-) : <Text bodyOne>{subtitle}</Text>
+) : <Text subtitleOne>{subtitle}</Text>
 
-const rightIcon = (selectable, selected) => selectable ? {
-  name: selected ? 'check-box' : 'check-box-outline-blank',
-  color: selected ? colors.primary : colors.textDefault
+const rightIcon = (selectable, selected) => selectable && selected ? {
+  name: 'check',
+  size: layout.s4,
+  color: colors.primary,
+  containerStyle: styles.icon.container
 } : null
 
 const badge = owner => owner ? {
@@ -49,18 +53,21 @@ const badge = owner => owner ? {
 } : null
 
 const styles = {
+  icon: StyleSheet.create({
+    container: {
+      position: 'absolute',
+      right: layout.s3
+    }
+  }),
   item: StyleSheet.create({
     container: {
-      backgroundColor: 'transparent',
-      paddingHorizontal: 0
-    },
-    divider: {
-      backgroundColor: colors.textLight
+      marginBottom: layout.s2,
+      position: 'relative'
     }
   }),
   title: StyleSheet.create({
     container: {
-      flex: 1,
+      width: '100%',
       flexDirection: 'row',
       alignItems: 'center'
     },

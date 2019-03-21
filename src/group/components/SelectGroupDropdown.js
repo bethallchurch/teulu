@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, View, StyleSheet } from 'react-native'
-import { ListItem, Divider } from 'react-native-elements'
+import { ListItem } from 'react-native-elements'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { Overlay, Text } from '@global/components'
-import GroupList from '@group/components/GroupList'
+import { ConnectedSelectGroupList as SelectGroupList } from '@group/components/GroupList'
 import { colors, layout } from '@global/styles'
 
 export default class SelectGroupDropdown extends Component {
@@ -20,7 +20,7 @@ export default class SelectGroupDropdown extends Component {
 
   render () {
     const { isOpen } = this.state
-    const { navigation, selectedGroupId, children } = this.props
+    const { selectedGroupId, children } = this.props
     return (
       <>
         <TouchableOpacity style={styles.touchable} onPress={this.open}>
@@ -41,13 +41,9 @@ export default class SelectGroupDropdown extends Component {
               title={<Text subtitleOne>None</Text>}
               onPress={() => this.onSelectGroup({})}
               containerStyle={styles.deselectContainer}
-              rightIcon={rightIcon(!selectedGroupId)}
+              rightIcon={rightIconConfig(!selectedGroupId)}
             />
-            <Divider style={styles.divider} />
-            <GroupList
-              compact
-              selectable
-              navigation={navigation}
+            <SelectGroupList
               onPressItem={this.onSelectGroup}
               selectedGroupId={selectedGroupId}
             />
@@ -58,10 +54,9 @@ export default class SelectGroupDropdown extends Component {
   }
 }
 
-const rightIcon = selected => ({
-  name: selected ? 'check-box' : 'check-box-outline-blank',
-  color: selected ? colors.primary : colors.textDefault
-})
+const rightIconConfig = selected => selected ? ({
+  name: 'check', color: colors.primary
+}) : null
 
 const styles = StyleSheet.create({
   touchable: {
@@ -78,16 +73,15 @@ const styles = StyleSheet.create({
   },
   overlayContentContainer: {
     flex: 1,
-    marginTop: layout.s6,
-    marginHorizontal: layout.s3
+    marginTop: layout.s6
   },
   overlayTitle: {
-    marginBottom: layout.s5
+    marginBottom: layout.s5,
+    marginHorizontal: layout.s3
   },
   deselectContainer: {
-    paddingVertical: layout.s4
-  },
-  divider: {
-    backgroundColor: colors.textLight
+    paddingVertical: layout.s4,
+    marginHorizontal: layout.s3,
+    marginBottom: layout.s3
   }
 })

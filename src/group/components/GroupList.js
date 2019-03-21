@@ -6,7 +6,7 @@ import { GROUP, CREATE_GROUP } from '@navigation/routes'
 import { LIST_GROUPS } from '@group/GroupService'
 import { UserContext } from '@global/context'
 import { Error, Loading } from '@global/components'
-import GroupListItem from '@group/components/GroupListItem'
+import GroupListItem, { SelectGroupListItem } from '@group/components/GroupListItem'
 import CreateGroupButton from '@group/components/CreateGroupButton'
 import { layout } from '@global/styles'
 
@@ -19,13 +19,7 @@ class GroupList extends Component {
   }
 
   renderItem = ({ index, item }) => {
-    const {
-      compact = false,
-      selectable = false,
-      onPressItem = null,
-      selectedGroupId = null,
-      navigation: { navigate }
-    } = this.props
+    const { navigation: { navigate } } = this.props
     return item.id === 'create-button' ? (
       <CreateGroupButton onPress={() => navigate(CREATE_GROUP)} />
     ) : (
@@ -33,24 +27,48 @@ class GroupList extends Component {
         id={item.id}
         group={item}
         index={index}
-        compact={compact}
-        onPress={onPressItem}
-        selectable={selectable}
         navigateToGroup={this.navigateToGroup}
-        selected={selectable && item.id === selectedGroupId}
       />
     )
   }
 
   render () {
-    const { compact = false, createButton = false, groups } = this.props
+    const { createButton = false, groups } = this.props
     const data = createButton ? [{ id: 'create-button' }, ...groups] : groups
     return (
       <FlatList
         data={data}
         renderItem={this.renderItem}
         keyExtractor={({ id }) => id}
-        style={compact ? {} : styles.container}
+        style={styles.container}
+      />
+    )
+  }
+}
+
+class SelectGroupList extends Component {
+  renderItem = ({ index, item }) => {
+    const { onPressItem, selectedGroupId } = this.props
+    return (
+      <SelectGroupListItem
+        id={item.id}
+        group={item}
+        index={index}
+        onPress={onPressItem}
+        selected={item.id === selectedGroupId}
+      />
+    )
+  }
+
+  render () {
+    const { groups, selectedGroupId } = this.props
+    return (
+      <FlatList
+        data={groups}
+        extraData={selectedGroupId}
+        renderItem={this.renderItem}
+        keyExtractor={({ id }) => id}
+        style={styles.container}
       />
     )
   }
@@ -58,7 +76,8 @@ class GroupList extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: layout.s2
+    paddingVertical: layout.s2,
+    width: '100%'
   }
 })
 
@@ -88,11 +107,21 @@ const mapProps = ({ user, groupData }) => {
 const Connect = adopt(mapper, mapProps)
 
 const ConnectedGroupList = props => (
-  <Connect compact={props.compact}>
+  <Connect>
     {({ userId, error, loading, groups }) => {
       if (error) return <Error />
       if (loading) return <Loading />
       return <GroupList userId={userId} groups={groups} {...props} />
+    }}
+  </Connect>
+)
+
+export const ConnectedSelectGroupList = props => (
+  <Connect>
+    {({ userId, error, loading, groups }) => {
+      if (error) return <Error />
+      if (loading) return <Loading />
+      return <SelectGroupList userId={userId} groups={groups} {...props} />
     }}
   </Connect>
 )

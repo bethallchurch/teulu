@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { View, FlatList, StyleSheet } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
-import { ListItem, Divider } from 'react-native-elements'
 import { MaterialIcons } from '@expo/vector-icons'
 import { GET_GROUP, UPDATE_GROUP, createGroupLink } from '@group/GroupService'
 import { LIST_CONTACTS } from '@contact/ContactService'
 import { ScreenBase, Text, Section, Error, Loading } from '@global/components'
 import ContactListItem from '@contact/components/ContactListItem'
 import AddUsersModal from '@group/components/AddUsersModal'
+import AddMembersButton from '@group/components/AddMembersButton'
 import { colors, layout } from '@global/styles'
 
 // TODO: Top same as AlbumSettingsScreen
@@ -65,12 +65,7 @@ class GroupSettingsScreen extends Component {
           title='Members'
           listComponent={(
             <>
-              <ListItem
-                title={<Text bodyOne>Add members</Text>}
-                leftIcon={<LeftIcon />}
-                onPress={this.showModal}
-              />
-              <Divider style={styles.divider} />
+              <AddMembersButton onPress={this.showModal} />
               <FlatList
                 style={styles.list}
                 keyExtractor={({ id }) => id}
@@ -92,12 +87,6 @@ class GroupSettingsScreen extends Component {
     )
   }
 }
-
-const LeftIcon = () => (
-  <View style={{ backgroundColor: colors.primary, padding: layout.s2, borderRadius: 100 }}>
-    <MaterialIcons name='person-add' size={layout.sg5} color={colors.secondaryBackground} />
-  </View>
-)
 
 const styles = StyleSheet.create({
   container: {
