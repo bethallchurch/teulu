@@ -19,7 +19,6 @@ module.exports = function (api) {
           '@global': './src/global',
           '@graphql': './src/graphql',
           '@group': './src/group',
-          '@message': './src/message',
           '@photo': './src/photo',
           '@styles': './src/styles',
           '@user': './src/user',
