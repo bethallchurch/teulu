@@ -59,7 +59,7 @@ type Group
   @model
   @auth(rules: [
     { allow: owner },
-    { allow: owner, ownerField: "authUsers", mutations: [update] }
+    { allow: owner, ownerField: "authUsers" }
   ]) {
   id: ID!
   name: String
