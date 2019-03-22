@@ -16,12 +16,13 @@ const AddUsersModal = ({ visible, hide, toggleUser, users, newUsers, addUsers })
           selectedContacts={newUsers}
           onPressContact={toggleUser}
         />
+        <FullWidthButton
+          title='Add Members'
+          onPress={addUsers}
+          rightIcon={<RightIcon numUsers={newUsers.length} />}
+        />
       </View>
-      <FullWidthButton
-        title='Add Members'
-        onPress={addUsers}
-        rightIcon={<RightIcon numUsers={newUsers.length} />}
-      />
+
     </SafeAreaView>
   </Overlay>
 )

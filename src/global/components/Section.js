@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { colors, layout } from '@global/styles'
 import Text from '@global/components/Text'
 
-const Section = ({ title, onPressTitle = null, listComponent, containerStyle = {} }) => (
+const Section = ({ title = '', onPressTitle = null, listComponent, containerStyle = {} }) => (
   <View style={[ styles.container, containerStyle ]}>
     {onPressTitle && (
       <TouchableOpacity onPress={onPressTitle}>
@@ -18,12 +18,12 @@ const Section = ({ title, onPressTitle = null, listComponent, containerStyle = {
   </View>
 )
 
-const Title = ({ title, pressable }) => (
+const Title = ({ title, pressable }) => title.length ? (
   <View style={styles.titleContainer}>
     <Text h6>{title}</Text>
     {pressable && <MaterialIcons name='chevron-right' color={colors.textDefault} size={layout.s4} />}
   </View>
-)
+) : null
 
 const styles = StyleSheet.create({
   container: {

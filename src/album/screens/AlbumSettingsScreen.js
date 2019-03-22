@@ -47,7 +47,7 @@ class AlbumSettingsScreen extends Component {
             <ListItem
               title={<Text color={colors.danger} subtitleOne>Delete album</Text>}
               onPress={this.confirmDelete}
-              rightIcon={{ name: 'delete-outline', color: colors.danger, type: 'material-community' }}
+              leftIcon={{ name: 'delete-outline', color: colors.danger, type: 'material-community' }}
             />
           )}
         </View>

@@ -11,6 +11,7 @@ export const LIST_USERS = gql(queries.listUsers)
 
 // Mutations
 const createUser = input => API.graphql(graphqlOperation(mutations.createUser, { input }))
+export const UPDATE_USER = gql(mutations.updateUser)
 
 export const getOrCreateUser = async () => {
   try {

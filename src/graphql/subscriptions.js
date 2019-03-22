@@ -107,7 +107,7 @@ export const onCreateAlbum = `subscription OnCreateAlbum($albumGroupId: ID) {
     updatedAt
   }
 }
-`;
+`
 export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
   onCreatePhoto(photoAlbumId: $photoAlbumId) {
     id
@@ -197,7 +197,7 @@ export const onCreatePhoto = `subscription OnCreatePhoto($photoAlbumId: ID) {
     updatedAt
   }
 }
-`;
+`
 export const onCreateUser = `subscription OnCreateUser {
   onCreateUser {
     id
@@ -237,7 +237,7 @@ export const onCreateUser = `subscription OnCreateUser {
     updatedAt
   }
 }
-`;
+`
 export const onUpdateUser = `subscription OnUpdateUser {
   onUpdateUser {
     id
@@ -277,7 +277,7 @@ export const onUpdateUser = `subscription OnUpdateUser {
     updatedAt
   }
 }
-`;
+`
 export const onDeleteUser = `subscription OnDeleteUser {
   onDeleteUser {
     id
@@ -317,7 +317,7 @@ export const onDeleteUser = `subscription OnDeleteUser {
     updatedAt
   }
 }
-`;
+`
 export const onCreateGroupLink = `subscription OnCreateGroupLink {
   onCreateGroupLink {
     id
@@ -406,7 +406,7 @@ export const onCreateGroupLink = `subscription OnCreateGroupLink {
     updatedAt
   }
 }
-`;
+`
 export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
   onUpdateGroupLink {
     id
@@ -495,7 +495,7 @@ export const onUpdateGroupLink = `subscription OnUpdateGroupLink {
     updatedAt
   }
 }
-`;
+`
 export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
   onDeleteGroupLink {
     id
@@ -584,7 +584,7 @@ export const onDeleteGroupLink = `subscription OnDeleteGroupLink {
     updatedAt
   }
 }
-`;
+`
 export const onCreateGroup = `subscription OnCreateGroup {
   onCreateGroup {
     id
@@ -664,7 +664,7 @@ export const onCreateGroup = `subscription OnCreateGroup {
     updatedAt
   }
 }
-`;
+`
 export const onUpdateGroup = `subscription OnUpdateGroup {
   onUpdateGroup {
     id
@@ -744,7 +744,7 @@ export const onUpdateGroup = `subscription OnUpdateGroup {
     updatedAt
   }
 }
-`;
+`
 export const onDeleteGroup = `subscription OnDeleteGroup {
   onDeleteGroup {
     id
@@ -824,4 +824,4 @@ export const onDeleteGroup = `subscription OnDeleteGroup {
     updatedAt
   }
 }
-`;
+`

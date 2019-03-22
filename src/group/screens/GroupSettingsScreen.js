@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
-import { View, FlatList, StyleSheet } from 'react-native'
+import { View, FlatList, Alert, StyleSheet } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import { MaterialIcons } from '@expo/vector-icons'
-import { GET_GROUP, UPDATE_GROUP, createGroupLink } from '@group/GroupService'
+import { ListItem } from 'react-native-elements'
+import { GROUP_LIST } from '@navigation/routes'
+import { GET_GROUP, UPDATE_GROUP, DELETE_GROUP, DELETE_GROUP_LINK, CREATE_GROUP_LINK, LIST_GROUPS } from '@group/GroupService'
 import { LIST_CONTACTS } from '@contact/ContactService'
+import { UPDATE_USER } from '@user/UserService'
+import { UserContext } from '@global/context'
 import { ScreenBase, Text, Section, Error, Loading } from '@global/components'
 import ContactListItem from '@contact/components/ContactListItem'
 import AddUsersModal from '@group/components/AddUsersModal'
@@ -36,6 +40,22 @@ class GroupSettingsScreen extends Component {
     } catch (error) {
       console.log('Error updating group members:', error)
     }
+  }
+
+  confirmExit = () => {
+    const { group, exitGroup } = this.props
+    Alert.alert(
+      'Confirm Exit Group',
+      `Are you sure you want to leave ${group.name}? Make sure you have saved any albums you want to keep.`,
+      [{
+        text: 'Cancel',
+        style: 'cancel'
+      }, {
+        text: 'Leave',
+        onPress: exitGroup,
+        style: 'destructive'
+      }]
+    )
   }
 
   showModal = () => this.setState({ modalVisible: true })
@@ -73,6 +93,16 @@ class GroupSettingsScreen extends Component {
                 renderItem={this.renderItem}
               />
             </>
+          )}
+        />
+        <Section
+          containerStyle={styles.sectionContainer}
+          listComponent={(
+            <ListItem
+              title={<Text color={colors.danger} subtitleOne>Exit group</Text>}
+              onPress={this.confirmExit}
+              leftIcon={{ name: 'exit-run', color: colors.danger, type: 'material-community' }}
+            />
           )}
         />
         <AddUsersModal
@@ -134,6 +164,7 @@ const contactDataExtractor = ({ data: { listUsers } = {}, loading, error }) => (
 })
 
 const mapper = {
+  user: <UserContext.Consumer />,
   groupData: ({ groupId, render }) => {
     return (
       <Query query={GET_GROUP} variables={{ id: groupId }}>
@@ -154,10 +185,39 @@ const mapper = {
     <Mutation mutation={UPDATE_GROUP}>
       {mutation => render(mutation)}
     </Mutation>
+  ),
+  deleteGroup: ({ render }) => (
+    <Mutation mutation={DELETE_GROUP}>
+      {mutation => render(mutation)}
+    </Mutation>
+  ),
+  updateUser: ({ render }) => (
+    <Mutation mutation={UPDATE_USER}>
+      {mutation => render(mutation)}
+    </Mutation>
+  ),
+  createGroupLink: ({ render }) => (
+    <Mutation mutation={CREATE_GROUP_LINK}>
+      {mutation => render(mutation)}
+    </Mutation>
+  ),
+  deleteGroupLink: ({ navigate, render }) => (
+    <Mutation mutation={DELETE_GROUP_LINK}>
+      {mutation => render({ navigate, mutation })}
+    </Mutation>
   )
 }
 
-const mapProps = ({ user, groupData, contactData, updateGroup }) => {
+const mapProps = ({
+  user,
+  groupData,
+  updateUser,
+  contactData,
+  updateGroup,
+  deleteGroup,
+  createGroupLink,
+  deleteGroupLink: { mutation: deleteLink, navigate }
+}) => {
   const { error: groupError, loading: groupLoading, group } = groupDataExtractor(groupData)
   const { error: contactsError, loading: contactsLoading, contacts } = contactDataExtractor(contactData)
   return {
@@ -170,10 +230,45 @@ const mapProps = ({ user, groupData, contactData, updateGroup }) => {
         await updateGroup({ variables: { input: { id: group.id, authUsers: allGroupUsers } } })
         Promise.all(newUsers.map(id => {
           const input = { groupLinkUserId: id, groupLinkGroupId: group.id }
-          return createGroupLink(input)
+          return createGroupLink({ variables: { input } })
         }))
       } catch (error) {
         console.log('Error updating group members:', error)
+      }
+    },
+    exitGroup: async () => {
+      try {
+        const link = group.userLinks.items.find(({ user: { id } }) => id === user.id) || {}
+        const remainingUsers = group.authUsers.filter(id => id !== user.id)
+        if (link.id) {
+          const update = async (cache, { data: { deleteGroupLink } }) => {
+            navigate(GROUP_LIST)
+            const query = LIST_GROUPS
+            const groups = cache.readQuery({ query })
+            const itemExists = groups.listGroups.items.map(({ id }) => id).includes(deleteGroupLink.group.id)
+            if (itemExists) {
+              groups.listGroups.items = groups.listGroups.items.filter(({ id }) => id !== deleteGroupLink.group.id)
+              await cache.writeQuery({ query, data: groups })
+            }
+          }
+          await deleteLink({ variables: { input: { id: link.id } }, update })
+          if (remainingUsers.length === 0) {
+            // TODO: should probs delete all albums and photos as well
+            await deleteGroup({ variables: { input: { id: group.id } } })
+          } else {
+            await updateGroup({
+              variables: {
+                input: {
+                  id: group.id,
+                  authUsers: remainingUsers,
+                  owner: group.owner === user.id ? null : group.owner
+                }
+              }
+            })
+          }
+        }
+      } catch (error) {
+        console.log('Error exiting group:', error)
       }
     }
   }
@@ -183,12 +278,18 @@ const Connect = adopt(mapper, mapProps)
 
 const ConnectedGroupSettingsScreen = props => {
   return (
-    <Connect groupId={props.navigation.getParam('groupId')}>
-      {({ error, loading, group, contacts, updateGroupUsers }) => {
+    <Connect groupId={props.navigation.getParam('groupId')} navigate={props.navigation.navigate}>
+      {({ error, loading, group, contacts, updateGroupUsers, exitGroup }) => {
         if (error) return <Error />
         if (loading) return <Loading />
         return (
-          <GroupSettingsScreen group={group} currentMembers={contacts} updateGroupUsers={updateGroupUsers} {...props} />
+          <GroupSettingsScreen
+            {...props}
+            group={group}
+            exitGroup={exitGroup}
+            currentMembers={contacts}
+            updateGroupUsers={updateGroupUsers}
+          />
         )
       }}
     </Connect>
