@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1]
+
+### Fixed
+
+- Contacts list crashing app.
+
 ## [0.2.0]
 
 ### Added
