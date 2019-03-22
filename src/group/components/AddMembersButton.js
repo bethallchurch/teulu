@@ -17,10 +17,10 @@ const AddMembersButton = ({ onPress }) => (
 
 const styles = StyleSheet.create({
   container: {
-    borderWidth: StyleSheet.hairlineWidth,
+    marginBottom: layout.s3,
     borderColor: colors.primary,
     backgroundColor: 'transparent',
-    marginVertical: layout.s2
+    borderWidth: StyleSheet.hairlineWidth
   },
   title: {
     color: colors.primary

@@ -66,9 +66,9 @@ const styles = StyleSheet.create({
   },
   content: {
     left: 0,
-    top: STATUS_BAR_OFFSET,
+    top: 0,
     width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT + STATUS_BAR_OFFSET,
+    height: WINDOW_HEIGHT - STATUS_BAR_OFFSET,
     position: 'absolute',
     flex: 1,
     justifyContent: 'center',

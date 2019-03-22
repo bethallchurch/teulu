@@ -4,6 +4,7 @@ import * as routes from '@navigation/routes'
 import AlbumListScreen from '@album/screens/AlbumListScreen'
 import CreateGroupScreen from '@group/screens/CreateGroupScreen'
 import GroupSettingsScreen from '@group/screens/GroupSettingsScreen'
+import GroupMembersScreen from '@group/screens/GroupMembersScreen'
 import HeaderIcon from '@navigation/components/HeaderIcon'
 import { stackNavigatorStyle } from '@navigation/styles'
 
@@ -39,6 +40,17 @@ export const CreateGroupStack = createStackNavigator({
     screen: CreateGroupScreen,
     navigationOptions: ({ navigation }) => ({
       headerRight: <HeaderIcon name='close' onPress={() => navigation.goBack(null)} />
+    })
+  }
+}, {
+  defaultNavigationOptions: stackNavigatorStyle
+})
+
+export const GroupMembersStack = createStackNavigator({
+  [routes.GROUP_MEMBERS]: {
+    screen: GroupMembersScreen,
+    navigationOptions: ({ navigation }) => ({
+      headerLeft: <HeaderIcon name='arrow-left' type='material-community' onPress={() => navigation.goBack(null)} />
     })
   }
 }, {

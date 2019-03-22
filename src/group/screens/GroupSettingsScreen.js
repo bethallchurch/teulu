@@ -1,52 +1,41 @@
 import React, { Component } from 'react'
-import { View, FlatList, Alert, StyleSheet } from 'react-native'
+import { View, Alert, StyleSheet } from 'react-native'
 import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ListItem } from 'react-native-elements'
-import { GROUP_LIST } from '@navigation/routes'
+import { GROUP_LIST, GROUP_MEMBERS } from '@navigation/routes'
 import { GET_GROUP, UPDATE_GROUP, DELETE_GROUP, DELETE_GROUP_LINK, CREATE_GROUP_LINK, LIST_GROUPS } from '@group/GroupService'
 import { LIST_CONTACTS } from '@contact/ContactService'
 import { UPDATE_USER } from '@user/UserService'
 import { UserContext } from '@global/context'
-import { ScreenBase, Text, Section, Error, Loading } from '@global/components'
-import ContactListItem from '@contact/components/ContactListItem'
-import AddUsersModal from '@group/components/AddUsersModal'
-import AddMembersButton from '@group/components/AddMembersButton'
+import { ScreenBase, Text, Error, Loading } from '@global/components'
 import { colors, layout } from '@global/styles'
 
 // TODO: Top same as AlbumSettingsScreen
 class GroupSettingsScreen extends Component {
-  state = { modalVisible: false, newMembers: [] }
-
-  toggleNewMember = id => {
-    const { newMembers } = this.state
-    const updatedNewMembers = newMembers.includes(id)
-      ? newMembers.filter(authUserId => authUserId !== id)
-      : [ id, ...newMembers ]
-    this.setState({ newMembers: updatedNewMembers })
+  get chevronProps () {
+    return { name: 'chevron-right', color: colors.textLight }
   }
 
-  updateMembers = async () => {
-    const { currentMembers, updateGroupUsers } = this.props
-    const { newMembers } = this.state
-
-    const newUsers = newMembers.map(({ id }) => id)
-    const allGroupUsers = [ ...currentMembers.map(({ id }) => id), ...newMembers ]
-
-    try {
-      await updateGroupUsers({ allGroupUsers, newUsers })
-      this.hideModal()
-    } catch (error) {
-      console.log('Error updating group members:', error)
-    }
+  get membersString () {
+    const { currentMembers } = this.props
+    return currentMembers.reduce((str, { name4 }, index) => {
+      if (currentMembers.length === 1) {
+        return name4
+      }
+      if (index === currentMembers.length - 1) {
+        return `${str} and ${name4}.`
+      }
+      return `${str}, ${name4}`
+    }, '')
   }
 
   confirmExit = () => {
     const { group, exitGroup } = this.props
     Alert.alert(
       'Confirm Exit Group',
-      `Are you sure you want to leave ${group.name}? Make sure you have saved any albums you want to keep.`,
+      `Are you sure you want to leave ${group.name}? Make sure you've saved any albums you want to keep.`,
       [{
         text: 'Cancel',
         style: 'cancel'
@@ -58,61 +47,30 @@ class GroupSettingsScreen extends Component {
     )
   }
 
-  showModal = () => this.setState({ modalVisible: true })
-  hideModal = () => this.setState({ modalVisible: false })
-
-  renderItem = ({ item, index }) => (
-    <ContactListItem
-      {...item}
-      index={index}
-      name={item.name4}
-      owner={this.props.group.owner === item.id}
-      itemContainerStyle={styles.itemContainer}
-    />
-  )
-
   render () {
-    const { group, currentMembers } = this.props
-    const { modalVisible, newMembers } = this.state
+    const { group, currentMembers, navigation: { navigate } } = this.props
     return (
       <ScreenBase style={styles.container}>
         <View style={styles.imageContainer}>
           <MaterialIcons name='image' color={colors.primaryBackground} size={layout.s6} />
           <Text h4 color={colors.primaryBackground} style={styles.imageCaption}>{group.name}</Text>
         </View>
-        <Section
-          containerStyle={styles.sectionContainer}
-          title='Members'
-          listComponent={(
-            <>
-              <AddMembersButton onPress={this.showModal} />
-              <FlatList
-                style={styles.list}
-                keyExtractor={({ id }) => id}
-                data={currentMembers}
-                renderItem={this.renderItem}
-              />
-            </>
-          )}
-        />
-        <Section
-          containerStyle={styles.sectionContainer}
-          listComponent={(
-            <ListItem
-              title={<Text color={colors.danger} subtitleOne>Exit group</Text>}
-              onPress={this.confirmExit}
-              leftIcon={{ name: 'exit-run', color: colors.danger, type: 'material-community' }}
-            />
-          )}
-        />
-        <AddUsersModal
-          visible={modalVisible}
-          hide={this.hideModal}
-          toggleUser={this.toggleNewMember}
-          users={currentMembers}
-          newUsers={newMembers}
-          addUsers={this.updateMembers}
-        />
+        <View style={styles.contentContainer}>
+          <ListItem
+            title={<Text subtitleOne>{`${currentMembers.length} ${currentMembers.length === 1 ? 'member' : 'members'}`}</Text>}
+            subtitle={<Text caption color={colors.textLight}>{this.membersString}</Text>}
+            rightIcon={this.chevronProps}
+            leftIcon={{ name: 'people', color: colors.textDefault }}
+            onPress={() => navigate(GROUP_MEMBERS, { groupId: group.id })}
+            containerStyle={styles.item}
+            underlayColor='transparent'
+          />
+          <ListItem
+            title={<Text color={colors.danger} subtitleOne>Exit group</Text>}
+            onPress={this.confirmExit}
+            leftIcon={{ name: 'exit-run', color: colors.danger, type: 'material-community' }}
+          />
+        </View>
       </ScreenBase>
     )
   }
@@ -122,14 +80,11 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'flex-start'
   },
-  sectionContainer: {
+  contentContainer: {
+    padding: layout.s3
+  },
+  item: {
     marginBottom: layout.s3
-  },
-  divider: {
-    backgroundColor: colors.textLight
-  },
-  list: {
-    width: '100%'
   },
   imageContainer: {
     width: '100%',
@@ -144,10 +99,6 @@ const styles = StyleSheet.create({
     bottom: layout.s3,
     left: layout.s3,
     marginBottom: 0
-  },
-  itemContainer: {
-    paddingHorizontal: layout.s3,
-    backgroundColor: colors.secondaryBackground
   }
 })
 
@@ -157,10 +108,10 @@ const groupDataExtractor = ({ data: { getGroup } = {}, loading, error }) => ({
   group: getGroup
 })
 
-const contactDataExtractor = ({ data: { listUsers } = {}, loading, error }) => ({
+const membersDataExtractor = ({ data: { listUsers } = {}, loading, error }) => ({
   error,
   loading: loading || !listUsers,
-  contacts: listUsers ? listUsers.items : []
+  members: listUsers ? listUsers.items : []
 })
 
 const mapper = {
@@ -172,12 +123,12 @@ const mapper = {
       </Query>
     )
   },
-  contactData: ({ render, groupData }) => {
-    const { authUsers = [] } = groupData.data.getGroup || {}
+  memberData: ({ render, groupData = {} }) => {
+    const { authUsers = [] } = (groupData.data || {}).getGroup || {}
     const variables = { filter: { id: { in: authUsers } } }
     return (
       <Query query={LIST_CONTACTS} variables={variables}>
-        {contactData => render(contactData)}
+        {memberData => render(memberData)}
       </Query>
     )
   },
@@ -212,30 +163,19 @@ const mapProps = ({
   user,
   groupData,
   updateUser,
-  contactData,
+  memberData,
   updateGroup,
   deleteGroup,
   createGroupLink,
   deleteGroupLink: { mutation: deleteLink, navigate }
 }) => {
   const { error: groupError, loading: groupLoading, group } = groupDataExtractor(groupData)
-  const { error: contactsError, loading: contactsLoading, contacts } = contactDataExtractor(contactData)
+  const { error: membersError, loading: membersLoading, members } = membersDataExtractor(memberData)
   return {
-    error: groupError || contactsError,
-    loading: groupLoading && contactsLoading,
+    error: groupError || membersError,
+    loading: groupLoading && membersLoading,
     group,
-    contacts,
-    updateGroupUsers: async ({ allGroupUsers, newUsers }) => {
-      try {
-        await updateGroup({ variables: { input: { id: group.id, authUsers: allGroupUsers } } })
-        Promise.all(newUsers.map(id => {
-          const input = { groupLinkUserId: id, groupLinkGroupId: group.id }
-          return createGroupLink({ variables: { input } })
-        }))
-      } catch (error) {
-        console.log('Error updating group members:', error)
-      }
-    },
+    members,
     exitGroup: async () => {
       try {
         const link = group.userLinks.items.find(({ user: { id } }) => id === user.id) || {}
@@ -279,7 +219,7 @@ const Connect = adopt(mapper, mapProps)
 const ConnectedGroupSettingsScreen = props => {
   return (
     <Connect groupId={props.navigation.getParam('groupId')} navigate={props.navigation.navigate}>
-      {({ error, loading, group, contacts, updateGroupUsers, exitGroup }) => {
+      {({ error, loading, group, members, exitGroup }) => {
         if (error) return <Error />
         if (loading) return <Loading />
         return (
@@ -287,8 +227,7 @@ const ConnectedGroupSettingsScreen = props => {
             {...props}
             group={group}
             exitGroup={exitGroup}
-            currentMembers={contacts}
-            updateGroupUsers={updateGroupUsers}
+            currentMembers={members}
           />
         )
       }}
