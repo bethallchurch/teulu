@@ -3,7 +3,7 @@ import { Dimensions } from 'react-native'
 import Lightbox from '@photo/components/Lightbox'
 import Image from '@photo/components/Image'
 
-const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window')
+const { width: WINDOW_WIDTH } = Dimensions.get('window')
 
 const PhotoThumbnail = ({
   width = null,
@@ -16,7 +16,7 @@ const PhotoThumbnail = ({
     activeProps={{
       resizeMode: 'contain',
       imgKey: fullsizeKey.replace('public/', ''),
-      style: { width: WINDOW_WIDTH, height: WINDOW_HEIGHT }
+      style: { width: WINDOW_WIDTH, height: '100%' }
     }}>
     <Image
       resizeMode='contain'

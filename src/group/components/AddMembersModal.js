@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Text, Overlay, FullWidthButton } from '@global/components'
 import SelectContactList from '@contact/components/SelectContactList'
@@ -8,7 +8,7 @@ import { colors, layout } from '@global/styles'
 
 const AddMembersModal = ({ visible, hide, toggleUser, users, newUsers, addUsers }) => (
   <Overlay isOpen={visible} close={hide} backgroundColor={colors.primaryBackground} iconColor={colors.textDefault}>
-    <SafeAreaView headerVisible={false} style={styles.container}>
+    <View style={styles.container}>
       <Text h5 style={styles.title}>Add Members</Text>
       <SelectContactList
         exclude={users.map(({ id }) => id)}
@@ -20,7 +20,7 @@ const AddMembersModal = ({ visible, hide, toggleUser, users, newUsers, addUsers 
         onPress={addUsers}
         rightIcon={<RightIcon numUsers={newUsers.length} />}
       />
-    </SafeAreaView>
+    </View>
   </Overlay>
 )
 
@@ -35,11 +35,10 @@ const RightIcon = numUsers => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: layout.s3,
     justifyContent: 'space-between'
   },
   title: {
-    marginBottom: layout.s4
+    marginHorizontal: layout.s4
   }
 })
 

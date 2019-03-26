@@ -8,12 +8,11 @@ import {
   TouchableOpacity,
   StatusBar
 } from 'react-native'
+import { SafeAreaView } from 'react-navigation'
 import { Icon } from 'react-native-elements'
-import { Constants } from 'expo'
 import { colors, layout } from '@global/styles'
 
 const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window')
-const STATUS_BAR_OFFSET = Constants.statusBarHeight
 const IS_IOS = Platform.OS === 'ios'
 
 export default class Overlay extends Component {
@@ -37,14 +36,15 @@ export default class Overlay extends Component {
             styles.background,
             { backgroundColor: this.props.backgroundColor }
           ]}
-        />
-        <View style={styles.content}>
-          {this.props.children}
-        </View>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={this.props.close}>
-            <Icon name='close' color={this.props.iconColor} />
-          </TouchableOpacity>
+        >
+          <SafeAreaView emulateUnlessSupported style={styles.header}>
+            <TouchableOpacity onPress={this.props.close}>
+              <Icon name='close' color={this.props.iconColor} />
+            </TouchableOpacity>
+          </SafeAreaView>
+          <SafeAreaView emulateUnlessSupported style={styles.content}>
+            {this.props.children}
+          </SafeAreaView>
         </View>
       </Modal>
     )
@@ -58,30 +58,17 @@ Overlay.defaultProps = {
 
 const styles = StyleSheet.create({
   background: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
     width: WINDOW_WIDTH,
     height: WINDOW_HEIGHT
   },
   content: {
-    left: 0,
-    top: 0,
-    width: WINDOW_WIDTH,
-    height: WINDOW_HEIGHT - STATUS_BAR_OFFSET,
-    position: 'absolute',
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'transparent'
+    position: 'relative',
+    justifyContent: 'center'
   },
   header: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: WINDOW_WIDTH,
-    backgroundColor: 'transparent',
     flexDirection: 'row',
-    justifyContent: 'flex-end',
-    padding: layout.s3
+    padding: layout.s3,
+    justifyContent: 'flex-end'
   }
 })

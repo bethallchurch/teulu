@@ -22,7 +22,8 @@ const AlbumStack = createStackNavigator({
               onPress={navigation.getParam('pickImage') || defaultOnPress}
             />
             <HeaderIcon
-              name='info'
+              name='dots-horizontal'
+              type='material-community'
               onPress={() => navigation.navigate(routes.ALBUM_SETTINGS, {
                 albumId: navigation.getParam('albumId')
               })}

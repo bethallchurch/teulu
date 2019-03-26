@@ -12,8 +12,9 @@ const NoContacts = ({ onEmptyMessage }) => (
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     marginBottom: layout.s3,
-    width: '100%'
+    alignItems: 'center'
   },
   text: {
     marginVertical: layout.s3

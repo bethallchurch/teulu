@@ -4,9 +4,7 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { colors, layout } from '@global/styles'
 
-// TODO: need to wrap in TouchableOpacity?
-
-const HeaderIcon = ({ onPress, name, type, icon = null }) => (
+const HeaderIcon = ({ onPress, name, type = 'material', icon = null }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={styles.container}>
       {icon}

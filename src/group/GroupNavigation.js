@@ -15,7 +15,8 @@ const GroupStack = createStackNavigator({
       headerLeft: <HeaderIcon name='arrow-left' type='material-community' onPress={() => navigation.goBack(null)} />,
       headerRight: (
         <HeaderIcon
-          name='info'
+          name='dots-horizontal'
+          type='material-community'
           onPress={() => navigation.navigate(routes.GROUP_SETTINGS, {
             groupId: navigation.getParam('groupId')
           })}
