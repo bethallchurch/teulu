@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation'
 import AlbumStack, { CreateAlbumStack } from '@album/AlbumNavigation'
-import GroupStack, { CreateGroupStack, GroupMembersStack } from '@group/GroupNavigation'
+import GroupStack, { CreateGroupStack, GroupMembersStack, UpdateGroupStack } from '@group/GroupNavigation'
 import { ResetPasswordStack, ResetPhoneNumberStack, NotificationSettingsStack } from '@user/UserNavigation'
 import AlbumListScreen from '@album/screens/AlbumListScreen'
 import GroupListScreen from '@group/screens/GroupListScreen'
@@ -43,6 +43,7 @@ const MainStack = createStackNavigator({
   [routes.GROUP]: GroupStack,
   [routes.ALBUM]: AlbumStack,
   [routes.MAIN_APP]: MainAppTabs,
+  [routes.UPDATE_GROUP]: UpdateGroupStack,
   [routes.GROUP_MEMBERS]: GroupMembersStack,
   [routes.RESET_PASSWORD]: ResetPasswordStack,
   [routes.RESET_PHONE_NUMBER]: ResetPhoneNumberStack,

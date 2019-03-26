@@ -108,8 +108,8 @@ const mapper = {
       </Query>
     )
   },
-  memberData: ({ render, groupData }) => {
-    const { authUsers = [] } = groupData.data.getGroup || {}
+  memberData: ({ render, groupData: { data = {} } }) => {
+    const { authUsers = [] } = data.getGroup || {}
     const variables = { filter: { id: { in: authUsers } } }
     return (
       <Query query={LIST_CONTACTS} variables={variables}>
@@ -131,11 +131,11 @@ const mapper = {
 
 const mapProps = ({
   user,
-  groupData,
   updateUser,
   updateGroup,
-  memberData,
-  createGroupLink
+  groupData = {},
+  createGroupLink,
+  memberData = {}
 }) => {
   const { error: groupError, loading: groupLoading, group } = groupDataExtractor(groupData)
   const { error: membersError, loading: membersLoading, members } = membersDataExtractor(memberData)

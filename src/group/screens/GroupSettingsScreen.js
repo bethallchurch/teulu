@@ -4,7 +4,7 @@ import { Query, Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ListItem } from 'react-native-elements'
-import { GROUP_LIST, GROUP_MEMBERS } from '@navigation/routes'
+import * as routes from '@navigation/routes'
 import { GET_GROUP, UPDATE_GROUP, DELETE_GROUP, DELETE_GROUP_LINK, CREATE_GROUP_LINK, LIST_GROUPS } from '@group/GroupService'
 import { LIST_CONTACTS } from '@contact/ContactService'
 import { UPDATE_USER } from '@user/UserService'
@@ -57,17 +57,26 @@ class GroupSettingsScreen extends Component {
         </View>
         <View style={styles.contentContainer}>
           <ListItem
+            underlayColor='transparent'
+            containerStyle={styles.item}
+            rightIcon={this.chevronProps}
+            title={<Text subtitleOne>Edit group</Text>}
+            leftIcon={{ name: 'pencil', type: 'material-community', color: colors.textDefault }}
+            onPress={() => navigate(routes.UPDATE_GROUP, { groupId: group.id, groupName: group.name })}
+          />
+          <ListItem
             title={<Text subtitleOne>{`${currentMembers.length} ${currentMembers.length === 1 ? 'member' : 'members'}`}</Text>}
             subtitle={<Text caption color={colors.textLight}>{this.membersString}</Text>}
             rightIcon={this.chevronProps}
             leftIcon={{ name: 'people', color: colors.textDefault }}
-            onPress={() => navigate(GROUP_MEMBERS, { groupId: group.id })}
+            onPress={() => navigate(routes.GROUP_MEMBERS, { groupId: group.id })}
             containerStyle={styles.item}
             underlayColor='transparent'
           />
           <ListItem
-            title={<Text color={colors.danger} subtitleOne>Exit group</Text>}
             onPress={this.confirmExit}
+            underlayColor='transparent'
+            title={<Text color={colors.danger} subtitleOne>Exit group</Text>}
             leftIcon={{ name: 'exit-run', color: colors.danger, type: 'material-community' }}
           />
         </View>
@@ -182,7 +191,7 @@ const mapProps = ({
         const remainingUsers = group.authUsers.filter(id => id !== user.id)
         if (link.id) {
           const update = async (cache, { data: { deleteGroupLink } }) => {
-            navigate(GROUP_LIST)
+            navigate(routes.GROUP_LIST)
             const query = LIST_GROUPS
             const groups = cache.readQuery({ query })
             const itemExists = groups.listGroups.items.map(({ id }) => id).includes(deleteGroupLink.group.id)
