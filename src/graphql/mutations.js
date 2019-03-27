@@ -40,7 +40,7 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
     updatedAt
   }
 }
-`
+`;
 export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {
     id
@@ -80,7 +80,7 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
     updatedAt
   }
 }
-`
+`;
 export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
   deleteUser(input: $input) {
     id
@@ -120,7 +120,7 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
     updatedAt
   }
 }
-`
+`;
 export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLinkInput!) {
   createGroupLink(input: $input) {
     id
@@ -209,7 +209,7 @@ export const createGroupLink = `mutation CreateGroupLink($input: CreateGroupLink
     updatedAt
   }
 }
-`
+`;
 export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLinkInput!) {
   updateGroupLink(input: $input) {
     id
@@ -298,7 +298,7 @@ export const updateGroupLink = `mutation UpdateGroupLink($input: UpdateGroupLink
     updatedAt
   }
 }
-`
+`;
 export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLinkInput!) {
   deleteGroupLink(input: $input) {
     id
@@ -387,7 +387,7 @@ export const deleteGroupLink = `mutation DeleteGroupLink($input: DeleteGroupLink
     updatedAt
   }
 }
-`
+`;
 export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
   createGroup(input: $input) {
     id
@@ -467,7 +467,7 @@ export const createGroup = `mutation CreateGroup($input: CreateGroupInput!) {
     updatedAt
   }
 }
-`
+`;
 export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
   updateGroup(input: $input) {
     id
@@ -547,7 +547,7 @@ export const updateGroup = `mutation UpdateGroup($input: UpdateGroupInput!) {
     updatedAt
   }
 }
-`
+`;
 export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
   deleteGroup(input: $input) {
     id
@@ -627,7 +627,7 @@ export const deleteGroup = `mutation DeleteGroup($input: DeleteGroupInput!) {
     updatedAt
   }
 }
-`
+`;
 export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
   createAlbum(input: $input) {
     id
@@ -734,7 +734,7 @@ export const createAlbum = `mutation CreateAlbum($input: CreateAlbumInput!) {
     updatedAt
   }
 }
-`
+`;
 export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
   updateAlbum(input: $input) {
     id
@@ -841,7 +841,7 @@ export const updateAlbum = `mutation UpdateAlbum($input: UpdateAlbumInput!) {
     updatedAt
   }
 }
-`
+`;
 export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
   deleteAlbum(input: $input) {
     id
@@ -948,7 +948,7 @@ export const deleteAlbum = `mutation DeleteAlbum($input: DeleteAlbumInput!) {
     updatedAt
   }
 }
-`
+`;
 export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
   createPhoto(input: $input) {
     id
@@ -1038,4 +1038,4 @@ export const createPhoto = `mutation CreatePhoto($input: CreatePhotoInput!) {
     updatedAt
   }
 }
-`
+`;
