@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.3.0]
+
+### Added
+
+- Delete albums. (https://github.com/bethallchurch/teulu/issues/28)
+- Edit group. (https://github.com/bethallchurch/teulu/issues/32)
+- Leave group. (https://github.com/bethallchurch/teulu/issues/31)
+
+### Removed
+
+ - Dead code. (https://github.com/bethallchurch/teulu/issues/29)
+
+### Changed
+
+- Group settings UX. (https://github.com/bethallchurch/teulu/issues/33)
+
+### Fixed
+
+- Newly created group appears twice in group list. (https://github.com/bethallchurch/teulu/issues/1)
+
 ## [0.2.1]
 
 ### Fixed
