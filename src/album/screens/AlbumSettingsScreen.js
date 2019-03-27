@@ -43,7 +43,7 @@ class AlbumSettingsScreen extends Component {
           </LinearGradient>
         </BackgroundImage>
         <View style={styles.contentContainer}>
-          {!album.group && (
+          {(!album.group || album.group.authUsers.length === 1) && (
             <ListItem
               title={<Text color={colors.danger} subtitleOne>Delete album</Text>}
               onPress={this.confirmDelete}
