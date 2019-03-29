@@ -19,7 +19,14 @@ const PhotoList = ({
     data={photos}
     keyExtractor={({ thumbnail }) => thumbnail.key}
     renderItem={({ item, width, margin, index }) => (
-      <PhotoThumbnail galleryData={photos} galleryStartIndex={index} width={width} height={width} margin={margin} {...item} />
+      <PhotoThumbnail
+        {...item}
+        width={width}
+        height={width}
+        margin={margin}
+        galleryData={photos}
+        galleryStartIndex={index}
+      />
     )}
   />
 )
