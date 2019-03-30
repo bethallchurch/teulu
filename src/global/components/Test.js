@@ -2,13 +2,8 @@ import * as React from 'react'
 
 import {
   Animated,
-  CameraRoll,
   I18nManager,
   Image,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
   View
 } from 'react-native'
 import ImageZoom from 'react-native-image-pan-zoom'
@@ -20,66 +15,29 @@ const styles = (
 ) => {
   return {
     modalContainer: { backgroundColor, justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
-    watchOrigin: { position: 'absolute', width, bottom: 20, justifyContent: 'center', alignItems: 'center' },
-    watchOriginTouchable: {
-      paddingLeft: 10,
-      paddingRight: 10,
-      paddingTop: 5,
-      paddingBottom: 5,
-      borderRadius: 30,
-      borderColor: 'white',
-      borderWidth: 0.5,
-      backgroundColor: 'rgba(0, 0, 0, 0.1)'
-    },
-    watchOriginText: { color: 'white', backgroundColor: 'transparent' },
     imageStyle: {},
     container: { backgroundColor }, // 多图浏览需要调整整体位置的盒子
     moveBox: { flexDirection: 'row', alignItems: 'center' },
-    menuContainer: { position: 'absolute', width, height, left: 0, bottom: 0, zIndex: 12 },
-    menuShadow: {
-      position: 'absolute',
-      width,
-      height,
-      backgroundColor: 'black',
-      left: 0,
-      bottom: 0,
-      opacity: 0.2,
-      zIndex: 10
-    },
-    menuContent: { position: 'absolute', width, left: 0, bottom: 0, zIndex: 11 },
-    operateContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: 'white',
-      height: 40,
-      borderBottomColor: '#ccc',
-      borderBottomWidth: 1
-    },
-    operateText: { color: '#333' },
     loadingTouchable: { width, height },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    arrowLeftContainer: { position: 'absolute', top: 0, bottom: 0, left: 0, justifyContent: 'center', zIndex: 13 },
-    arrowRightContainer: { position: 'absolute', top: 0, bottom: 0, right: 0, justifyContent: 'center', zIndex: 13 }
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' }
   }
 }
 
 const startState = {
-  show: false,
   currentShowIndex: 0,
   imageLoaded: false,
-  imageSizes: [],
-  isShowMenu: false
+  imageSizes: []
 }
 
 export default class ImageViewer extends React.Component {
   state = startState
-  // 背景透明度渐变动画
+  // 背景透明度渐变动画 | Background transparency gradient animation
   fadeAnim = new Animated.Value(0)
 
-  // 当前基准位置
+  // 当前基准位置 | Current reference position
   standardPositionX = 0
 
-  // 整体位移，用来切换图片用
+  // 整体位移，用来切换图片用 | Overall displacement, used to switch pictures
   positionXNumber = 0
   positionX = new Animated.Value(0)
 
@@ -88,10 +46,10 @@ export default class ImageViewer extends React.Component {
 
   styles = styles(0, 0, 'transparent')
 
-  // 是否执行过 layout. fix 安卓不断触发 onLayout 的 bug
+  // 是否执行过 layout. fix 安卓不断触发 onLayout 的 bug | check onLayout has been executed
   hasLayout = false
 
-  // 记录已加载的图片 index
+  // 记录已加载的图片 index | Record the loaded image index
   loadedIndex = new Map()
 
   handleLongPressWithIndex = new Map()
@@ -109,12 +67,12 @@ export default class ImageViewer extends React.Component {
           currentShowIndex: nextProps.index
         },
         () => {
-          // 立刻预加载要看的图
+          // 立刻预加载要看的图 | Immediately preload the map you want to see
           this.loadImage(nextProps.index || 0)
 
           this.jumpToCurrentImage()
 
-          // 显示动画
+          // 显示动画 | Display animation
           Animated.timing(this.fadeAnim, {
             toValue: 1,
             duration: 200
@@ -125,16 +83,16 @@ export default class ImageViewer extends React.Component {
   }
 
   /**
-   * props 有变化时执行
+   * props 有变化时执行 | Execute when there is change
    */
   init (nextProps) {
     if (nextProps.imageUrls.length === 0) {
-      // 隐藏时候清空
+      // 隐藏时候清空 | Empty when hidden
       this.fadeAnim.setValue(0)
       return this.setState(startState)
     }
 
-    // 给 imageSizes 塞入空数组
+    // 给 imageSizes 塞入空数组 | Fill imageSizes with an empty array
     const imageSizes = []
     nextProps.imageUrls.forEach(imageUrl => {
       imageSizes.push({
@@ -150,12 +108,12 @@ export default class ImageViewer extends React.Component {
         imageSizes
       },
       () => {
-        // 立刻预加载要看的图
+        // 立刻预加载要看的图 | Immediately preload the map you want to see
         this.loadImage(nextProps.index || 0)
 
         this.jumpToCurrentImage()
 
-        // 显示动画
+        // 显示动画 | Display animation
         Animated.timing(this.fadeAnim, {
           toValue: 1,
           duration: 200
@@ -170,17 +128,17 @@ export default class ImageViewer extends React.Component {
     this.imageRefs[index] && this.imageRefs[index].reset()
   }
   /**
-   * 调到当前看图位置
+   * 调到当前看图位置 | Tune to the current view position
    */
   jumpToCurrentImage () {
-    // 跳到当前图的位置
+    // 跳到当前图的位置 | Jump to the current map position
     this.positionXNumber = this.width * (this.state.currentShowIndex || 0) * (I18nManager.isRTL ? 1 : -1)
     this.standardPositionX = this.positionXNumber
     this.positionX.setValue(this.positionXNumber)
   }
 
   /**
-   * 加载图片，主要是获取图片长与宽
+   * 加载图片，主要是获取图片长与宽 | Loading images, mainly to get the length and width of the image
    */
   loadImage (index) {
     if (!this.state.imageSizes[index]) {
@@ -208,18 +166,18 @@ export default class ImageViewer extends React.Component {
     }
 
     if (this.state.imageSizes[index].status === 'success') {
-      // 已经加载过就不会加载了
+      // 已经加载过就不会加载了 | It will not be loaded again
       return
     }
 
-    // 如果已经有宽高了，直接设置为 success
+    // 如果已经有宽高了，直接设置为 success | If it already has width and height, set it directly to success
     if (this.state.imageSizes[index].width > 0 && this.state.imageSizes[index].height > 0) {
       imageStatus.status = 'success'
       saveImageSize()
       return
     }
 
-    // 是否加载完毕了图片
+    // 是否加载完毕了图片 | Whether the image is loaded or not
     let imageLoaded = false
 
     // Tagged success if url is started with file:, or not set yet(for custom source.uri).
@@ -272,7 +230,7 @@ export default class ImageViewer extends React.Component {
     }
   }
   /**
-   * 触发溢出水平滚动
+   * 触发溢出水平滚动 | Trigger overflow horizontal scrolling
    */
   handleHorizontalOuterRangeOffset = (offsetX) => {
     this.positionXNumber = this.standardPositionX + offsetX
@@ -292,7 +250,7 @@ export default class ImageViewer extends React.Component {
   }
 
   /**
-   * 手势结束，但是没有取消浏览大图
+   * 手势结束，但是没有取消浏览大图 | Gesture ends, but did not cancel the big picture
    */
   handleResponderRelease = (vx) => {
     const vxRTL = I18nManager.isRTL ? -vx : vx
@@ -307,7 +265,7 @@ export default class ImageViewer extends React.Component {
       // 上一张
       this.goBack()
 
-      // 这里可能没有触发溢出滚动，为了防止图片不被加载，调用加载图片
+      // 这里可能没有触发溢出滚动，为了防止图片不被加载，调用加载图片 | There may be no trigger overflow scrolling here, in order to prevent the image from being loaded, call to load the image
       if (this.state.currentShowIndex) {
         this.loadImage((this.state.currentShowIndex || 0) - 1)
       }
@@ -414,11 +372,6 @@ export default class ImageViewer extends React.Component {
    * 长按
    */
   handleLongPress = (image) => {
-    if (this.props.saveToLocalByLongPress) {
-      // 出现保存到本地的操作框
-      this.setState({ isShowMenu: true })
-    }
-
     if (this.props.onLongPress) {
       this.props.onLongPress(image)
     }
@@ -427,18 +380,18 @@ export default class ImageViewer extends React.Component {
   /**
    * 单击
    */
-  handleClick = () => {
-    if (this.props.onClick) {
-      this.props.onClick(this.handleCancel, this.state.currentShowIndex)
+  handlePress = () => {
+    if (this.props.onPress) {
+      this.props.onPress(this.handleCancel, this.state.currentShowIndex)
     }
   }
 
   /**
    * 双击
    */
-  handleDoubleClick = () => {
-    if (this.props.onDoubleClick) {
-      this.props.onDoubleClick(this.handleCancel)
+  handleDoublePress = () => {
+    if (this.props.onDoublePress) {
+      this.props.onDoublePress(this.handleCancel)
     }
   }
 
@@ -447,9 +400,6 @@ export default class ImageViewer extends React.Component {
    */
   handleCancel = () => {
     this.hasLayout = false
-    if (this.props.onCancel) {
-      this.props.onCancel()
-    }
   }
 
   /**
@@ -494,7 +444,7 @@ export default class ImageViewer extends React.Component {
         return <View key={index} style={{ width: screenWidth, height: screenHeight }} />
       }
 
-      // 如果宽大于屏幕宽度,整体缩放到宽度是屏幕宽度
+      // 如果宽大于屏幕宽度,整体缩放到宽度是屏幕宽度 | If the width is greater than the screen width, the overall zoom to width is the screen width
       if (width > screenWidth) {
         const widthPixel = screenWidth / width
         width *= widthPixel
@@ -516,14 +466,14 @@ export default class ImageViewer extends React.Component {
           horizontalOuterRangeOffset={this.handleHorizontalOuterRangeOffset}
           responderRelease={this.handleResponderRelease}
           onLongPress={this.handleLongPressWithIndex.get(index)}
-          onClick={this.handleClick}
-          onDoubleClick={this.handleDoubleClick}
+          onClick={this.handlePress}
+          onDoubleClick={this.handleDoublePress}
           enableSwipeDown={this.props.enableSwipeDown}
           swipeDownThreshold={this.props.swipeDownThreshold}
           onSwipeDown={this.handleSwipeDown}
           pinchToZoom={this.props.enableImageZoom}
           enableDoubleClickZoom={this.props.enableImageZoom}
-          doubleClickInterval={this.props.doubleClickInterval}
+          doubleClickInterval={this.props.doublePressInterval}
           {...others}
         >
           {children}
@@ -584,8 +534,8 @@ export default class ImageViewer extends React.Component {
               horizontalOuterRangeOffset={this.handleHorizontalOuterRangeOffset}
               responderRelease={this.handleResponderRelease}
               onLongPress={this.handleLongPressWithIndex.get(index)}
-              onClick={this.handleClick}
-              onDoubleClick={this.handleDoubleClick}
+              onClick={this.handlePress}
+              onDoubleClick={this.handleDoublePress}
               imageWidth={width}
               imageHeight={height}
               enableSwipeDown={this.props.enableSwipeDown}
@@ -593,7 +543,7 @@ export default class ImageViewer extends React.Component {
               onSwipeDown={this.handleSwipeDown}
               pinchToZoom={this.props.enableImageZoom}
               enableDoubleClickZoom={this.props.enableImageZoom}
-              doubleClickInterval={this.props.doubleClickInterval}
+              doubleClickInterval={this.props.doublePressInterval}
             >
               {this.props.renderImage(image.props)}
             </ImageZoom>
@@ -624,20 +574,6 @@ export default class ImageViewer extends React.Component {
     return (
       <Animated.View style={{ zIndex: 9 }}>
         <Animated.View style={{ ...this.styles.container, opacity: this.fadeAnim }}>
-          {this.props.renderHeader(this.state.currentShowIndex)}
-
-          <View style={this.styles.arrowLeftContainer}>
-            <TouchableWithoutFeedback onPress={this.goBack}>
-              <View>{this.props.renderArrowLeft()}</View>
-            </TouchableWithoutFeedback>
-          </View>
-
-          <View style={this.styles.arrowRightContainer}>
-            <TouchableWithoutFeedback onPress={this.goNext}>
-              <View>{this.props.renderArrowRight()}</View>
-            </TouchableWithoutFeedback>
-          </View>
-
           <Animated.View
             style={{
               ...this.styles.moveBox,
@@ -647,62 +583,9 @@ export default class ImageViewer extends React.Component {
           >
             {ImageElements}
           </Animated.View>
-          {this.props.renderIndicator((this.state.currentShowIndex || 0) + 1, this.props.imageUrls.length)}
-
-          {this.props.imageUrls[this.state.currentShowIndex || 0] &&
-            this.props.imageUrls[this.state.currentShowIndex || 0].originSizeKb &&
-            this.props.imageUrls[this.state.currentShowIndex || 0].originUrl && (
-            <View style={this.styles.watchOrigin}>
-              <TouchableOpacity style={this.styles.watchOriginTouchable}>
-                <Text style={this.styles.watchOriginText}>查看原图(2M)</Text>
-              </TouchableOpacity>
-            </View>
-          )}
         </Animated.View>
       </Animated.View>
     )
-  }
-
-  /**
-   * 保存当前图片到本地相册
-   */
-  saveToLocal = () => {
-    if (!this.props.onSave) {
-      CameraRoll.saveToCameraRoll(this.props.imageUrls[this.state.currentShowIndex || 0].url)
-      this.props.onSaveToCamera(this.state.currentShowIndex)
-    } else {
-      this.props.onSave(this.props.imageUrls[this.state.currentShowIndex || 0].url)
-    }
-
-    this.setState({ isShowMenu: false })
-  }
-
-  getMenu () {
-    if (!this.state.isShowMenu) {
-      return null
-    }
-
-    return (
-      <View style={this.styles.menuContainer}>
-        <View style={this.styles.menuShadow} />
-        <View style={this.styles.menuContent}>
-          <TouchableHighlight underlayColor='#F2F2F2' onPress={this.saveToLocal} style={this.styles.operateContainer}>
-            <Text style={this.styles.operateText}>{this.props.menuContext.saveToLocal}</Text>
-          </TouchableHighlight>
-          <TouchableHighlight
-            underlayColor='#F2F2F2'
-            onPress={this.handleLeaveMenu}
-            style={this.styles.operateContainer}
-          >
-            <Text style={this.styles.operateText}>{this.props.menuContext.cancel}</Text>
-          </TouchableHighlight>
-        </View>
-      </View>
-    )
-  }
-
-  handleLeaveMenu = () => {
-    this.setState({ isShowMenu: false })
   }
 
   handleSwipeDown = () => {
@@ -718,7 +601,6 @@ export default class ImageViewer extends React.Component {
     childs = (
       <View>
         {this.getContent()}
-        {this.getMenu()}
       </View>
     )
     return (
@@ -738,22 +620,17 @@ export default class ImageViewer extends React.Component {
 
 ImageViewer.defaultProps = {
   /**
-   * 是否显示
-   */
-  show: false,
-
-  /**
    * 图片数组
    */
   imageUrls: [],
 
   /**
-   * 滑动到下一页的X阈值
+   * 滑动到下一页的X阈值 | Slide to the X threshold of the next page
    */
   flipThreshold: 80,
 
   /**
-   * 当前页能滑到下一页X位置最大值
+   * 当前页能滑到下一页X位置最大值 | The current page can slide to the next page X position maximum
    */
   maxOverflow: 300,
 
@@ -771,21 +648,6 @@ ImageViewer.defaultProps = {
    * 背景颜色
    */
   backgroundColor: 'black',
-
-  /**
-   * style props for the footer container
-   */
-  footerContainerStyle: {},
-
-  /**
-   * Menu Context Values
-   */
-  menuContext: { saveToLocal: 'save to the album', cancel: 'cancel' },
-
-  /**
-   * 是否开启长按保存到本地的功能
-   */
-  saveToLocalByLongPress: true,
 
   /**
    * 是否允许缩放图片
@@ -820,51 +682,15 @@ ImageViewer.defaultProps = {
   /**
    * 单击回调
    */
-  onClick: () => {
+  onPress: () => {
     //
   },
 
   /**
    * 双击回调
    */
-  onDoubleClick: () => {
+  onDoublePress: () => {
     //
-  },
-
-  /**
-   * 图片保存到本地方法，如果写了这个方法，就不会调取系统默认方法
-   * 针对安卓不支持 saveToCameraRoll 远程图片，可以在安卓调用此回调，调用安卓原生接口
-   */
-  onSave: () => {
-    //
-  },
-
-  /**
-   * 自定义头部
-   */
-  renderHeader: () => {
-    return null
-  },
-
-  /**
-   * 自定义尾部
-   */
-  renderFooter: () => {
-    return null
-  },
-
-  /**
-   * 自定义计时器
-   */
-  renderIndicator: (
-    currentIndex,
-    allSize
-  ) => {
-    return React.createElement(
-      View,
-      { style: simpleStyle.count },
-      React.createElement(Text, { style: simpleStyle.countText }, currentIndex + '/' + allSize)
-    )
   },
 
   /**
@@ -875,30 +701,9 @@ ImageViewer.defaultProps = {
   },
 
   /**
-   * 自定义左翻页按钮
-   */
-  renderArrowLeft: () => {
-    return null
-  },
-
-  /**
-   * 自定义右翻页按钮
-   */
-  renderArrowRight: () => {
-    return null
-  },
-
-  /**
    * 弹出大图的回调
    */
   onShowModal: () => {
-    //
-  },
-
-  /**
-   * 取消看图的回调
-   */
-  onCancel: () => {
     //
   },
 
@@ -910,47 +715,16 @@ ImageViewer.defaultProps = {
   },
 
   /**
-   * 渲染loading元素
+   * 渲染loading元素 | Rendering loading element
    */
   loadingRender: () => {
     return null
   },
 
   /**
-   * 保存到相册的回调
-   */
-  onSaveToCamera: () => {
-    //
-  },
-
-  /**
-   * 当图片切换时触发
+   * 当图片切换时触发 | Triggered when the image is switched
    */
   onChange: () => {
     //
-  }
-}
-
-const simpleStyle = {
-  count: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 38,
-    zIndex: 13,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent'
-  },
-  countText: {
-    color: 'white',
-    fontSize: 16,
-    backgroundColor: 'transparent',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: {
-      width: 0,
-      height: 0.5
-    },
-    textShadowRadius: 0
   }
 }
