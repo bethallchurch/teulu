@@ -18,8 +18,15 @@ const PhotoList = ({
     numColumns={numColumns}
     data={photos}
     keyExtractor={({ thumbnail }) => thumbnail.key}
-    renderItem={({ item, width, margin }) => (
-      <PhotoThumbnail width={width} height={width} margin={margin} {...item} />
+    renderItem={({ item, width, margin, index }) => (
+      <PhotoThumbnail
+        {...item}
+        width={width}
+        height={width}
+        margin={margin}
+        galleryData={photos}
+        galleryStartIndex={index}
+      />
     )}
   />
 )
