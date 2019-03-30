@@ -1,10 +1,7 @@
 import React, { Component, Children, cloneElement } from 'react'
-import { View, TouchableHighlight, Dimensions } from 'react-native'
-import ImageZoom from 'react-native-image-pan-zoom'
+import { View, TouchableHighlight } from 'react-native'
 import { Overlay, Swiper } from '@global/components'
 import { colors } from '@global/styles'
-
-const { width: WINDOW_WIDTH, height: WINDOW_HEIGHT } = Dimensions.get('window')
 
 class Lightbox extends Component {
   state = { isOpen: false }
@@ -34,17 +31,7 @@ class Lightbox extends Component {
   }
 
   renderActive ({ children, props, index = 0 }) {
-    return (
-      <ImageZoom
-        key={index}
-        cropWidth={WINDOW_WIDTH}
-        cropHeight={WINDOW_HEIGHT}
-        imageWidth={props.style.width}
-        imageHeight={props.style.height}
-      >
-        {cloneElement(Children.only(children), props)}
-      </ImageZoom>
-    )
+    return cloneElement(Children.only(children), { ...props, key: index })
   }
 
   render () {

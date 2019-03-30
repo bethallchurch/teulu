@@ -1,15 +1,27 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { View, ViewPropTypes } from 'react-native'
-import SwiperFlatList from 'react-native-swiper-flatlist'
+import ImageViewer from '@global/components/Test'
+import Image from '@photo/components/Image'
 
 export default class Swiper extends Component {
   render () {
     return (
       <View style={this.props.containerStyle}>
-        <SwiperFlatList index={this.props.startIndex}>
-          {this.props.items.map(this.props.renderItem)}
-        </SwiperFlatList>
+        <ImageViewer
+          index={this.props.startIndex}
+          imageUrls={this.props.items.map(item => ({ url: 'https://avatars2.githubusercontent.com/u/7970947?v=3&s=460', props: item }))}
+          renderImage={props => {
+            const { imgKey, style } = props
+            return (
+              <Image
+                resizeMode='contain'
+                imgKey={imgKey.replace('public/', '')}
+                style={style}
+              />
+            )
+          }}
+        />
       </View>
     )
   }
