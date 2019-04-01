@@ -21,11 +21,11 @@ const PhotoList = ({
     renderItem={({ item, width, margin, index }) => (
       <PhotoThumbnail
         {...item}
+        index={index}
         width={width}
         height={width}
         margin={margin}
-        galleryData={photos}
-        galleryStartIndex={index}
+        swiperImages={photos}
       />
     )}
   />

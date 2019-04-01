@@ -7,24 +7,16 @@ class Lightbox extends Component {
   state = { isOpen: false }
 
   open = () => this.setState({ isOpen: true })
-
   close = () => this.setState({ isOpen: false })
 
   getContent = () => {
-    const { children, activeProps, galleryData, galleryStartIndex } = this.props
-    if (activeProps && galleryData.length <= 1) {
+    const { children, activeProps, swiperImages, swiperIndex } = this.props
+    if (activeProps && swiperImages.length <= 1) {
       return this.renderActive({ children, props: activeProps })
     }
-    if (activeProps && galleryData.length > 1) {
+    if (activeProps && swiperImages.length > 1) {
       return (
-        <Swiper
-          containerStyle={{ flex: 1 }}
-          startIndex={galleryStartIndex}
-          items={galleryData}
-          renderItem={(image, index) => {
-            return this.renderActive({ children, props: image, index })
-          }}
-        />
+        <Swiper index={swiperIndex} images={swiperImages} />
       )
     }
     return children

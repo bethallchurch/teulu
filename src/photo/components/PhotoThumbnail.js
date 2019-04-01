@@ -1,30 +1,26 @@
 import React from 'react'
-import { Dimensions } from 'react-native'
 import Lightbox from '@photo/components/Lightbox'
 import Image from '@photo/components/Image'
 
-const { width: WINDOW_WIDTH } = Dimensions.get('window')
-
 const PhotoThumbnail = ({
+  fullsize,
   margin = {},
+  index = null,
   width = null,
   height = null,
-  galleryData = [],
-  galleryStartIndex = null,
-  fullsize: { key: fullsizeKey },
+  swiperImages = [],
   thumbnail: { width: thumbnailWidth, height: thumbnailHeight, key: thumbnailKey }
 }) => {
-  const activeProps = fullsizeKey => ({
+  const activeProps = fullsize => ({
     resizeMode: 'contain',
-    imgKey: fullsizeKey.replace('public/', ''),
-    style: { width: WINDOW_WIDTH, height: '100%' }
+    imgKey: fullsize.key.replace('public/', ''),
+    ...fullsize
   })
   return (
     <Lightbox
-      startIndex={galleryStartIndex}
-      galleryStartIndex={galleryStartIndex}
-      activeProps={activeProps(fullsizeKey)}
-      galleryData={galleryData.map(image => activeProps(image.fullsize.key))}
+      swiperIndex={index}
+      activeProps={activeProps(fullsize)}
+      swiperImages={swiperImages.map(image => ({ props: activeProps(image.fullsize) }))}
     >
       <Image
         resizeMode='contain'
