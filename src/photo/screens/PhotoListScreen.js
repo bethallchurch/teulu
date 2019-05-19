@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { View, ScrollView, StyleSheet } from 'react-native'
-import { ImagePicker, Permissions } from 'expo'
+import { View, ScrollView, StyleSheet, Modal } from 'react-native'
+import { ImagePicker as ExpoImagePicker, Permissions } from 'expo'
 import { ScreenBase, Text } from '@global/components'
 import PhotoUpload from '@photo/components/PhotoUpload'
 import PhotoList, { AlbumPhotoList } from '@photo/components/PhotoList'
+import ImagePicker from '@global/components/ImagePicker'
 import { layout } from '@global/styles'
 
 class PhotoListScreen extends Component {
   state = {
-    pickedImage: null,
+    pickedImages: [],
     uploading: false,
     hasCameraRollPermission: null,
     modalVisible: false,
@@ -16,7 +17,7 @@ class PhotoListScreen extends Component {
   }
 
   componentDidMount () {
-    this.props.navigation.setParams({ pickImage: this.pickImage })
+    this.props.navigation.setParams({ pickImage: () => this.setState({ modalVisible: true }) })
   }
 
   get albumId () {
@@ -35,7 +36,7 @@ class PhotoListScreen extends Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
     this.setState({ hasCameraRollPermission: status === 'granted' })
     if (status === 'granted') {
-      const pickedImage = await ImagePicker.launchImageLibraryAsync({
+      const pickedImage = await ExpoImagePicker.launchImageLibraryAsync({
         allowsEditing: true
       })
       if (!pickedImage.cancelled) {
@@ -44,11 +45,16 @@ class PhotoListScreen extends Component {
     }
   }
 
-  render () {
-    return (
-      <ScreenBase>
-        <View style={styles.container}>
-          {this.albumId && (
+pickImages = images => {
+  this.setState({ pickedImages: images, modalVisible: false })
+}
+
+render () {
+  const { pickedImages } = this.state
+  return (
+    <ScreenBase>
+      <View style={styles.container}>
+        {this.albumId && (
             <>
               <ScrollView>
                 <Text h5 style={styles.title}>{this.albumName}</Text>
@@ -60,27 +66,35 @@ class PhotoListScreen extends Component {
                   {...this.props}
                 />
               </ScrollView>
-              <PhotoUpload
+              <Modal
+                onRequestClose={this.closeModal}
                 visible={this.state.modalVisible}
-                close={this.closeModal}
-                pickedImage={this.state.pickedImage}
-                hasCameraRollPermission={this.state.hasCameraRollPermission}
-                {...this.props}
-              />
+              >
+                <ImagePicker close={this.closeModal} pick={this.pickImages} />
+              </Modal>
+              {!!pickedImages.length && (
+                <PhotoUpload
+                  visible={!!pickedImages.length}
+                  pickedImages={pickedImages}
+                  close={() => this.setState({ pickedImages: [] })}
+                  hasCameraRollPermission={this.state.hasCameraRollPermission}
+                  {...this.props}
+                />
+              )}
             </>
-          )}
-          {!this.albumId && (
-            <PhotoList
-              containerPadding={0}
-              gutterWidth={0}
-              numColumns={2}
-              {...this.props}
-            />
-          )}
-        </View>
-      </ScreenBase>
-    )
-  }
+        )}
+        {!this.albumId && (
+          <PhotoList
+            containerPadding={0}
+            gutterWidth={0}
+            numColumns={2}
+            {...this.props}
+          />
+        )}
+      </View>
+    </ScreenBase>
+  )
+}
 }
 
 const styles = StyleSheet.create({

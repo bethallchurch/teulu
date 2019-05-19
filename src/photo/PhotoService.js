@@ -36,3 +36,5 @@ export const uploadImage = async ({ uri, authUsers, albumId, userId }) => {
   blob.close()
   return snapshot
 }
+
+export const uploadImages = async images => Promise.all(images.map(uploadImage))
