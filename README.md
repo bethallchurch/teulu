@@ -1,6 +1,6 @@
 # README
 
-Messing around with AWS Amplify and React Native.
+Messing around with AWS Amplify, React Native and GraphQL.
 
 ## Test Users
 
